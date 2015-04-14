@@ -285,70 +285,82 @@ class Sales_Model extends Parent_Model {
     }
 
     public function insert_credit_sale(){
+        include_once(APPPATH."models/helperClasses/App_Voucher.php");
+        include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
+
+
         $pannel_count = $this->input->post('pannel_count');
-        $customer  = $this->input->post('customer');
-        $invoice_date = $this->input->post('invoice_date');
-        $extra_info = $this->input->post('extra_info');
-        $recieved = $this->input->post('received');
-        $transaction_type = 0;
 
-        $invoice_data = array(
-            'customer_id'=>$customer,
-            'invoice_date'=>$invoice_date,
-            'transaction_type'=>$transaction_type,
-            'extra_info'=>$extra_info,
-            'recieved'=>$recieved,
-        );
+        $voucher = new App_Voucher();
+        $voucher->voucher_date = $this->input->post('invoice_date');
+        $voucher->summary = $this->input->post('extra_info');
 
-        $invoice_entries = array();
+        $voucher_entries = array();
         $stock_entries = array();
         for($i = 1; $i<$pannel_count; $i++)
         {
-            $invoice_entry = array();
 
             $product = $this->input->post('product_'.$i);
             $quantity = $this->input->post('quantity_'.$i);
-            $sale_price_per_item = $this->input->post('salePricePerItem_'.$i);
+            $cost_per_item = $this->input->post('costPerItem_'.$i);
 
-            $stock_entry['product_id']=$product;
-            $stock_entry['quantity']=$quantity;
-
-            $invoice_entry['product_id']=$product;
-            $invoice_entry['quantity'] = $quantity;
-            $invoice_entry['sale_price_per_item']= $sale_price_per_item;
-
-            if($invoice_entry['product_id'] != '')
+            /* if product is empty than entry will not be added */
+            if($product != '')
             {
+                /*---------First ENTRY--------*/
+                $voucher_entry_1 = new App_voucher_Entry();
+                $voucher_entry_1->ac_title = $product;
+                $voucher_entry_1->ac_type = 'receivable';
+                $voucher_entry_1->related_customer = $this->input->post('customer');
+                $voucher_entry_1->cost_per_item = $cost_per_item;
+                $voucher_entry_1->quantity = $quantity;
+                $voucher_entry_1->amount = $cost_per_item * $quantity;
+                $voucher_entry_1->dr_cr = 1;
+
+                array_push($voucher_entries, $voucher_entry_1);
+                /*----------------------------------*/
+
+                /*---------Second ENTRY--------*/
+                $voucher_entry_2 = new App_voucher_Entry();
+                $voucher_entry_2->ac_title = $product;
+                $voucher_entry_2->ac_type = 'revenue';
+                $voucher_entry_2->related_business = $this->admin_model->business_name();
+                $voucher_entry_2->cost_per_item = $cost_per_item;
+                $voucher_entry_2->quantity = $quantity;
+                $voucher_entry_2->amount = $cost_per_item * $quantity;
+                $voucher_entry_2->dr_cr = 0;
+
+                array_push($voucher_entries, $voucher_entry_2);
+                /*----------------------------------*/
+
+                /*----------Managing Stack-------------*/
+                $stock_entry['product_id']=$product;
+                $stock_entry['quantity']=$quantity;
                 array_push($stock_entries, $stock_entry);
-                array_push($invoice_entries, $invoice_entry);
+                /*------------------------------------*/
             }
-
         }
 
-        $invoice_id = 0;
-        $this->db->trans_start();
+        /*------------inserting voucher entries in the voucher container---------*/
+        $voucher->entries = $voucher_entries;
+        /*---------------------------------------------------------------------*/
 
-        if(sizeof($invoice_entries) > 0)
+        /*--------------Lets the game begin---------------*/
+        $this->db->trans_begin();
+
+        $voucher_inserted = $this->accounts_model->insert_voucher($voucher);
+        $stock_updated = $this->stock_model->decrease($stock_entries);
+
+
+        if($this->db->trans_status() == false || $voucher_inserted == false || $stock_updated == false)
         {
-            $this->db->insert($this->table, $invoice_data);
-            $invoice_id = $this->db->insert_id();
-
-            $modified_invoice_entries = array();
-            foreach($invoice_entries as $entry)
-            {
-                $entry['invoice_id'] = $invoice_id;
-                array_push($modified_invoice_entries, $entry);
-            }
-
-            $this->db->insert_batch('sale_invoice_items',$modified_invoice_entries);
-
-            $this->stock_model->decrease($stock_entries);
+            $this->db->trans_rollback();
+            return false;
         }
-
-
-        if($this->db->trans_complete() == true)
+        else
         {
-            return $invoice_id;
+            $this->db->trans_commit();
+            return $voucher_inserted;
         }
         return false;
     }

@@ -22,10 +22,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="purchases_model.php" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/application/models/purchases_model.php">
+      <file leaf-file-name="payments.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/controllers/payments.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="314" column="44" selection-start="11723" selection-end="11723" vertical-scroll-proportion="-0.5243363" vertical-offset="8638" max-vertical-offset="9958">
+            <state line="47" column="66" selection-start="1823" selection-end="1823" vertical-scroll-proportion="0.6261062" vertical-offset="656" max-vertical-offset="1872">
               <folding />
             </state>
           </provider>
@@ -49,22 +49,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/application/models/Customers_model.php" />
-        <option value="$PROJECT_DIR$/application/controllers/sales.php" />
-        <option value="$PROJECT_DIR$/application/views/settings/accounts.php" />
-        <option value="$PROJECT_DIR$/application/config/form_validation.php" />
-        <option value="$PROJECT_DIR$/application/views/settings/components/bank_accounts.php" />
-        <option value="$PROJECT_DIR$/application/controllers/settings.php" />
-        <option value="$PROJECT_DIR$/application/models/bank_ac_model.php" />
-        <option value="$PROJECT_DIR$/application/models/helperClasses/Voucher.php" />
         <option value="$PROJECT_DIR$/application/models/helperClasses/App_Voucher_Entry.php" />
         <option value="$PROJECT_DIR$/application/controllers/purchases.php" />
         <option value="$PROJECT_DIR$/application/models/admin_model.php" />
         <option value="$PROJECT_DIR$/application/views/purchases/credit/make.php" />
-        <option value="$PROJECT_DIR$/application/controllers/parentController.php" />
         <option value="$PROJECT_DIR$/application/models/helperClasses/App_Voucher.php" />
         <option value="$PROJECT_DIR$/application/models/accounts_model.php" />
         <option value="$PROJECT_DIR$/application/models/purchases_model.php" />
+        <option value="$PROJECT_DIR$/application/models/sales_model.php" />
+        <option value="$PROJECT_DIR$/application/views/sales/credit/make.php" />
+        <option value="$PROJECT_DIR$/application/views/components/header.php" />
+        <option value="$PROJECT_DIR$/application/views/payments/make.php" />
+        <option value="$PROJECT_DIR$/application/views/payments/components/payment_form.php" />
+        <option value="$PROJECT_DIR$/application/controllers/parentController.php" />
+        <option value="$PROJECT_DIR$/application/models/payments_model.php" />
+        <option value="$PROJECT_DIR$/application/views/payments/components/receipt_form.php" />
+        <option value="$PROJECT_DIR$/application/controllers/payments.php" />
       </list>
     </option>
   </component>
@@ -394,172 +394,6 @@
               <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suppliers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="suppliers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="components" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="settings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="settings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="components" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="purchases" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="credit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="purchases" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="arif_system" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="products" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -709,7 +543,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -722,7 +556,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.67102396" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.67102396" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -744,110 +578,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/application/controllers/customers.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="20" selection-start="2215" selection-end="2215" vertical-scroll-proportion="0.7123894" vertical-offset="942" max-vertical-offset="1846">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/settings/components/bank_accounts.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="157" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.43141592" vertical-offset="260" max-vertical-offset="2444">
-          <folding>
-            <marker date="1429004306552" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/system/helpers/form_helper.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="27560">
-          <folding>
-            <marker date="1417581516905" expanded="false" signature="-1:-1" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/config/form_validation.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="97" selection-start="1739" selection-end="1739" vertical-scroll-proportion="0.5176991" vertical-offset="910" max-vertical-offset="2184">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Customers_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="20" selection-start="1105" selection-end="1105" vertical-scroll-proportion="0.17775354" vertical-offset="929" max-vertical-offset="1846">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Suppliers_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="23" selection-start="1304" selection-end="1304" vertical-scroll-proportion="0.60305345" vertical-offset="695" max-vertical-offset="1846">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/settings.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="8" selection-start="2165" selection-end="2165" vertical-scroll-proportion="0.5685841" vertical-offset="1020" max-vertical-offset="1924">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/bank_ac_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="23" selection-start="1471" selection-end="1471" vertical-scroll-proportion="0.6444929" vertical-offset="865" max-vertical-offset="1872">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/helperClasses/App_Voucher_Entry.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="20" selection-start="622" selection-end="622" vertical-scroll-proportion="0.6881134" vertical-offset="45" max-vertical-offset="962">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/purchases.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="18" selection-start="1426" selection-end="1426" vertical-scroll-proportion="0.54646015" vertical-offset="546" max-vertical-offset="1794">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/admin_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="38" selection-start="44" selection-end="44" vertical-scroll-proportion="0.028353326" vertical-offset="0" max-vertical-offset="917">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/purchases/credit/make.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="200" column="41" selection-start="8955" selection-end="8955" vertical-scroll-proportion="0.57522124" vertical-offset="4680" max-vertical-offset="6500">
-          <folding>
-            <marker date="1429012391348" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/parentController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="29" selection-start="1353" selection-end="1353" vertical-scroll-proportion="0.79867256" vertical-offset="344" max-vertical-offset="4810">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/helperClasses/App_Voucher.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="10" selection-start="362" selection-end="362" vertical-scroll-proportion="0.48200655" vertical-offset="0" max-vertical-offset="1118">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/models/accounts_model.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="17" column="0" selection-start="441" selection-end="441" vertical-scroll-proportion="0.48200655" vertical-offset="0" max-vertical-offset="1976">
@@ -855,9 +585,117 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/stock_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="96" column="20" selection-start="2947" selection-end="2947" vertical-scroll-proportion="0.3329646" vertical-offset="2195" max-vertical-offset="4186">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/sales_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="357" column="25" selection-start="13713" selection-end="13713" vertical-scroll-proportion="0.48230088" vertical-offset="8846" max-vertical-offset="9906">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/components/header.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="158" column="22" selection-start="5527" selection-end="5527" vertical-scroll-proportion="0.6039823" vertical-offset="3510" max-vertical-offset="4680">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/products/welcome.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="3494" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2834">
+          <folding>
+            <marker date="1428412687287" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/payments/make.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="59" selection-start="620" selection-end="620" vertical-scroll-proportion="0.28761062" vertical-offset="312" max-vertical-offset="1248">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/sales/credit/make.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="141" column="24" selection-start="4874" selection-end="6219" vertical-scroll-proportion="0.31637168" vertical-offset="3380" max-vertical-offset="6526">
+          <folding>
+            <marker date="1429014498601" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/purchases.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="13" selection-start="1143" selection-end="1143" vertical-scroll-proportion="0.25884956" vertical-offset="728" max-vertical-offset="1794">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/purchases/credit/make.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="121" column="12" selection-start="3765" selection-end="4533" vertical-scroll-proportion="0.11504425" vertical-offset="3042" max-vertical-offset="6500">
+          <folding>
+            <marker date="1429012391348" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/application/models/purchases_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="314" column="44" selection-start="11723" selection-end="11723" vertical-scroll-proportion="-0.5243363" vertical-offset="8638" max-vertical-offset="9958">
+        <state line="300" column="35" selection-start="11181" selection-end="11181" vertical-scroll-proportion="0.8053097" vertical-offset="7072" max-vertical-offset="9958">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/parent_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="6" selection-start="240" selection-end="240" vertical-scroll-proportion="0.035986915" vertical-offset="71" max-vertical-offset="988">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/parentController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="29" selection-start="1383" selection-end="1383" vertical-scroll-proportion="0.63274336" vertical-offset="520" max-vertical-offset="4836">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/payments/components/payment_form.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="55" column="96" selection-start="2101" selection-end="2101" vertical-scroll-proportion="0.48893806" vertical-offset="858" max-vertical-offset="1794">
+          <folding>
+            <marker date="1429023097984" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/payments/components/receipt_form.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="42" selection-start="189" selection-end="189" vertical-scroll-proportion="0.14380531" vertical-offset="0" max-vertical-offset="1768">
+          <folding>
+            <marker date="1429024301923" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/payments_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="23" selection-start="147" selection-end="147" vertical-scroll-proportion="0.19847329" vertical-offset="0" max-vertical-offset="3718">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/payments.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="66" selection-start="1823" selection-end="1823" vertical-scroll-proportion="0.6261062" vertical-offset="656" max-vertical-offset="1872">
           <folding />
         </state>
       </provider>
