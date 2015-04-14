@@ -37,6 +37,7 @@ class ParentController extends CI_Controller {
             'purchases_model',
             'sales_model',
             'stock_model',
+            'bank_ac_model',
             'intelligent_router_model',
         ));
 

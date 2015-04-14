@@ -22,10 +22,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="products_model.php" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/application/models/products_model.php">
+      <file leaf-file-name="bank_ac_model.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/models/bank_ac_model.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="50" column="40" selection-start="1353" selection-end="1353" vertical-scroll-proportion="0.6881134" vertical-offset="669" max-vertical-offset="1586">
+            <state line="56" column="37" selection-start="1485" selection-end="1485" vertical-scroll-proportion="0.6444929" vertical-offset="865" max-vertical-offset="1872">
               <folding />
             </state>
           </provider>
@@ -49,22 +49,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/application/controllers/customers.php" />
-        <option value="$PROJECT_DIR$/application/controllers/suppliers.php" />
-        <option value="$PROJECT_DIR$/application/views/suppliers/welcome.php" />
-        <option value="$PROJECT_DIR$/application/models/helper_model.php" />
-        <option value="$PROJECT_DIR$/application/models/privilege_model.php" />
         <option value="$PROJECT_DIR$/application/models/products_model.php" />
         <option value="$PROJECT_DIR$/application/models/purchases_model.php" />
         <option value="$PROJECT_DIR$/application/models/sales_model.php" />
         <option value="$PROJECT_DIR$/application/models/stock_model.php" />
         <option value="$PROJECT_DIR$/application/models/intelligent_router_model.php" />
         <option value="$PROJECT_DIR$/application/models/parent_model.php" />
-        <option value="$PROJECT_DIR$/application/controllers/parentController.php" />
         <option value="$PROJECT_DIR$/application/models/Suppliers_model.php" />
         <option value="$PROJECT_DIR$/application/models/Customers_model.php" />
         <option value="$PROJECT_DIR$/application/controllers/purchases.php" />
         <option value="$PROJECT_DIR$/application/controllers/sales.php" />
+        <option value="$PROJECT_DIR$/application/controllers/parentController.php" />
+        <option value="$PROJECT_DIR$/application/views/settings/accounts.php" />
+        <option value="$PROJECT_DIR$/application/config/form_validation.php" />
+        <option value="$PROJECT_DIR$/application/views/settings/components/bank_accounts.php" />
+        <option value="$PROJECT_DIR$/application/controllers/settings.php" />
+        <option value="$PROJECT_DIR$/application/models/bank_ac_model.php" />
       </list>
     </option>
   </component>
@@ -457,6 +457,76 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="settings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="settings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="components" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="products" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="models" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -488,7 +558,7 @@
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="options.lastSelected" value="vcs.Git" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../viriklogistics_auth/application/views/settings/accounts.php" />
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
   </component>
@@ -604,116 +674,125 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/application/controllers/suppliers.php">
+    <entry file="file://$PROJECT_DIR$/../viriklogistics_auth/application/views/settings/accounts.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="0" selection-start="422" selection-end="422" vertical-scroll-proportion="0.3738938" vertical-offset="0" max-vertical-offset="1846">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/suppliers/welcome.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="17" selection-start="388" selection-end="388" vertical-scroll-proportion="0.3528761" vertical-offset="201" max-vertical-offset="3172">
+        <state line="143" column="18" selection-start="7445" selection-end="7445" vertical-scroll-proportion="0.5431416" vertical-offset="939" max-vertical-offset="3302">
           <folding>
-            <marker date="1428996438367" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1426591794870" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1426591794870" expanded="true" signature="-1:-1" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/helper_model.php">
+    <entry file="file://$PROJECT_DIR$/application/views/settings/components/nav_bar.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="39" selection-start="45" selection-end="45" vertical-scroll-proportion="0.0" vertical-offset="26" max-vertical-offset="17888">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/privilege_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="42" selection-start="118" selection-end="118" vertical-scroll-proportion="0.028761063" vertical-offset="26" max-vertical-offset="2080">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/purchases_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="42" selection-start="48" selection-end="48" vertical-scroll-proportion="0.028761063" vertical-offset="0" max-vertical-offset="9646">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/sales_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="38" selection-start="44" selection-end="44" vertical-scroll-proportion="0.028761063" vertical-offset="0" max-vertical-offset="9594">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/stock_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="0" selection-start="48" selection-end="48" vertical-scroll-proportion="0.086283185" vertical-offset="0" max-vertical-offset="4186">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/intelligent_router_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="30" selection-start="406" selection-end="406" vertical-scroll-proportion="0.36859325" vertical-offset="52" max-vertical-offset="1040">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/models/parent_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="8" selection-start="397" selection-end="397" vertical-scroll-proportion="0.31188658" vertical-offset="0" max-vertical-offset="988">
+        <state line="18" column="0" selection-start="389" selection-end="389" vertical-scroll-proportion="0.23446019" vertical-offset="71" max-vertical-offset="988">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/parentController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="27" selection-start="1031" selection-end="1031" vertical-scroll-proportion="0.20132743" vertical-offset="598" max-vertical-offset="4732">
+        <state line="39" column="28" selection-start="1296" selection-end="1296" vertical-scroll-proportion="0.460177" vertical-offset="598" max-vertical-offset="4758">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Suppliers_model.php">
+    <entry file="file://$PROJECT_DIR$/application/views/purchases/credit/make.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="24" selection-start="275" selection-end="275" vertical-scroll-proportion="0.22682661" vertical-offset="52" max-vertical-offset="1846">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6500">
+          <folding>
+            <marker date="1428993654927" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/products/welcome.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="40" selection-start="281" selection-end="281" vertical-scroll-proportion="0.460177" vertical-offset="0" max-vertical-offset="2834">
+          <folding>
+            <marker date="1428412687287" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/settings/accounts.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="26" selection-start="496" selection-end="496" vertical-scroll-proportion="0.40458015" vertical-offset="279" max-vertical-offset="1352">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/helperClasses/Customer.php">
+    <entry file="file://$PROJECT_DIR$/system/libraries/Form_validation.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="6" selection-start="100" selection-end="100" vertical-scroll-proportion="0.08505998" vertical-offset="0" max-vertical-offset="917">
+        <state line="26" column="6" selection-start="737" selection-end="737" vertical-scroll-proportion="0.0" vertical-offset="676" max-vertical-offset="37206">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/customers.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="61" column="20" selection-start="2215" selection-end="2215" vertical-scroll-proportion="0.7123894" vertical-offset="942" max-vertical-offset="1846">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/settings/components/bank_accounts.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="157" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.43141592" vertical-offset="260" max-vertical-offset="2444">
+          <folding>
+            <marker date="1429004306552" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/system/helpers/form_helper.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="27560">
+          <folding>
+            <marker date="1417581516905" expanded="false" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/config/form_validation.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="53" column="97" selection-start="1739" selection-end="1739" vertical-scroll-proportion="0.5176991" vertical-offset="910" max-vertical-offset="2184">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/models/Customers_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="160" selection-end="160" vertical-scroll-proportion="0.17011996" vertical-offset="26" max-vertical-offset="1846">
+        <state line="42" column="20" selection-start="1105" selection-end="1105" vertical-scroll-proportion="0.17775354" vertical-offset="929" max-vertical-offset="1846">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/purchases.php">
+    <entry file="file://$PROJECT_DIR$/application/models/Suppliers_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="66" selection-start="1065" selection-end="1065" vertical-scroll-proportion="0.3528761" vertical-offset="539" max-vertical-offset="1794">
+        <state line="48" column="23" selection-start="1304" selection-end="1304" vertical-scroll-proportion="0.60305345" vertical-offset="695" max-vertical-offset="1846">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/sales.php">
+    <entry file="file://$PROJECT_DIR$/application/controllers/settings.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="20" selection-start="2194" selection-end="2194" vertical-scroll-proportion="0.52588236" vertical-offset="1061" max-vertical-offset="2626">
+        <state line="59" column="8" selection-start="2165" selection-end="2165" vertical-scroll-proportion="0.5685841" vertical-offset="1020" max-vertical-offset="1924">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/products_model.php">
+    <entry file="file://$PROJECT_DIR$/application/models/bank_ac_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="40" selection-start="1353" selection-end="1353" vertical-scroll-proportion="0.6881134" vertical-offset="669" max-vertical-offset="1586">
+        <state line="56" column="37" selection-start="1485" selection-end="1485" vertical-scroll-proportion="0.6444929" vertical-offset="865" max-vertical-offset="1872">
           <folding />
         </state>
       </provider>
