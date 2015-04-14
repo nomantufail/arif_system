@@ -29,6 +29,7 @@ class ParentController extends CI_Controller {
         $this->load->library(array('form_validation','email','Carbon','Helper','pagination'));
         $this->load->model(array(
             'parent_model',
+            'admin_model',
             'helper_model',
             'privilege_model',
             'customers_model',
@@ -38,6 +39,7 @@ class ParentController extends CI_Controller {
             'sales_model',
             'stock_model',
             'bank_ac_model',
+            'accounts_model',
             'intelligent_router_model',
         ));
 

@@ -148,7 +148,7 @@ $default_row_counter = 1;
                                 <td>
                                     <select class="select_box suppliers_select_box" style="width: 200px;" name="supplier" id="supplier">
                                         <?php foreach($suppliers as $supplier):?>
-                                            <option value="<?= $supplier->id ?>"><?= $supplier->name ?></option>
+                                            <option value="<?= $supplier->name ?>"><?= $supplier->name ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </td>
@@ -189,7 +189,7 @@ $default_row_counter = 1;
                                             <select class="select_box product_select_box" style="width: 200px;" name="product_<?= $row_counter ?>" id="product_<?= $row_counter ?>">
                                                 <option value="">--Select--</option>
                                                 <?php foreach($products as $product):?>
-                                                    <option value="<?= $product->id ?>"><?= $product->name ?></option>
+                                                    <option value="<?= $product->name ?>"><?= $product->name ?></option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </td>
