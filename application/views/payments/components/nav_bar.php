@@ -17,8 +17,8 @@
             <a href="<?= $this->helper_model->controller_path()."make" ?>"><i class="fa fa-fw fa-plus-circle"></i>New</a>
         </li>
 
-        <li class="<?php if($section == 'invoices'){echo "active";} ?>">
-            <a target="_blank" href="<?= $this->helper_model->controller_path()."history" ?>"><i class="fa fa-fw fa-file-o"></i>History</a>
+        <li class="<?php if($section == 'history'){echo "active";} ?>">
+            <a href="<?= $this->helper_model->controller_path()."history" ?>"><i class="fa fa-fw fa-file-o"></i>History</a>
         </li>
     </ul>
 </div>

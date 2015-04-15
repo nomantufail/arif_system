@@ -22,7 +22,7 @@
     <?php } ?>
 <?php endif; ?>
 
-<form method="post">
+<form method="post" action="<?= $this->helper_model->controller_path()."make" ?>">
     <table class="invoice_table table table-bordered">
 
         <tr>
@@ -32,7 +32,7 @@
         <tr>
             <th>Customer</th>
             <td>
-                <select class="select_box suppliers_select_box" style="width: 100%;" name="supplier" id="supplier">
+                <select class="select_box suppliers_select_box" style="width: 100%;" name="customer" id="supplier">
                     <?php foreach($customers as $customer):?>
                         <option value="<?= $customer->name ?>"><?= $customer->name ?></option>
                     <?php endforeach; ?>

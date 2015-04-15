@@ -90,6 +90,14 @@ class Parent_Model extends CI_Model {
     }
 
     /**
+     * Used to fetch only receipt vouchers
+     */
+    public function receipt_vouchers()
+    {
+        $this->db->where('vouchers.voucher_type','receipt');
+    }
+
+    /**
      * Used to join vouchers table with voucher_entries table
      */
     public function join_vouchers()

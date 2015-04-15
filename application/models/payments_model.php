@@ -120,9 +120,7 @@ class Payments_Model extends Parent_Model {
 
         /*--------------Lets the game begin---------------*/
         $this->db->trans_begin();
-
         $voucher_inserted = $this->accounts_model->insert_voucher($voucher);
-
 
         if($this->db->trans_status() == false || $voucher_inserted == false)
         {
@@ -143,6 +141,7 @@ class Payments_Model extends Parent_Model {
             vouchers.id as voucher_id, vouchers.summary, voucher_entries.ac_title,
             voucher_entries.ac_sub_title, voucher_entries.amount, vouchers.voucher_date,
             voucher_entries.id as entry_id,
+            voucher_entries.dr_cr,
             voucher_entries.related_supplier, voucher_entries.related_customer,
             voucher_entries.related_business, voucher_entries.related_other_agent,
         ");
@@ -150,6 +149,26 @@ class Payments_Model extends Parent_Model {
         $this->join_vouchers();
         $this->active();
         $this->payment_vouchers();
+        $this->latest($this->table);
+        $result = $this->db->get()->result();
+
+        $journal = $this->accounts_model->make_vouchers_from_raw($result);
+        return $journal;
+    }
+    public function receipt_history()
+    {
+        $this->db->select("
+            vouchers.id as voucher_id, vouchers.summary, voucher_entries.ac_title,
+            voucher_entries.ac_sub_title, voucher_entries.amount, vouchers.voucher_date,
+            voucher_entries.id as entry_id,
+            voucher_entries.dr_cr,
+            voucher_entries.related_supplier, voucher_entries.related_customer,
+            voucher_entries.related_business, voucher_entries.related_other_agent,
+        ");
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->receipt_vouchers();
         $this->latest($this->table);
         $result = $this->db->get()->result();
 

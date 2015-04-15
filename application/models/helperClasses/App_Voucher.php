@@ -41,4 +41,30 @@ class App_Voucher {
         }
         return round($total_debit-$total_credit);
     }
+
+    public function debit_entries()
+    {
+        $entries = array();
+        foreach($this->entries as $entry)
+        {
+            if($entry->dr_cr == 1)
+            {
+                array_push($entries, $entry);
+            }
+        }
+        return $entries;
+    }
+
+    public function credit_entries()
+    {
+        $entries = array();
+        foreach($this->entries as $entry)
+        {
+            if($entry->dr_cr == 0)
+            {
+                array_push($entries, $entry);
+            }
+        }
+        return $entries;
+    }
 } 

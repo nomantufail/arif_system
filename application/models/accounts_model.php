@@ -116,6 +116,7 @@ class Accounts_Model extends CI_Model {
                 $temp_voucher_entry->related_business = $record->related_business;
                 $temp_voucher_entry->related_other_agent = $record->related_other_agent;
                 $temp_voucher_entry->amount = $record->amount;
+                $temp_voucher_entry->dr_cr = $record->dr_cr;
             }/////////////////////////////////////////////////
 
             //pushing particals
@@ -131,7 +132,6 @@ class Accounts_Model extends CI_Model {
                 array_push($final_voucher_array, $temp_voucher);
             }
         }
-
         return $final_voucher_array;
     }
 }

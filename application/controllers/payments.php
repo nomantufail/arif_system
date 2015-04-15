@@ -61,6 +61,13 @@ class Payments extends ParentController {
 
     public function history()
     {
-        $this->payments_model->payment_history();
+        $headerData['title']='Payment New*';
+        $this->bodyData['section'] = 'history';
+        $this->bodyData['payment_history'] = $this->payments_model->payment_history();
+        $this->bodyData['receipt_history'] = $this->payments_model->receipt_history();
+
+        $this->load->view('components/header',$headerData);
+        $this->load->view('payments/history', $this->bodyData);
+        $this->load->view('components/footer');
     }
 }
