@@ -335,7 +335,7 @@ class Sales_Model extends Parent_Model {
                 /*----------------------------------*/
 
                 /*----------Managing Stack-------------*/
-                $stock_entry['product_id']=$product;
+                $stock_entry['product_name']=$product;
                 $stock_entry['quantity']=$quantity;
                 array_push($stock_entries, $stock_entry);
                 /*------------------------------------*/

@@ -22,10 +22,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="payments_model.php" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/application/models/payments_model.php">
+      <file leaf-file-name="stock_model.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/models/stock_model.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="71" column="0" selection-start="2527" selection-end="2527" vertical-scroll-proportion="0.48200655" vertical-offset="1404" max-vertical-offset="3770">
+            <state line="129" column="13" selection-start="4439" selection-end="4439" vertical-scroll-proportion="0.65486723" vertical-offset="2762" max-vertical-offset="4186">
               <folding />
             </state>
           </provider>
@@ -59,12 +59,12 @@
         <option value="$PROJECT_DIR$/application/controllers/parentController.php" />
         <option value="$PROJECT_DIR$/application/views/payments/components/receipt_form.php" />
         <option value="$PROJECT_DIR$/application/controllers/payments.php" />
-        <option value="$PROJECT_DIR$/application/models/stock_model.php" />
         <option value="$PROJECT_DIR$/application/models/helperClasses/App_Voucher.php" />
-        <option value="$PROJECT_DIR$/application/models/purchases_model.php" />
-        <option value="$PROJECT_DIR$/application/models/sales_model.php" />
         <option value="$PROJECT_DIR$/application/models/accounts_model.php" />
         <option value="$PROJECT_DIR$/application/models/payments_model.php" />
+        <option value="$PROJECT_DIR$/application/models/purchases_model.php" />
+        <option value="$PROJECT_DIR$/application/models/sales_model.php" />
+        <option value="$PROJECT_DIR$/application/models/stock_model.php" />
       </list>
     </option>
   </component>
@@ -630,30 +630,9 @@
         <state line="47" column="66" selection-start="1823" selection-end="1823" vertical-scroll-proportion="0.6261062" vertical-offset="656" max-vertical-offset="1872" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/stock_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="90" column="9" selection-start="2877" selection-end="2877" vertical-scroll-proportion="0.36172566" vertical-offset="2013" max-vertical-offset="4134">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/models/helperClasses/App_Voucher.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="23" column="8" selection-start="386" selection-end="386" vertical-scroll-proportion="0.42529988" vertical-offset="78" max-vertical-offset="1144">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/purchases_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="300" column="0" selection-start="11190" selection-end="11190" vertical-scroll-proportion="0.3329646" vertical-offset="7499" max-vertical-offset="9984">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/sales_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="296" column="40" selection-start="11051" selection-end="11051" vertical-scroll-proportion="0.74115044" vertical-offset="7026" max-vertical-offset="9932">
           <folding />
         </state>
       </provider>
@@ -667,7 +646,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/models/payments_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="0" selection-start="2527" selection-end="2527" vertical-scroll-proportion="0.48200655" vertical-offset="1404" max-vertical-offset="3770">
+        <state line="84" column="29" selection-start="2995" selection-end="2995" vertical-scroll-proportion="0.6804798" vertical-offset="1560" max-vertical-offset="3770">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/purchases_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="340" column="42" selection-start="13045" selection-end="13045" vertical-scroll-proportion="0.18915929" vertical-offset="8669" max-vertical-offset="9984">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/sales_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="337" column="42" selection-start="12912" selection-end="12912" vertical-scroll-proportion="0.19469027" vertical-offset="8586" max-vertical-offset="9932">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/stock_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="129" column="13" selection-start="4439" selection-end="4439" vertical-scroll-proportion="0.65486723" vertical-offset="2762" max-vertical-offset="4186">
           <folding />
         </state>
       </provider>

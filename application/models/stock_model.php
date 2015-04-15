@@ -52,31 +52,32 @@ class Stock_Model extends Parent_Model {
     }
     public function increase($stock_entries)
     {
-        $product_ids = array();
+        $product_names = array();
         foreach($stock_entries as $entry)
         {
-            array_push($product_ids, $entry['product_id']);
+            array_push($product_names, $entry['product_name']);
         }
 
-        if(sizeof($product_ids) > 0)
+        if(sizeof($product_names) > 0)
         {
             $this->db->trans_start();
 
-            $this->db->select('product_id, quantity');
-            $this->db->where_in("product_id", $product_ids);
-            $result = $this->db->get($this->table)->result();
-
+            $this->db->select('products.id as product_id, products.name as product_name, stock.quantity');
+            $this->db->from($this->table);
+            $this->db->join('products','products.id = stock.product_id', 'left');
+            $this->db->where_in("products.name", $product_names);
+            $result = $this->db->get()->result();
             $modified_stock_entries = array();
             foreach($result as $record)
             {
                 foreach($stock_entries as $entry)
                 {
-                    if($entry['product_id'] == $record->product_id)
+                    if($entry['product_name'] == $record->product_name)
                     {
                         $modified_stock_entry = array(
-                            'product_id' => $entry['product_id'],
-                            'quantity' => $entry['quantity'] + $record->quantity,
-                            'updated_at' => date('m/d/Y h:i:s', time()),
+                            'product_id' => $record->product_id,
+                            'quantity' => $record->quantity + $entry['quantity'],
+                            'updated_at' => date('Y-m-d h:i:s', time()),
                         );
                         array_push($modified_stock_entries, $modified_stock_entry);
                     }
@@ -95,37 +96,38 @@ class Stock_Model extends Parent_Model {
     }
     public function decrease($stock_entries)
     {
-        $product_ids = array();
+        $product_names = array();
         foreach($stock_entries as $entry)
         {
-            array_push($product_ids, $entry['product_id']);
+            array_push($product_names, $entry['product_name']);
         }
 
-        if(sizeof($product_ids) > 0)
+        if(sizeof($product_names) > 0)
         {
             $this->db->trans_start();
 
-            $this->db->select('product_id, quantity');
-            $this->db->where_in("product_id", $product_ids);
-            $result = $this->db->get($this->table)->result();
-
+            $this->db->select('products.id as product_id, products.name as product_name, stock.quantity');
+            $this->db->from($this->table);
+            $this->db->join('products','products.id = stock.product_id', 'left');
+            $this->db->where_in("products.name", $product_names);
+            $result = $this->db->get()->result();
             $modified_stock_entries = array();
             foreach($result as $record)
             {
                 foreach($stock_entries as $entry)
                 {
-                    if($entry['product_id'] == $record->product_id)
+
+                    if($entry['product_name'] == $record->product_name)
                     {
                         $modified_stock_entry = array(
-                            'product_id' => $entry['product_id'],
-                            'quantity' => $entry['quantity'] - $record->quantity,
-                            'updated_at' => date('m/d/Y h:i:s', time()),
+                            'product_id' => $record->product_id,
+                            'quantity' => $record->quantity - $entry['quantity'],
+                            'updated_at' => date('Y-m-d h:i:s', time()),
                         );
                         array_push($modified_stock_entries, $modified_stock_entry);
                     }
                 }
             }
-
             if(sizeof($modified_stock_entries) > 0)
             {
                 $this->db->update_batch($this->table, $modified_stock_entries, 'product_id');
