@@ -13,6 +13,7 @@ class Payments_Model extends Parent_Model {
         $voucher = new App_Voucher();
         $voucher->voucher_date = $this->input->post('voucher_date');
         $voucher->summary = $this->input->post('summary');
+        $voucher->voucher_type = 'payment';
 
         $voucher_entries = array();
 
@@ -77,6 +78,7 @@ class Payments_Model extends Parent_Model {
         $voucher = new App_Voucher();
         $voucher->voucher_date = $this->input->post('voucher_date');
         $voucher->summary = $this->input->post('summary');
+        $voucher->voucher_type = 'receipt';
 
         $voucher_entries = array();
 

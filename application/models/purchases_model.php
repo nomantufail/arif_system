@@ -297,6 +297,7 @@ class Purchases_Model extends Parent_Model {
         $voucher = new App_Voucher();
         $voucher->voucher_date = $this->input->post('invoice_date');
         $voucher->summary = $this->input->post('extra_info');
+        $voucher->voucher_type = 'purchase';
 
         $voucher_entries = array();
         $stock_entries = array();

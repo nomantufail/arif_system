@@ -12,6 +12,7 @@ class Accounts_Model extends CI_Model {
         $voucher_data = array(
             'voucher_date'=>$voucher->voucher_date,
             'summary'=>$voucher->summary,
+            'voucher_type'=>$voucher->voucher_type,
         );
         $this->db->insert('vouchers',$voucher_data);
         $voucher_id = $this->db->insert_id();

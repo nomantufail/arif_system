@@ -11,6 +11,7 @@ class App_Voucher {
     public $id;
     public $voucher_date;
     public $summary;
+    public $voucher_type;
     public $inserted_at;
     public $updated_at;
     public $deleted_at;
@@ -20,7 +21,7 @@ class App_Voucher {
 
     public function __construct()
     {
-        //$this->summary = "";
+
     }
 
     public function balance()
