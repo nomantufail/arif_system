@@ -11,7 +11,7 @@ class Purchase_Invoice {
     public $id;
     public $supplier;
     public $date;
-    public $extra_info;
+    public $summary;
     public $entries;
     public $paid;
 
@@ -20,15 +20,15 @@ class Purchase_Invoice {
         $this->entries = array();
     }
 
-    public function extra_info_simplified()
+    public function summary_simplified()
     {
-        $extra_info = $this->extra_info;
-        if(strlen($extra_info) > 50)
+        $summary = $this->summary;
+        if(strlen($summary) > 50)
         {
-            $extra_info = substr($extra_info, 0,50);
-            $extra_info.="...";
+            $summary = substr($summary, 0,50);
+            $summary.="...";
         }
-        return $extra_info;
+        return $summary;
     }
 
     public function grand_total_purchase_price()

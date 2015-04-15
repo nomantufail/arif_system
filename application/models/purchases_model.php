@@ -4,7 +4,7 @@ class Purchases_Model extends Parent_Model {
     public function __construct(){
         parent::__construct();
         
-        $this->table = "purchase_invoices";
+        $this->table = "vouchers";
     }
 
     public function get(){
@@ -96,7 +96,7 @@ class Purchases_Model extends Parent_Model {
         return $final_invoices_array;
     }
 
-    public function credit()
+    public function invoices()
     {
         include_once(APPPATH."models/helperClasses/Purchase_Invoice.php");
         include_once(APPPATH."models/helperClasses/Purchase_Invoice_Entry.php");
@@ -104,23 +104,18 @@ class Purchases_Model extends Parent_Model {
         include_once(APPPATH."models/helperClasses/Product.php");
 
         $this->db->select("
-            purchase_invoices.id as invoice_id, purchase_invoices.invoice_date, purchase_invoices.extra_info,
-            customers.id as supplier_id, customers.name as supplier_name,
-            purchase_invoices.paid as paid,
-            purchase_invoice_items.id as entry_id, purchase_invoice_items.quantity as product_quantity,
-            purchase_invoice_items.cost_per_item,
-            products.id as product_id, products.name as product_name,
+            vouchers.id as invoice_id, vouchers.voucher_date as invoice_date, vouchers.summary as invoice_summary,
+            voucher_entries.related_supplier, voucher_entries.ac_title as product_name, voucher_entries.quantity,
+            voucher_entries.cost_per_item, voucher_entries.amount,
+            voucher_entries.id as entry_id,
+
         ");
         $this->db->from($this->table);
-        $this->db->join('purchase_invoice_items','purchase_invoice_items.invoice_id = purchase_invoices.id','left');
-        $this->db->join('customers','customers.id = purchase_invoices.supplier_id','left');
-        $this->db->join('products','products.id = purchase_invoice_items.product_id','left');
-
-        $this->db->where(array(
-            'purchase_invoices.deleted'=>0,
-            'purchase_invoices.transaction_type'=>0,
-        ));
-        $this->db->order_by('purchase_invoices.id, purchase_invoice_items.id');
+        $this->db->join('voucher_entries','voucher_entries.voucher_id = vouchers.id','left');
+        $this->active();
+        $this->purchase_vouchers();
+        $this->with_credit_entries_only();
+        $this->latest($this->table);
         $raw_invoices = $this->db->get()->result();
 
         $final_invoices_array = array();
@@ -145,9 +140,8 @@ class Purchases_Model extends Parent_Model {
                 //setting data in the parent object
                 $temp_invoice->id = $record->invoice_id;
                 $temp_invoice->date = $record->invoice_date;
-                $temp_invoice->supplier = new Supplier($record->supplier_id, $record->supplier_name);
-                $temp_invoice->extra_info = $record->extra_info;
-                $temp_invoice->paid = $record->paid;
+                $temp_invoice->supplier = new Supplier(null, $record->related_supplier);
+                $temp_invoice->summary = $record->invoice_summary;
 
             }/////////////////////////////////////////////////
 
@@ -160,9 +154,10 @@ class Purchases_Model extends Parent_Model {
 
                 //setting data in the Trip_Product_Data object
                 $temp_invoice_item->id = $record->entry_id;
-                $temp_invoice_item->product = new Product($record->product_id, $record->product_name);
+                $temp_invoice_item->product = new Product(null, $record->product_name);
                 $temp_invoice_item->costPerItem = $record->cost_per_item;
-                $temp_invoice_item->quantity = $record->product_quantity;
+                $temp_invoice_item->quantity = $record->quantity;
+                $temp_invoice_item->amount = $record->amount;
             }/////////////////////////////////////////////////
 
             //pushing particals
@@ -174,15 +169,14 @@ class Purchases_Model extends Parent_Model {
                     array_push($final_invoices_array, $temp_invoice);
                 }
             }else{
-
                 array_push($temp_invoice->entries, $temp_invoice_item);
                 array_push($final_invoices_array, $temp_invoice);
             }
         }
 
+        //var_dump($final_invoices_array);die();
         return $final_invoices_array;
     }
-
 
     public function get_limited($limit, $start, $keys, $sort) {
 
@@ -371,9 +365,7 @@ class Purchases_Model extends Parent_Model {
 
     public function next_invoice()
     {
-        $this->db->select_max('id');
-        $result = $this->db->get('purchase_invoices')->result();
-        return $result[0]->id +1;
+        return $this->helper_model->next_id($this->table);
     }
 
 }

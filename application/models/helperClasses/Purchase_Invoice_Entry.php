@@ -12,6 +12,7 @@ class Purchase_Invoice_Entry {
     public $product;
     public $quantity;
     public $costPerItem;
+    public $amount;
     public $invoice;
     public function __construct(&$whole_obj)
     {

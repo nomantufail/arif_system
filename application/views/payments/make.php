@@ -7,22 +7,20 @@
  */
 ?>
 
-<div class="row page_heading_container">
-    <div class="col-lg-12">
-        <section class="col-md-6">
-            <h3 class="">
-                Payments <small></small>
-            </h3>
-        </section>
-    </div>
-</div>
 <div id="page-wrapper" class="whole_page_container">
 
     <div class="container-fluid">
+        <div class="row">
 
+            <?php
+            include_once(APPPATH."views/payments/components/nav_bar.php");
+            ?>
+
+        </div>
         <div class="row actual_body_contents">
 
-            <div class="row" style="background-color: ;">
+
+            <div class="row" style="background-color: ; margin-top: 10px;">
 
                 <!-- Receipt Voucher -->
                 <div class="col-md-6" style="border-left: 0px solid lightgray;">

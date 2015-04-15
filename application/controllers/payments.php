@@ -59,8 +59,8 @@ class Payments extends ParentController {
         $this->load->view('components/footer');
     }
 
-    public function show()
+    public function history()
     {
-
+        $this->payments_model->payment_history();
     }
 }

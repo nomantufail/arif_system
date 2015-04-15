@@ -3,6 +3,8 @@ class Payments_Model extends Parent_Model {
 
     public function __construct(){
         parent::__construct();
+
+        $this->table = "vouchers";
     }
 
     public function insert_payment()
@@ -135,6 +137,25 @@ class Payments_Model extends Parent_Model {
         return false;
     }
 
+    public function payment_history()
+    {
+        $this->db->select("
+            vouchers.id as voucher_id, vouchers.summary, voucher_entries.ac_title,
+            voucher_entries.ac_sub_title, voucher_entries.amount, vouchers.voucher_date,
+            voucher_entries.id as entry_id,
+            voucher_entries.related_supplier, voucher_entries.related_customer,
+            voucher_entries.related_business, voucher_entries.related_other_agent,
+        ");
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->payment_vouchers();
+        $this->latest($this->table);
+        $result = $this->db->get()->result();
+
+        $journal = $this->accounts_model->make_vouchers_from_raw($result);
+        return $journal;
+    }
 }
 
 ?>

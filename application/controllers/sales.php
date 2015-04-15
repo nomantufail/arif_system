@@ -81,11 +81,12 @@ class Sales extends ParentController {
         $this->load->view('components/footer');
     }
 
-    public function credit()
+    public function invoices()
     {
-        $headerData['title']= 'Credit Invoices';
-        $sales = $this->sales_model->credit();
+        $headerData['title']= 'Sale Invoices';
+        $sales = $this->sales_model->invoices();
         $this->bodyData['sales']= $sales;
+        $this->bodyData['section'] = 'invoices';
 
         $this->load->view('components/header', $headerData);
         $this->load->view('sales/credit/show', $this->bodyData);

@@ -49,11 +49,12 @@ class Purchases extends ParentController {
         $this->load->view('components/footer');
     }
 
-    public function credit()
+    public function invoices()
     {
-        $headerData['title']= 'Credit Invoices';
-        $purchases = $this->purchases_model->credit();
+        $headerData['title']= 'Purchase Invoices';
+        $purchases = $this->purchases_model->invoices();
         $this->bodyData['purchases']= $purchases;
+        $this->bodyData['section'] = 'invoices';
 
         $this->load->view('components/header', $headerData);
         $this->load->view('purchases/credit/show', $this->bodyData);

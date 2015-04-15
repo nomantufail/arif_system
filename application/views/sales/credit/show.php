@@ -51,8 +51,6 @@
                             <th class="column_heading">Qty</th>
                             <th class="column_heading">Sale Price / Item</th>
                             <th class="column_heading">Total Price</th>
-                            <th class="column_heading">Received</th>
-                            <th class="column_heading">Remaining</th>
                             <th class="column_heading">Extra Info</th>
                             <th class="column_heading"></th>
                         </tr>
@@ -104,25 +102,9 @@
                                     </td>
 
                                     <?php if($count == 1):?>
-                                        <td rowspan="<?=($num_invoice_items)?>" style="vertical-align: middle;">
-                                            <?php
-                                            echo $record->received;
-                                            ?>
-                                        </td>
-                                    <?php endif; ?>
-
-                                    <?php if($count == 1):?>
-                                        <td rowspan="<?=($num_invoice_items)?>" style="vertical-align: middle;">
-                                            <?php
-                                            echo $record->remaining();
-                                            ?>
-                                        </td>
-                                    <?php endif; ?>
-
-                                    <?php if($count == 1):?>
                                         <td rowspan="<?=($num_invoice_items)?>">
                                             <?php
-                                            echo $record->extra_info_simplified();
+                                            echo $record->summary_simplified();
                                             ?>
                                         </td>
                                     <?php endif; ?>

@@ -21,7 +21,7 @@ class App_Voucher {
 
     public function __construct()
     {
-
+        $this->entries = array();
     }
 
     public function balance()

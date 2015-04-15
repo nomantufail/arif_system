@@ -7,7 +7,7 @@
  */
 ?>
 
-<h3 style="color: #006dcc;">Payment Voucher</h3>
+<h4 style="color: #006dcc;">Payment Voucher</h4>
 
 <?php if(isset($_POST['savePayment'])): ?>
     <?php echo validation_errors('<div class="alert alert-danger alert-dismissible" role="alert">
@@ -23,7 +23,7 @@
     <?php } ?>
 <?php endif; ?>
 
-<form method="post">
+<form method="post" action="<?= $this->helper_model->controller_path()."make" ?>">
     <table class="invoice_table table table-bordered">
 
         <tr>

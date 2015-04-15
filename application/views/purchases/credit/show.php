@@ -51,8 +51,6 @@
                             <th class="column_heading">Qty</th>
                             <th class="column_heading">Cst / Item</th>
                             <th class="column_heading">Total Cst</th>
-                            <th class="column_heading">Paid</th>
-                            <th class="column_heading">Remaining</th>
                             <th class="column_heading">Extra Info</th>
                             <th class="column_heading"></th>
                         </tr>
@@ -104,24 +102,9 @@
                                     </td>
 
                                     <?php if($count == 1):?>
-                                        <td rowspan="<?=($num_invoice_items)?>" style="vertical-align: middle;">
-                                            <?php
-                                            echo $record->paid;
-                                            ?>
-                                        </td>
-                                    <?php endif; ?>
-                                    <?php if($count == 1):?>
-                                        <td rowspan="<?=($num_invoice_items)?>" style="vertical-align: middle;">
-                                            <?php
-                                            echo $record->remaining();
-                                            ?>
-                                        </td>
-                                    <?php endif; ?>
-
-                                    <?php if($count == 1):?>
                                         <td rowspan="<?=($num_invoice_items)?>">
                                             <?php
-                                            echo $record->extra_info_simplified();
+                                            echo $record->summary_simplified();
                                             ?>
                                         </td>
                                     <?php endif; ?>

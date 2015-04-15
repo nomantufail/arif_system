@@ -4,7 +4,7 @@ class Sales_Model extends Parent_Model {
     public function __construct(){
         parent::__construct();
         
-        $this->table = "sale_invoices";
+        $this->table = "vouchers";
     }
 
     public function get(){
@@ -96,7 +96,7 @@ class Sales_Model extends Parent_Model {
         return $final_invoices_array;
     }
 
-    public function credit()
+    public function invoices()
     {
         include_once(APPPATH."models/helperClasses/Sale_Invoice.php");
         include_once(APPPATH."models/helperClasses/Sale_Invoice_Entry.php");
@@ -104,23 +104,18 @@ class Sales_Model extends Parent_Model {
         include_once(APPPATH."models/helperClasses/Product.php");
 
         $this->db->select("
-            sale_invoices.id as invoice_id, sale_invoices.invoice_date, sale_invoices.extra_info,
-            customers.id as customer_id, customers.name as customer_name,
-            sale_invoices.recieved,
-            sale_invoice_items.id as entry_id, sale_invoice_items.quantity as product_quantity,
-            sale_invoice_items.sale_price_per_item,
-            products.id as product_id, products.name as product_name,
+            vouchers.id as invoice_id, vouchers.voucher_date as invoice_date, vouchers.summary as invoice_summary,
+            voucher_entries.related_customer, voucher_entries.ac_title as product_name, voucher_entries.quantity,
+            voucher_entries.cost_per_item, voucher_entries.amount,
+            voucher_entries.id as entry_id,
+
         ");
         $this->db->from($this->table);
-        $this->db->join('sale_invoice_items','sale_invoice_items.invoice_id = sale_invoices.id','left');
-        $this->db->join('customers','customers.id = sale_invoices.customer_id','left');
-        $this->db->join('products','products.id = sale_invoice_items.product_id','left');
-
-        $this->db->where(array(
-            'sale_invoices.deleted'=>0,
-            'sale_invoices.transaction_type'=>0,
-        ));
-        $this->db->order_by('sale_invoices.id, sale_invoice_items.id');
+        $this->db->join('voucher_entries','voucher_entries.voucher_id = vouchers.id','left');
+        $this->active();
+        $this->sale_vouchers();
+        $this->with_debit_entries_only();
+        $this->latest($this->table);
         $raw_invoices = $this->db->get()->result();
 
         $final_invoices_array = array();
@@ -145,9 +140,8 @@ class Sales_Model extends Parent_Model {
                 //setting data in the parent object
                 $temp_invoice->id = $record->invoice_id;
                 $temp_invoice->date = $record->invoice_date;
-                $temp_invoice->customer = new Customer($record->customer_id, $record->customer_name);
-                $temp_invoice->extra_info = $record->extra_info;
-                $temp_invoice->received = $record->recieved;
+                $temp_invoice->customer = new Customer(null, $record->related_customer);
+                $temp_invoice->summary = $record->invoice_summary;
 
             }/////////////////////////////////////////////////
 
@@ -160,9 +154,9 @@ class Sales_Model extends Parent_Model {
 
                 //setting data in the Trip_Product_Data object
                 $temp_invoice_item->id = $record->entry_id;
-                $temp_invoice_item->product = new Product($record->product_id, $record->product_name);
-                $temp_invoice_item->salePricePerItem = $record->sale_price_per_item;
-                $temp_invoice_item->quantity = $record->product_quantity;
+                $temp_invoice_item->product = new Product(null, $record->product_name);
+                $temp_invoice_item->salePricePerItem = $record->cost_per_item;
+                $temp_invoice_item->quantity = $record->quantity;
             }/////////////////////////////////////////////////
 
             //pushing particals
@@ -303,7 +297,7 @@ class Sales_Model extends Parent_Model {
 
             $product = $this->input->post('product_'.$i);
             $quantity = $this->input->post('quantity_'.$i);
-            $cost_per_item = $this->input->post('costPerItem_'.$i);
+            $cost_per_item = $this->input->post('salePricePerItem_'.$i);
 
             /* if product is empty than entry will not be added */
             if($product != '')
@@ -369,9 +363,7 @@ class Sales_Model extends Parent_Model {
 
     public function next_invoice()
     {
-        $this->db->select_max('id');
-        $result = $this->db->get('sale_invoices')->result();
-        return $result[0]->id +1;
+        return $this->helper_model->next_id($this->table);
     }
 
 }

@@ -6,7 +6,7 @@
  * Time: 7:18 AM
  */
 ?>
-<h3 style="color: #006dcc;">Receipt Vocuher</h3>
+<h4 style="color: #006dcc;">Receipt Vocuher</h4>
 
 <?php if(isset($_POST['saveReceipt'])): ?>
     <?php echo validation_errors('<div class="alert alert-danger alert-dismissible" role="alert">
