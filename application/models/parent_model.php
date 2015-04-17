@@ -105,6 +105,75 @@ class Parent_Model extends CI_Model {
         $this->db->join('voucher_entries','voucher_entries.voucher_id = vouchers.id','left');
     }
 
+    /**
+     * Used to select all the sale contents which are needed
+     */
+    public function select_sale_content()
+    {
+        $this->db->select("
+            vouchers.id as invoice_id, vouchers.voucher_date as invoice_date, vouchers.summary as invoice_summary,
+            voucher_entries.related_customer, voucher_entries.ac_title as product_name, voucher_entries.quantity,
+            voucher_entries.cost_per_item, voucher_entries.amount,
+            voucher_entries.id as entry_id,
+
+        ");
+    }
+
+    /**
+     * Used to select all the purchases contents which are needed
+     */
+    public function select_purchases_content()
+    {
+        $this->db->select("
+            vouchers.id as invoice_id, vouchers.voucher_date as invoice_date, vouchers.summary as invoice_summary,
+            voucher_entries.related_supplier, voucher_entries.ac_title as product_name, voucher_entries.quantity,
+            voucher_entries.cost_per_item, voucher_entries.amount,
+            voucher_entries.id as entry_id,
+
+        ");
+    }
+
+    /**
+     * Used to select all the payment(paid) contents which are needed
+     */
+    public function select_payment_content()
+    {
+        $this->db->select("
+            vouchers.id as voucher_id, vouchers.summary, voucher_entries.ac_title,
+            voucher_entries.ac_sub_title, voucher_entries.amount, vouchers.voucher_date,
+            voucher_entries.id as entry_id,
+            voucher_entries.dr_cr,
+            voucher_entries.related_supplier, voucher_entries.related_customer,
+            voucher_entries.related_business, voucher_entries.related_other_agent,
+        ");
+    }
+
+    /**
+     * Used to select all the receipt contents which are needed
+     */
+    public function select_receipt_content()
+    {
+        $this->db->select("
+            vouchers.id as voucher_id, vouchers.summary, voucher_entries.ac_title,
+            voucher_entries.ac_sub_title, voucher_entries.amount, vouchers.voucher_date,
+            voucher_entries.id as entry_id,
+            voucher_entries.dr_cr,
+            voucher_entries.related_supplier, voucher_entries.related_customer,
+            voucher_entries.related_business, voucher_entries.related_other_agent,
+        ");
+    }
+
+    /**
+     * Used to fetch only today vouchers
+     */
+    public function today_vouchers()
+    {
+        $this->db->where(array(
+            'vouchers.voucher_date'=>date('Y-m-d'),
+        ));
+    }
+
+
 }
 
 ?>

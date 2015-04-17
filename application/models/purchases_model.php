@@ -96,27 +96,12 @@ class Purchases_Model extends Parent_Model {
         return $final_invoices_array;
     }
 
-    public function invoices()
+    public function make_invoices_from_raw($raw_invoices)
     {
         include_once(APPPATH."models/helperClasses/Purchase_Invoice.php");
         include_once(APPPATH."models/helperClasses/Purchase_Invoice_Entry.php");
         include_once(APPPATH."models/helperClasses/Supplier.php");
         include_once(APPPATH."models/helperClasses/Product.php");
-
-        $this->db->select("
-            vouchers.id as invoice_id, vouchers.voucher_date as invoice_date, vouchers.summary as invoice_summary,
-            voucher_entries.related_supplier, voucher_entries.ac_title as product_name, voucher_entries.quantity,
-            voucher_entries.cost_per_item, voucher_entries.amount,
-            voucher_entries.id as entry_id,
-
-        ");
-        $this->db->from($this->table);
-        $this->db->join('voucher_entries','voucher_entries.voucher_id = vouchers.id','left');
-        $this->active();
-        $this->purchase_vouchers();
-        $this->with_credit_entries_only();
-        $this->latest($this->table);
-        $raw_invoices = $this->db->get()->result();
 
         $final_invoices_array = array();
 
@@ -177,6 +162,35 @@ class Purchases_Model extends Parent_Model {
         //var_dump($final_invoices_array);die();
         return $final_invoices_array;
     }
+    public function invoices()
+    {
+        $this->select_purchases_content();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->purchase_vouchers();
+        $this->with_credit_entries_only();
+        $this->latest($this->table);
+        $raw_invoices = $this->db->get()->result();
+
+        return $this->purchases_model->make_invoices_from_raw($raw_invoices);
+    }
+
+    public function today_purchases()
+    {
+        $this->select_purchases_content();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->purchase_vouchers();
+        $this->today_vouchers();
+        $this->with_credit_entries_only();
+        $this->latest($this->table);
+        $raw_invoices = $this->db->get()->result();
+
+        return $this->purchases_model->make_invoices_from_raw($raw_invoices);
+    }
+
 
     public function get_limited($limit, $start, $keys, $sort) {
 
