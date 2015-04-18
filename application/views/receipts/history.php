@@ -17,27 +17,20 @@
         <div class="row">
 
             <?php
-            include_once(APPPATH."views/payments/components/nav_bar.php");
+            include_once(APPPATH."views/receipts/components/nav_bar.php");
             ?>
 
         </div>
         <div class="row actual_body_contents">
-
-
             <div class="row" style="background-color: ; margin-top: 10px;">
-
-                <!-- Payment Voucher -->
-                <div class="col-md-10" style="border-left: 1px solid lightgray;">
+                <!-- Receipt Voucher -->
+                <div class="col-md-10" style="border-left: 0px solid lightgray;">
                     <?php
-                    include_once(APPPATH."views/payments/components/payment_history.php");
+                    include_once(APPPATH."views/receipts/components/receipt_history.php");
                     ?>
                 </div>
-
             </div>
         </div>
-
-
-
     </div>
 
 </div>

@@ -49,7 +49,7 @@ $default_row_counter = 1;
     function grand_total_or_received_changed()
     {
         var grand_total_temp = grand_total_cost();
-        document.getElementById("grand_total_cost_label").innerHTML = grand_total_temp;
+        document.getElementById("grand_total_cost_label").innerHTML = to_rupees(grand_total_temp);
         var received = document.getElementById("received").value;
         document.getElementById("remaining").innerHTML = limit_number(grand_total_temp - received);
 
@@ -86,7 +86,7 @@ $default_row_counter = 1;
     {
 
         var total_cost_temp = total_cost(row_num);
-        document.getElementById("total_cost_label_"+row_num).innerHTML = total_cost_temp;
+        document.getElementById("total_cost_label_"+row_num).innerHTML = to_rupees(total_cost_temp);
         grand_total_or_received_changed();
     }
     function product_changed(e)

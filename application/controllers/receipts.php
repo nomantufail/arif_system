@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 include_once(APPPATH."controllers/parentController.php");
-class Payments extends ParentController {
+class Receipts extends ParentController {
     //public variables...
     public function __construct()
     {
@@ -29,22 +29,23 @@ class Payments extends ParentController {
     public function make()
     {
         $headerData['title']='Payment New*';
+        $this->bodyData['section'] = 'make';
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
-        $this->bodyData['suppliers'] = $this->suppliers_model->get();
+        $this->bodyData['customers'] = $this->customers_model->get();
 
-        if(isset($_POST['savePayment']))
+        if(isset($_POST['saveReceipt']))
         {
-            $saved_payment = $this->payments_model->insert_payment();
-            if($saved_payment != 0){
-                $this->bodyData['someMessage'] = array('message'=>'Payment Saved Successfully! Invoice# was <b>'.$saved_payment.'</b>', 'type'=>'alert-success');
+            $saved_receipt = $this->receipts_model->insert_receipt();
+            if($saved_receipt != 0){
+                $this->bodyData['someMessage'] = array('message'=>'Receipt Saved Successfully! Invoice# was <b>'.$saved_receipt.'</b>', 'type'=>'alert-success');
             }else{
                 $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
             }
-
         }
-        $this->bodyData['payment_history'] = $this->payments_model->few_payments();
+
+        $this->bodyData['receipt_history'] = $this->receipts_model->few_receipts();
         $this->load->view('components/header',$headerData);
-        $this->load->view('payments/make', $this->bodyData);
+        $this->load->view('receipts/make', $this->bodyData);
         $this->load->view('components/footer');
     }
 
@@ -52,10 +53,10 @@ class Payments extends ParentController {
     {
         $headerData['title']='Payment New*';
         $this->bodyData['section'] = 'history';
-        $this->bodyData['payment_history'] = $this->payments_model->payment_history();
+        $this->bodyData['receipt_history'] = $this->receipts_model->receipt_history();
 
         $this->load->view('components/header',$headerData);
-        $this->load->view('payments/history', $this->bodyData);
+        $this->load->view('Receipts/history', $this->bodyData);
         $this->load->view('components/footer');
     }
 }

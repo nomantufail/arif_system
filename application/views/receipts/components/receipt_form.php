@@ -6,7 +6,15 @@
  * Time: 7:18 AM
  */
 ?>
-<h4 style="color: #006dcc;">Receipt Vocuher</h4>
+<style>
+    .receipt_form_table th{
+        text-align: right;
+    }
+    .receipt_form_table tr{
+        border-top: 2px solid inherit;
+    }
+</style>
+<h3 style="color: #006dcc; text-align: center;">Receipt Vocuher</h3>
 
 <?php if(isset($_POST['saveReceipt'])): ?>
     <?php echo validation_errors('<div class="alert alert-danger alert-dismissible" role="alert">
@@ -23,13 +31,12 @@
 <?php endif; ?>
 
 <form method="post" action="<?= $this->helper_model->controller_path()."make" ?>">
-    <table class="invoice_table table table-bordered">
+    <table class="receipt_form_table table table-bordered">
 
         <tr>
-            <th>Date</th>
+            <th style="width: ">Date</th>
             <td><input class="form-control" value="<?= date("Y-m-d"); ?>" style="width: 100%;" type="date" name="voucher_date"></td>
-        </tr>
-        <tr>
+
             <th>Customer</th>
             <td>
                 <select class="select_box suppliers_select_box" style="width: 100%;" name="customer" id="supplier">
@@ -42,14 +49,6 @@
         <tr>
             <th>Amount</th>
             <td><input type="number" step="any" name="amount" class="form-control"></td>
-        </tr>
-        <tr>
-            <th>Summary</th>
-            <td>
-                <textarea class="form-control" name="summary"></textarea>
-            </td>
-        </tr>
-        <tr>
             <th>Bank A/C</th>
             <td>
                 <select class="select_box bank_ac_select_box" style="width: 100%;" name="bank_ac" id="supplier">
@@ -60,8 +59,15 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">
-                <button name="saveReceipt" class="btn btn-success center-block" style="width: 100px;"><i class="fa fa-save"></i> Save</button>
+            <th>Summary</th>
+            <td colspan="3">
+                <textarea class="form-control" name="summary"></textarea>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="4">
+                <button name="saveReceipt" class="btn btn-success center-block" style="width: 150px;"><i class="fa fa-save"></i> Save</button>
             </td>
         </tr>
     </table>

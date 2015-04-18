@@ -1,4 +1,4 @@
-<h4 style="color: #006dcc">Payment History</h4>
+<h4 style="color: #006dcc">Receipt History</h4>
 <table class="my_table list_table table table-bordered">
     <thead class="table_header">
     <tr class="table_row table_header_row">
