@@ -23,14 +23,14 @@
        <div class="row actual_body_contents">
            <div class="row" style="">
            <h3 style="color: #006dcc;">Day Book: <?= Carbon::now()->toFormattedDateString(); ?></h3>
-               <table class="table table-bordered">
+               <table class="my_table list_table table table-bordered">
                    <thead>
-                   <tr>
+                   <tr class="table_header_row">
                        <th colspan="9" style="text-align: center; font-size: 18px;">
                            Purchases
                        </th>
                    </tr>
-                   <tr>
+                   <tr class="">
                        <th>Invoice#</th>
                        <th>Date</th>
                        <th>Supplier</th>
@@ -45,7 +45,8 @@
                    <tbody>
                    <?php
                    $total_product_quantity = 0;
-                   $total_cost = 0;
+                   $total_credit = 0;
+                   $total_debit = 0;
                    ?>
                    <?php $parent_count = 0; ?>
                    <?php  foreach($purchases as $record): ?>
@@ -79,12 +80,12 @@
                                </td>
                                <td>
                                    <?php
-                                   echo $entry->costPerItem;
+                                   echo rupee_format($entry->costPerItem);
                                    ?>
                                </td>
                                <td>
                                    <?php
-                                   echo $entry->total_cost();
+                                   echo rupee_format($entry->total_cost());
                                    ?>
                                </td>
 
@@ -96,7 +97,8 @@
                                <?php if($count == 1):?>
                                    <td rowspan="<?=($num_invoice_items)?>" style="vertical-align: middle;">
                                        <?php
-                                       echo $record->grand_total_purchase_price();
+                                       $total_credit += $record->grand_total_purchase_price();
+                                       echo rupee_format($record->grand_total_purchase_price());
                                        ?>
                                    </td>
                                <?php endif; ?>
@@ -104,14 +106,20 @@
                            </tr>
                        <?php endforeach ?>
                    <?php endforeach; ?>
-                   </tbody>
-                   <thead>
                    <tr>
+                       <th colspan="7" style='text-align:right;'>Totals</th>
+                       <th style="background-color: lightblue;"><?= rupee_format($total_debit) ?></th>
+                       <th style="background-color: lightblue;"><?= rupee_format($total_credit) ?></th>
+                   </tr>
+                   </tbody>
+
+                   <thead>
+                   <tr class="table_header_row">
                        <th colspan="9" style="text-align: center; font-size: 18px;">
                            Sales
                        </th>
                    </tr>
-                   <tr>
+                   <tr class="">
                        <th>Invoice#</th>
                        <th>Date</th>
                        <th>Customer</th>
@@ -127,6 +135,8 @@
                    <?php
                    $total_product_quantity = 0;
                    $total_cost = 0;
+                   $total_debit = 0;
+                   $total_credit = 0;
                    ?>
                    <?php $parent_count = 0; ?>
                    <?php  foreach($sales as $record): ?>
@@ -160,19 +170,20 @@
                                </td>
                                <td>
                                    <?php
-                                   echo $entry->salePricePerItem;
+                                   echo rupee_format($entry->salePricePerItem);
                                    ?>
                                </td>
                                <td>
                                    <?php
-                                   echo $entry->total_cost();
+                                   echo rupee_format($entry->total_cost());
                                    ?>
                                </td>
 
                                <?php if($count == 1):?>
                                    <td rowspan="<?=($num_invoice_items)?>">
                                        <?php
-                                       echo $record->grand_total_sale_price();
+                                       $total_debit += $record->grand_total_sale_price();
+                                       echo rupee_format($record->grand_total_sale_price());
                                        ?>
                                    </td>
                                <?php endif; ?>
@@ -186,9 +197,15 @@
                            </tr>
                        <?php endforeach ?>
                    <?php endforeach; ?>
-                   </tbody>
-                   <thead>
                    <tr>
+                       <th colspan="7" style='text-align:right;'>Totals</th>
+                       <th class='total_amount'><?= rupee_format($total_debit) ?></th>
+                       <th class='total_amount'><?= rupee_format($total_credit) ?></th>
+                   </tr>
+                   </tbody>
+
+                   <thead>
+                   <tr class="table_header_row">
                        <th colspan="9" style="text-align: center; font-size: 18px;">
                            Receipts
                        </th>
@@ -206,6 +223,8 @@
                    <?php
                    $total_product_quantity = 0;
                    $total_cost = 0;
+                   $total_credit = 0;
+                   $total_debit = 0;
                    ?>
                    <?php $parent_count = 0; ?>
                    <?php  foreach($receipts as $record): ?>
@@ -244,16 +263,23 @@
                            <td>
                                <?php
                                $amount = $credit_entries[0]->amount;
-                               echo $amount;
+                               $total_credit += $amount;
+                               echo rupee_format($amount);
                                ?>
                            </td>
 
                        </tr>
                    <?php endforeach; ?>
                    </tr>
-                   </tbody>
-                   <thead>
                    <tr>
+                       <th colspan="7" style='text-align:right;'>Totals</th>
+                       <th class='total_amount'><?= rupee_format($total_debit) ?></th>
+                       <th class='total_amount'><?= rupee_format($total_credit) ?></th>
+                   </tr>
+                   </tbody>
+
+                   <thead>
+                   <tr class="table_header_row">
                        <th colspan="9" style="text-align: center; font-size: 18px;">
                            Payments
                        </th>
@@ -261,7 +287,7 @@
                    <tr>
                        <th>Voucher#</th>
                        <th>Date</th>
-                       <th>Customer</th>
+                       <th>Supplier</th>
                        <th colspan="4">Bank</th>
                        <th>Debit</th>
                        <th>Credit</th>
@@ -272,6 +298,8 @@
                        <?php
                        $total_product_quantity = 0;
                        $total_cost = 0;
+                       $total_credit = 0;
+                       $total_debit = 0;
                        ?>
                        <?php $parent_count = 0; ?>
                        <?php  foreach($payments as $record): ?>
@@ -307,7 +335,8 @@
                        <td>
                            <?php
                            $amount = $credit_entries[0]->amount;
-                           echo $amount;
+                           $total_debit += $amount;
+                           echo rupee_format($amount);
                            ?>
                        </td>
                        <td>
@@ -318,6 +347,11 @@
 
                    </tr>
                    <?php endforeach; ?>
+                   </tr>
+                   <tr>
+                       <th colspan="7" style='text-align:right;'>Totals</th>
+                       <th class='total_amount'><?= rupee_format($total_debit) ?></th>
+                       <th class='total_amount'><?= rupee_format($total_credit) ?></th>
                    </tr>
                    </tbody>
                </table>

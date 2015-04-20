@@ -27,7 +27,7 @@
             <div class="row" style="background-color: ; margin-top: 10px;">
 
                 <!-- Payment Voucher -->
-                <div class="col-md-10" style="border-left: 1px solid lightgray;">
+                <div class="col-md-10" style="">
                     <?php
                     include_once(APPPATH."views/payments/components/payment_history.php");
                     ?>

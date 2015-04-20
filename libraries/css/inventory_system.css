@@ -20,3 +20,13 @@
 .select_box{
 
 }
+.list_table tbody tr:nth-child(odd) {
+    background-color: rgba(0,0,0,0.06);
+}
+.table_header_row{
+    background-color: #006dcc;
+    color: white;
+}
+.total_amount{
+    background-color: lightblue;
+}

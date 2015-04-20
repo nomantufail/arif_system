@@ -49,7 +49,7 @@
             </td>
             <td>
                 <?php
-                $amount = $credit_entries[0]->amount;
+                $amount = rupee_format($credit_entries[0]->amount);
                 echo $amount;
                 ?>
             </td>

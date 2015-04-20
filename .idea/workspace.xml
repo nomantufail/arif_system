@@ -22,13 +22,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="payment_history.php" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/application/views/payments/components/payment_history.php">
+      <file leaf-file-name="welcome.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/views/daybook/welcome.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="55" column="16" selection-start="1736" selection-end="1736" vertical-scroll-proportion="0.8053097" vertical-offset="702" max-vertical-offset="1976">
-              <folding>
-                <element signature="n#style#0;n#h4#0;n#!!top" expanded="true" />
-              </folding>
+            <state line="34" column="36" selection-start="965" selection-end="965" vertical-scroll-proportion="0.6902655" vertical-offset="130" max-vertical-offset="9438">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -51,22 +49,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/application/controllers/receipts.php" />
-        <option value="$PROJECT_DIR$/application/models/receipts_model.php" />
-        <option value="$PROJECT_DIR$/application/views/receipts/history.php" />
-        <option value="$PROJECT_DIR$/application/views/payments/components/payment_form.php" />
-        <option value="$PROJECT_DIR$/application/views/payments/history.php" />
-        <option value="$PROJECT_DIR$/application/controllers/payments.php" />
-        <option value="$PROJECT_DIR$/application/models/payments_model.php" />
-        <option value="$PROJECT_DIR$/application/views/payments/make.php" />
-        <option value="$PROJECT_DIR$/libraries/js/myjs.js" />
+        <option value="$PROJECT_DIR$/application/views/sales/components/few_receipts.php" />
+        <option value="$PROJECT_DIR$/application/models/sales_model.php" />
         <option value="$PROJECT_DIR$/application/views/purchases/credit/make.php" />
         <option value="$PROJECT_DIR$/application/views/sales/credit/make.php" />
-        <option value="$PROJECT_DIR$/application/controllers/daybook.php" />
-        <option value="$PROJECT_DIR$/application/views/sales/credit/show.php" />
-        <option value="$PROJECT_DIR$/application/views/purchases/credit/show.php" />
-        <option value="$PROJECT_DIR$/application/views/receipts/components/receipt_history.php" />
+        <option value="$PROJECT_DIR$/libraries/php/helper.php" />
+        <option value="$PROJECT_DIR$/application/views/payments/components/few_payments.php" />
         <option value="$PROJECT_DIR$/application/views/payments/components/payment_history.php" />
+        <option value="$PROJECT_DIR$/application/views/purchases/components/few_purchases.php" />
+        <option value="$PROJECT_DIR$/application/views/purchases/credit/show.php" />
+        <option value="$PROJECT_DIR$/application/views/receipts/components/few_receipts.php" />
+        <option value="$PROJECT_DIR$/application/views/sales/components/few_sales.php" />
+        <option value="$PROJECT_DIR$/application/views/receipts/components/receipt_history.php" />
+        <option value="$PROJECT_DIR$/application/views/payments/history.php" />
+        <option value="$PROJECT_DIR$/application/views/sales/credit/show.php" />
+        <option value="$PROJECT_DIR$/libraries/css/inventory_system.css" />
+        <option value="$PROJECT_DIR$/application/views/daybook/welcome.php" />
       </list>
     </option>
   </component>
@@ -362,6 +360,38 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -703,6 +733,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="arif_system" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -744,11 +792,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\wamp\www\arif_system\application\views\purchases\components" />
       <recent name="C:\wamp\www\arif_system\application\views\payments\components" />
       <recent name="C:\wamp\www\arif_system\application\views\receipts\components" />
       <recent name="C:\wamp\www\arif_system\application\views" />
       <recent name="C:\wamp\www\arif_system\application\views\payments" />
-      <recent name="C:\wamp\www\arif_system\application\models" />
     </key>
   </component>
   <component name="RunManager">
@@ -794,26 +842,26 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1296" height="1000" extended-state="7" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32897604" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32897604" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.67102396" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32897604" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.67102396" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32897604" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -831,103 +879,123 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/application/views/payments/components/payment_form.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="27" selection-start="132" selection-end="132" vertical-scroll-proportion="0.11504425" vertical-offset="0" max-vertical-offset="1898" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/receipts/make.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="18" selection-start="733" selection-end="1081" vertical-scroll-proportion="0.6261062" vertical-offset="110" max-vertical-offset="1274" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/payments/components/few_payments.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="31" selection-start="662" selection-end="662" vertical-scroll-proportion="0.5176991" vertical-offset="0" max-vertical-offset="1976" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/payments.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="58" selection-start="1778" selection-end="1778" vertical-scroll-proportion="0.79867256" vertical-offset="448" max-vertical-offset="1742" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/payments_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="94" column="33" selection-start="3166" selection-end="3166" vertical-scroll-proportion="0.5463468" vertical-offset="1943" max-vertical-offset="3276" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/payments/history.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="37" selection-start="602" selection-end="602" vertical-scroll-proportion="0.51106197" vertical-offset="162" max-vertical-offset="1118" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/payments/make.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="22" selection-start="1035" selection-end="1035" vertical-scroll-proportion="0.8561947" vertical-offset="32" max-vertical-offset="1222" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/views/purchases/credit/make.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="87" column="98" selection-start="2968" selection-end="2968" vertical-scroll-proportion="0.59181416" vertical-offset="1727" max-vertical-offset="6500" />
+        <state line="149" column="44" selection-start="5344" selection-end="5344" vertical-scroll-proportion="0.48230088" vertical-offset="3438" max-vertical-offset="6500">
+          <folding>
+            <marker date="1429510670397" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/sales/credit/make.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="88" column="98" selection-start="3004" selection-end="3004" vertical-scroll-proportion="0.8053097" vertical-offset="1560" max-vertical-offset="6526" />
+        <state line="155" column="37" selection-start="5818" selection-end="5818" vertical-scroll-proportion="0.74115044" vertical-offset="3360" max-vertical-offset="6500">
+          <folding>
+            <marker date="1429510772238" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/daybook.php">
+    <entry file="file://$PROJECT_DIR$/application/libraries/Helper.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="9" selection-start="823" selection-end="823" vertical-scroll-proportion="0.5299003" vertical-offset="331" max-vertical-offset="1248">
+        <state line="8" column="6" selection-start="97" selection-end="97" vertical-scroll-proportion="0.0" vertical-offset="78" max-vertical-offset="1196">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libraries/js/myjs.js">
+    <entry file="file://$PROJECT_DIR$/libraries/php/helper.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="15" selection-start="1370" selection-end="1370" vertical-scroll-proportion="0.5176991" vertical-offset="858" max-vertical-offset="3172">
+        <state line="40" column="18" selection-start="1209" selection-end="1209" vertical-scroll-proportion="0.65486723" vertical-offset="318" max-vertical-offset="8476">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/models/helper_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="383" column="13" selection-start="11971" selection-end="11971" vertical-scroll-proportion="0.3329646" vertical-offset="9657" max-vertical-offset="18070">
+        <state line="425" column="9" selection-start="13088" selection-end="13088" vertical-scroll-proportion="0.79867256" vertical-offset="10328" max-vertical-offset="18070">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/sales/credit/show.php">
+    <entry file="file://$PROJECT_DIR$/application/views/payments/components/few_payments.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="99" column="93" selection-start="4330" selection-end="4330" vertical-scroll-proportion="0.6039823" vertical-offset="2028" max-vertical-offset="3718">
-          <folding>
-            <marker date="1429505372938" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
+        <state line="51" column="26" selection-start="1550" selection-end="1550" vertical-scroll-proportion="0.0" vertical-offset="1326" max-vertical-offset="1976">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/purchases/credit/show.php">
+    <entry file="file://$PROJECT_DIR$/application/views/purchases/components/few_purchases.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="99" column="72" selection-start="4303" selection-end="4303" vertical-scroll-proportion="0.6902655" vertical-offset="1950" max-vertical-offset="3692">
-          <folding>
-            <marker date="1429505372978" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
+        <state line="52" column="25" selection-start="1957" selection-end="1957" vertical-scroll-proportion="0.0" vertical-offset="1352" max-vertical-offset="2340">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/receipts/components/receipt_history.php">
+    <entry file="file://$PROJECT_DIR$/application/views/receipts/components/few_receipts.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="80" selection-start="1650" selection-end="1650" vertical-scroll-proportion="0.6039823" vertical-offset="780" max-vertical-offset="1976">
+        <state line="51" column="26" selection-start="1549" selection-end="1549" vertical-scroll-proportion="0.0" vertical-offset="1326" max-vertical-offset="1976">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/sales/components/few_sales.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="25" selection-start="2059" selection-end="2059" vertical-scroll-proportion="0.0" vertical-offset="1404" max-vertical-offset="2418">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/payments/components/payment_history.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="16" selection-start="1736" selection-end="1736" vertical-scroll-proportion="0.8053097" vertical-offset="702" max-vertical-offset="1976">
+        <state line="72" column="12" selection-start="2207" selection-end="2207" vertical-scroll-proportion="2.0707965" vertical-offset="0" max-vertical-offset="2054">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/payments/history.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="75" selection-start="522" selection-end="522" vertical-scroll-proportion="0.6039823" vertical-offset="0" max-vertical-offset="1118">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/purchases/credit/show.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="122" column="32" selection-start="5426" selection-end="5812" vertical-scroll-proportion="0.28097346" vertical-offset="2918" max-vertical-offset="3822">
           <folding>
-            <element signature="n#style#0;n#h4#0;n#!!top" expanded="true" />
+            <marker date="1429514250841" expanded="true" signature="-1:-1" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/sales/credit/show.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="56" column="32" selection-start="1963" selection-end="1963" vertical-scroll-proportion="0.57522124" vertical-offset="936" max-vertical-offset="3796">
+          <folding>
+            <marker date="1429514476349" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libraries/css/inventory_system.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="37" selection-start="332" selection-end="332" vertical-scroll-proportion="0.6521265" vertical-offset="0" max-vertical-offset="962">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/receipts/components/receipt_history.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="28" selection-start="133" selection-end="133" vertical-scroll-proportion="0.057522126" vertical-offset="0" max-vertical-offset="2054">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/daybook/welcome.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="36" selection-start="965" selection-end="965" vertical-scroll-proportion="0.6902655" vertical-offset="130" max-vertical-offset="9438">
+          <folding />
         </state>
       </provider>
     </entry>

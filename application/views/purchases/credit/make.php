@@ -138,13 +138,14 @@ $default_row_counter = 1;
             <form method="post">
                 <div class="row">
                     <div class="col-sm-12">
-                        <table class="invoice_table table table-bordered">
+                        <table class="">
                             <tr>
-                                <th>Invoice#</th>
-                                <td><?= $invoice_number ?></td>
+                                <th><h4>Invoice# <?= $invoice_number ?></h4></th>
                             </tr>
+                        </table>
+                        <table style="width: 100%;" class="">
                             <tr>
-                                <th>Supplier</th>
+                                <th style="text-align: right; width: 100px; text-align: center;">Supplier: </th>
                                 <td>
                                     <select class="select_box suppliers_select_box" style="width: 200px;" name="supplier" id="supplier">
                                         <?php foreach($suppliers as $supplier):?>
@@ -152,20 +153,14 @@ $default_row_counter = 1;
                                         <?php endforeach; ?>
                                     </select>
                                 </td>
-                            </tr>
-                            <tr>
-                                <th>Invoice Date</th>
-                                <td><input class="form-control" value="<?= date("Y-m-d"); ?>" style="width: 200px;" type="date" name="invoice_date"></td>
-                            </tr>
-                            <tr>
-                                <th>Transaction Type</th>
-                                <td>Credit</td>
+                                <th style="text-align: right; width: 100px;">Invoice Date: </th>
+                                <td><input class="form-control" value="<?= date("Y-m-d"); ?>" style="width: 200px; margin-left: 10px;" type="date" name="invoice_date"></td>
                             </tr>
                         </table>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" style="margin-top: 20px;">
 
                     <div class="row">
 
@@ -218,18 +213,23 @@ $default_row_counter = 1;
                             <textarea class="form-control" name="extra_info"></textarea>
                         </div>
                     </div>
-                    <div class="row" style="padding-top: 30px;">
+                    <div class="row" style="padding-top: 10px;">
                         <div class="col-md-4" style="margin: 0px; float: right;">
                             <section style="font-size: 20px; font-weight: normal; color: red;">Total Cost: <span id="grand_total_cost_label">0</span> Rs.</section>
                         </div>
-                    </div>
-                    <hr>
-                    <div class="col-lg-12" style="text-align: center">
-                        <button name="save_credit_purchase" class="btn btn-success" style="font-size: 20px;"><i class="fa fa-save" style="color: white;"></i> Save Invoice</button>
+                        <div class="col-md-4" style="margin: 0px; float: right;">
+                            <button name="save_credit_purchase" class="btn btn-success" style="font-size: 20px;"><i class="fa fa-save" style="color: white;"></i> Save Invoice</button>
+                        </div>
                     </div>
 
                 </div>
             </form>
+
+            <div class="row" style="margin-top: 20px;">
+                <?php
+                include_once(APPPATH."views/purchases/components/few_purchases.php");
+                ?>
+            </div>
         </div>
 
 

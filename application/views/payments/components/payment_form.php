@@ -37,7 +37,7 @@
             <th style="width: ">Date</th>
             <td><input class="form-control" value="<?= date("Y-m-d"); ?>" style="width: 100%;" type="date" name="voucher_date"></td>
 
-            <th>Customer</th>
+            <th>Supplier</th>
             <td>
                 <select class="select_box suppliers_select_box" style="width: 100%;" name="supplier" id="supplier">
                     <?php foreach($suppliers as $supplier):?>

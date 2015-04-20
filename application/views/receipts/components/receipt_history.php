@@ -14,7 +14,7 @@
     <tbody class="table_body">
     <?php
     $total_product_quantity = 0;
-    $total_cost = 0;
+    $grand_total_amount = 0;
     ?>
     <?php $parent_count = 0; ?>
     <?php  foreach($receipt_history as $record): ?>
@@ -49,8 +49,9 @@
             </td>
             <td>
                 <?php
-                $amount = $this->helper_model->money($credit_entries[0]->amount);
-                echo $amount;
+                $amount =$credit_entries[0]->amount;
+                $grand_total_amount += $amount;
+                echo rupee_format($amount);
                 ?>
             </td>
             <td>
@@ -65,7 +66,9 @@
     </tbody>
     <tfoot class="table_footer">
     <tr class="table_footer_row">
-
+        <th style="text-align: right;" colspan="4">Totals</th>
+        <th class="total_amount"><?= rupee_format($grand_total_amount) ?></th>
+        <th colspan="2"></th>
     </tr>
     </tfoot>
 </table>

@@ -173,6 +173,14 @@ class Parent_Model extends CI_Model {
         ));
     }
 
+    /**
+    * used to select id column in vouchers table.
+    **/
+    public function select_voucher_ids()
+    {
+        $this->db->select("vouchers.id as voucher_id");
+    }
+
 
 }
 

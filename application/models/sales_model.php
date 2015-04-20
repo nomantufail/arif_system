@@ -176,6 +176,44 @@ class Sales_Model extends Parent_Model {
         return $this->sales_model->make_invoices_from_raw($raw_invoices);
     }
 
+    public function few_invoices()
+    {
+        //fetching the vocuher ids
+        $this->select_voucher_ids();
+        $this->db->distinct();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->sale_vouchers();
+        $this->with_debit_entries_only();
+        $this->db->limit(5);
+        $this->latest($this->table);
+        $result = $this->db->get()->result();
+        $voucher_ids = array(0,);
+        if(sizeof($result) > 0)
+        {
+            foreach($result as $record)
+            {
+                array_push($voucher_ids, $record->voucher_id);
+            }
+        }
+        /*************************************/
+
+        //fetching the vouchers
+        $this->select_sale_content();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->db->where_in('vouchers.id',$voucher_ids);
+        $this->sale_vouchers();
+        $this->with_debit_entries_only();
+        $this->latest($this->table);
+        $raw_invoices = $this->db->get()->result();
+        /*****************************************/
+
+        return $this->sales_model->make_invoices_from_raw($raw_invoices);
+    }
+
     public function today_sales()
     {
         $this->select_sale_content();

@@ -44,6 +44,8 @@ class Purchases extends ParentController {
 
         }
         $this->bodyData['invoice_number'] = $this->purchases_model->next_invoice();
+        $purchases = $this->purchases_model->few_invoices();
+        $this->bodyData['purchases']= $purchases;
         $this->load->view('components/header',$headerData);
         $this->load->view('purchases/credit/make', $this->bodyData);
         $this->load->view('components/footer');

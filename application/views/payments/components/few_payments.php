@@ -1,4 +1,4 @@
-<h4 style="color: #006dcc">Payment History</h4>
+
 <table class="my_table list_table table table-bordered">
     <thead class="table_header">
     <tr class="table_row table_header_row">
@@ -49,7 +49,7 @@
             </td>
             <td>
                 <?php
-                $amount = $credit_entries[0]->amount;
+                $amount = rupee_format($credit_entries[0]->amount);
                 echo $amount;
                 ?>
             </td>

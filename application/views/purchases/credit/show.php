@@ -59,6 +59,7 @@
                         <?php
                         $total_product_quantity = 0;
                         $total_cost = 0;
+                        $grand_total_cost = 0;
                         ?>
                         <?php $parent_count = 0; ?>
                         <?php  foreach($purchases as $record): ?>
@@ -92,12 +93,14 @@
                                     </td>
                                     <td>
                                         <?php
-                                        echo $this->helper_model->money($entry->costPerItem);
+                                        echo rupee_format($entry->costPerItem);
                                         ?>
                                     </td>
                                     <td>
                                         <?php
-                                        echo $this->helper_model->money($entry->total_cost());
+                                        $total_cost = $entry->total_cost();
+                                        $grand_total_cost += $total_cost;
+                                        echo rupee_format($total_cost);
                                         ?>
                                     </td>
 
@@ -120,7 +123,9 @@
                         </tbody>
                         <tfoot class="table_footer">
                         <tr class="table_footer_row">
-
+                            <th style="text-align: right;" colspan="6">Totals</th>
+                            <th class="total_amount"><?= $grand_total_cost ?></th>
+                            <th colspan="2"></th>
                         </tr>
                         </tfoot>
                     </table>

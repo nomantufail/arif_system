@@ -53,7 +53,6 @@ class Sales extends ParentController {
         $headerData['title']='sale';
         $this->bodyData['products'] = $this->products_model->get();
         $this->bodyData['customers'] = $this->customers_model->get();
-
         if(isset($_POST['save_credit_sale']))
         {
             $saved_invoice = $this->sales_model->insert_credit_sale();
@@ -65,6 +64,8 @@ class Sales extends ParentController {
 
         }
         $this->bodyData['invoice_number'] = $this->sales_model->next_invoice();
+        $sales = $this->sales_model->few_invoices();
+        $this->bodyData['sales']= $sales;
         $this->load->view('components/header',$headerData);
         $this->load->view('sales/credit/make', $this->bodyData);
         $this->load->view('components/footer');
