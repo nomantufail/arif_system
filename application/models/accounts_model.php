@@ -1,10 +1,87 @@
 <?php
-class Accounts_Model extends CI_Model {
+class Accounts_Model extends Parent_Model {
 
     public function __construct(){
         parent::__construct();
     }
 
+    public function bank_accounts_status()
+    {
+        $this->db->select("voucher_entries.ac_title, voucher_entries.ac_sub_title,
+                  voucher_entries.dr_cr, SUM(voucher_entries.amount) as total_amount,
+                  ");
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active();
+        $this->bank_entries();
+        $this->db->group_by('voucher_entries.ac_title, voucher_entries.ac_sub_title,
+                voucher_entries.dr_cr');
+        $result = $this->db->get()->result();
+        $bank_accounts_status_temp = array();
+
+        if(sizeof($result) > 0)
+        {
+            foreach($result as $record)
+            {
+                $found = 0;
+
+                if(sizeof($bank_accounts_status_temp) >0)
+                {
+                    foreach($bank_accounts_status_temp as $account)
+                    {
+
+                        if($account['title'] == $record->ac_title && $account['sub_title'] == $record->ac_sub_title){
+
+                            $found = 1;
+                            /*if($record->dr_cr == 1)
+                            {
+                                $account['debit'] = $record->total_amount;
+
+                            }
+                            else if($record->dr_cr == 0)
+                            {
+                                $account['credit'] = $record->total_amount;
+                            }
+                            array_push($bank_accounts_status, $account);*/
+                        }
+
+                    }
+                }
+
+                if($found == 0)
+                {
+                    $bank_account = array(
+                        'title'=>$record->ac_title,
+                        'sub_title'=>$record->ac_sub_title,
+                        'debit'=>0,
+                        'credit'=>0,
+                    );
+                    array_push($bank_accounts_status_temp, $bank_account);
+                }
+
+            }
+            foreach($result as $record)
+            {
+                foreach($bank_accounts_status_temp as &$bank_account)
+                {
+                    if($bank_account['title'] == $record->ac_title && $bank_account['sub_title'] == $record->ac_sub_title){
+                        if($record->dr_cr == 1)
+                        {
+                            $bank_account['debit'] = $record->total_amount;
+                        }
+                        if($record->dr_cr == 0)
+                        {
+                            $bank_account['credit'] = $record->total_amount;
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+         return $bank_accounts_status_temp;
+    }
     public function insert_voucher($voucher)
     {
         $this->db->trans_begin();

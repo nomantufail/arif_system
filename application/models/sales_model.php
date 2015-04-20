@@ -11,6 +11,20 @@ class Sales_Model extends Parent_Model {
 
     }
 
+    public function total_sales()
+    {
+        $this->db->select("SUM(voucher_entries.amount) as total_sales");
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->sale_vouchers();
+        $this->with_debit_entries_only();
+        $this->latest($this->table);
+        $result = $this->db->get()->result();
+        $total_sales = ($result[0]->total_sales != null)?$result[0]->total_sales:0;
+        return round($total_sales, 3);
+    }
+
     public function cash()
     {
         include_once(APPPATH."models/helperClasses/Sale_Invoice.php");

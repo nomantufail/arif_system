@@ -11,8 +11,10 @@ class Admin extends ParentController {
 
     public function index()
     {
+
         $target_function = $this->intelligent_router_model->get_last_saved_route_for_current_controller();
-        if($target_function != 'index')
+
+        if($target_function != 'index' && $target_function != 'login')
         {
             //setting section
             $this->bodyData['section'] = $target_function;
@@ -41,6 +43,13 @@ class Admin extends ParentController {
     {
         $headerData['title']='Home';
         $this->bodyData['section'] = 'home';
+
+        $this->bodyData['total_sales'] = $this->sales_model->total_sales();
+        $this->bodyData['total_purchases'] = $this->purchases_model->total_purchases();
+        $this->bodyData['total_payables'] = $this->payments_model->total_payables();
+        $this->bodyData['total_receivables'] = $this->receipts_model->total_receivables();
+
+        $this->bodyData['bank_accounts'] = $this->accounts_model->bank_accounts_status();
         $this->load->view('components/header',$headerData);
         $this->load->view('admin/home', $this->bodyData);
         $this->load->view('components/footer');

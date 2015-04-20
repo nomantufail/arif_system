@@ -71,6 +71,7 @@ class ParentController extends CI_Controller {
 
     public function login($msg = "")
     {
+
         if($this->login == true){
             $this->index();
         }else{

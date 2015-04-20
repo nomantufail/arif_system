@@ -11,6 +11,20 @@ class Purchases_Model extends Parent_Model {
 
     }
 
+    public function total_purchases()
+    {
+        $this->db->select("SUM(voucher_entries.amount) as total_purchases");
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->purchase_vouchers();
+        $this->with_credit_entries_only();
+        $this->latest($this->table);
+        $result = $this->db->get()->result();
+        $total_purchases = ($result[0]->total_purchases != null)?$result[0]->total_purchases:0;
+        return $total_purchases;
+    }
+
     public function cash()
     {
         include_once(APPPATH."models/helperClasses/Purchase_Invoice.php");

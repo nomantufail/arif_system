@@ -7,6 +7,36 @@ class Payments_Model extends Parent_Model {
         $this->table = "vouchers";
     }
 
+    public function total_payables()
+    {
+        $this->db->select('SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr');
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->payables();
+        $this->db->group_by('voucher_entries.dr_cr');
+        $result = $this->db->get()->result();
+        $total_debit = 0;
+        $total_credit = 0;
+
+        if(sizeof($result) > 0)
+        {
+            foreach($result as $record)
+            {
+                if($record->dr_cr == 1)
+                {
+                    $total_debit = $record->total_amount;
+                }
+                else if($record->dr_cr == 0)
+                {
+                    $total_credit = $record->total_amount;
+                }
+            }
+        }
+
+        return round($total_credit - $total_debit, 3);
+    }
+
     public function insert_payment()
     {
         include_once(APPPATH."models/helperClasses/App_Voucher.php");

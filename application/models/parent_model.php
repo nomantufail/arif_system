@@ -181,6 +181,42 @@ class Parent_Model extends CI_Model {
         $this->db->select("vouchers.id as voucher_id");
     }
 
+    /**
+     * used to select vouchers in which account type is payable
+     **/
+    public function payables()
+    {
+        $this->db->where('ac_type', 'payable');
+    }
+    /**
+     * used to select vouchers in which account type is Receivable
+     **/
+    public function receivables()
+    {
+        $this->db->where('ac_type', 'receivable');
+    }
+    /**
+     * used to select vouchers in which account type is asset
+     **/
+    public function assets()
+    {
+        $this->db->where('ac_type', 'asset');
+    }
+    /**
+     * used to select vouchers in which account type is revenue
+     **/
+    public function revenue()
+    {
+        $this->db->where('ac_type', 'revenue');
+    }
+    /**
+     * used to select vouchers in which account type is bank
+     **/
+    public function bank_entries()
+    {
+        $this->db->where('ac_type', 'bank');
+    }
+
 
 }
 

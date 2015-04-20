@@ -148,7 +148,7 @@ $default_row_counter = 1;
                             <tr>
                                 <th style="text-align: right; width: 100px; text-align: center;">Customer: </th>
                                 <td>
-                                    <select class="select_box suppliers_select_box" style="width: 200px;" name="supplier" id="supplier">
+                                    <select class="select_box suppliers_select_box" style="width: 200px;" name="customer" id="supplier">
                                         <?php foreach($customers as $customer):?>
                                             <option value="<?= $customer->name ?>"><?= $customer->name ?></option>
                                         <?php endforeach; ?>
@@ -161,7 +161,7 @@ $default_row_counter = 1;
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" style="margin-top: 10px;">
 
                     <div class="row">
 
