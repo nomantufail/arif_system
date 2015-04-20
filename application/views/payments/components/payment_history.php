@@ -49,7 +49,7 @@
             </td>
             <td>
                 <?php
-                $amount = $credit_entries[0]->amount;
+                $amount = $this->helper_model->money($credit_entries[0]->amount);
                 echo $amount;
                 ?>
             </td>

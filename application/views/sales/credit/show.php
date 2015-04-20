@@ -92,12 +92,12 @@
                                     </td>
                                     <td>
                                         <?php
-                                        echo $entry->salePricePerItem;
+                                        echo $this->helper_model->money($entry->salePricePerItem);
                                         ?>
                                     </td>
                                     <td>
                                         <?php
-                                        echo $entry->total_cost();
+                                        echo $this->helper_model->money($entry->total_cost());
                                         ?>
                                     </td>
 
