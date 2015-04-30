@@ -32,6 +32,7 @@ class Purchases extends ParentController {
         $headerData['title']='Purchase';
         $this->bodyData['products'] = $this->products_model->get();
         $this->bodyData['suppliers'] = $this->suppliers_model->get();
+        $this->bodyData['tankers'] = $this->tankers_model->get();
 
         if(isset($_POST['save_credit_purchase']))
         {

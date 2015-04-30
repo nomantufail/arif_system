@@ -112,6 +112,7 @@ class Parent_Model extends CI_Model {
     {
         $this->db->select("
             vouchers.id as invoice_id, vouchers.voucher_date as invoice_date, vouchers.summary as invoice_summary,
+            vouchers.tanker,
             voucher_entries.related_customer, voucher_entries.ac_title as product_name, voucher_entries.quantity,
             voucher_entries.cost_per_item, voucher_entries.amount,
             voucher_entries.id as entry_id,
@@ -126,6 +127,7 @@ class Parent_Model extends CI_Model {
     {
         $this->db->select("
             vouchers.id as invoice_id, vouchers.voucher_date as invoice_date, vouchers.summary as invoice_summary,
+            vouchers.tanker,
             voucher_entries.related_supplier, voucher_entries.ac_title as product_name, voucher_entries.quantity,
             voucher_entries.cost_per_item, voucher_entries.amount,
             voucher_entries.id as entry_id,
@@ -140,6 +142,7 @@ class Parent_Model extends CI_Model {
     {
         $this->db->select("
             vouchers.id as voucher_id, vouchers.summary, voucher_entries.ac_title,
+            vouchers.tanker,
             voucher_entries.ac_sub_title, voucher_entries.amount, vouchers.voucher_date,
             voucher_entries.id as entry_id,
             voucher_entries.dr_cr,
@@ -155,6 +158,7 @@ class Parent_Model extends CI_Model {
     {
         $this->db->select("
             vouchers.id as voucher_id, vouchers.summary, voucher_entries.ac_title,
+            vouchers.tanker,
             voucher_entries.ac_sub_title, voucher_entries.amount, vouchers.voucher_date,
             voucher_entries.id as entry_id,
             voucher_entries.dr_cr,

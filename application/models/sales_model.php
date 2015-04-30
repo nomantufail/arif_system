@@ -141,6 +141,7 @@ class Sales_Model extends Parent_Model {
                 $temp_invoice->date = $record->invoice_date;
                 $temp_invoice->customer = new Customer(null, $record->related_customer);
                 $temp_invoice->summary = $record->invoice_summary;
+                $temp_invoice->tanker = $record->tanker;
 
             }/////////////////////////////////////////////////
 
@@ -353,6 +354,7 @@ class Sales_Model extends Parent_Model {
         $voucher = new App_Voucher();
         $voucher->voucher_date = $this->input->post('invoice_date');
         $voucher->summary = $this->input->post('extra_info');
+        $voucher->tanker = $this->input->post('tanker');
         $voucher->voucher_type = 'sale';
 
         $voucher_entries = array();

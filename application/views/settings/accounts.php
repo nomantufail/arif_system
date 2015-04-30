@@ -40,7 +40,7 @@
         <div class="row actual_body_contents">
 
             <div class="row" style="background-color: ;">
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <?php
                     include_once(APPPATH."views/settings/components/bank_accounts.php");
                     ?>

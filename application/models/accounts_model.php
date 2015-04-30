@@ -89,6 +89,7 @@ class Accounts_Model extends Parent_Model {
         $voucher_data = array(
             'voucher_date'=>$voucher->voucher_date,
             'summary'=>$voucher->summary,
+            'tanker'=>$voucher->tanker,
             'voucher_type'=>$voucher->voucher_type,
         );
         $this->db->insert('vouchers',$voucher_data);

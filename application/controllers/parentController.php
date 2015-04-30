@@ -35,6 +35,7 @@ class ParentController extends CI_Controller {
             'customers_model',
             'suppliers_model',
             'products_model',
+            'tankers_model',
             'purchases_model',
             'sales_model',
             'stock_model',

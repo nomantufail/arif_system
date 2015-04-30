@@ -12,6 +12,7 @@ class Purchase_Invoice {
     public $supplier;
     public $date;
     public $summary;
+    public $tanker;
     public $entries;
     public $paid;
 

@@ -28,8 +28,10 @@
             <form method="post" action="<?= base_url()."settings/accounts"?>">
                 <table class="search-table2" border="0" style=" width: 100%;">
                     <tr>
-                        <td style="width: 60%;"><input style="width: 100%;" required="required" type="text" placeholder="new title here...." value="" name="title"></td>
-                        <td style="width: 30%;">
+                        <td style=""><input style="width: 100%;" required="required" type="text" placeholder="new title here...." value="" name="title"></td>
+                        <td style=""><input style="width: 100%;" required="required" type="text" placeholder="account#" value="" name="account_number"></td>
+                        <td style=""><input style="width: 100%;" required="required" type="text" placeholder="bank" value="" name="bank"></td>
+                        <td style="">
                             <select name="type" style="width: 100%; height: 25px;">
                                 <option value="current">Current</option>
                                 <option value="saving">Saving</option>
@@ -46,6 +48,8 @@
                 <tr>
                     <th style="width: 10%">ID</th>
                     <th>Title</th>
+                    <th>Account#</th>
+                    <th>Bank</th>
                     <th>Type</th>
                     <th></th>
                 </tr>
@@ -57,14 +61,10 @@
                     ?>
                     <tr>
                         <td><?= $title->id; ?></td>
+                        <td><?= $title->title; ?></td>
+                        <td><?= $title->account_number; ?></td>
+                        <td><?= $title->bank; ?></td>
 
-                        <td>
-                            <?php if($this->helper_model->is_editable_title($title->title)): ?>
-                                <a href="#" id="account_title_<?= $title->id ?>" data-name="title" data-type="text" data-pk="<?= $title->id ?>" data-url="<?= base_url()."helper_controller/edit_record/account_titles/required|is_unique[account_titles.title]" ?>" data-title="Title"><?= ucwords($title->title) ?></a>
-                            <?php else:?>
-                                <?= ucwords($title->title) ?>
-                            <?php endif; ?>
-                        </td>
                         <td>
                             <?php if($this->helper_model->is_editable_title($title->title)): ?>
                                 <a href="#" id="account_type_<?= $title->id ?>" data-name="type" data-type="select" data-pk="<?= $title->id ?>" data-url="<?= base_url()."helper_controller/edit_record/account_titles/required" ?>" data-title="Title"><?= ucwords($title->type) ?></a>
@@ -72,17 +72,7 @@
                                 <?= ucwords($title->type) ?>
                             <?php endif; ?>
                         </td>
-                        <td>
-                            <?php if($this->privilege_model->allow_removing() == true): ?>
-                                <?php
-                                $query_string = $this->helper_model->merge_query($_SERVER['QUERY_STRING'],array('del_ac_title'=>$title->id));
-                                $url = $this->helper_model->url_path()."?".$query_string;
-                                ?>
-                                <?php if($this->helper_model->is_editable_title($title->title)): ?>
-                                    <a href="<?= $url ?>" onclick="return confirm_deleting()"><i class="fa fa-minus-circle" style="color: red"></i> remove</a>
-                                <?php endif; ?>
-                            <?php endif; ?>
-                        </td>
+                        <td></td>
                     </tr>
                 <?php
                 }

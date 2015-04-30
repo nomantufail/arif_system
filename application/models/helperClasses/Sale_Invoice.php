@@ -12,6 +12,7 @@ class Sale_Invoice {
     public $customer;
     public $date;
     public $summary;
+    public $tanker;
     public $entries;
     public $received;
 

@@ -5,6 +5,7 @@
         <th class="column_heading">Invoice#</th>
         <th class="column_heading">Date</th>
         <th class="column_heading">Supplier</th>
+        <th class="column_heading">Tanker</th>
         <th class="column_heading">Product</th>
         <th class="column_heading">Qty</th>
         <th class="column_heading">Cst / Item</th>
@@ -35,6 +36,7 @@
                 <?php if($count == 1){echo "<td rowspan=".($num_invoice_items).">".Carbon::createFromFormat('Y-m-d',$record->date)->toFormattedDateString()."</td>";} ?>
 
                 <?php if($count == 1){echo "<td rowspan=".($num_invoice_items).">".$record->supplier->name."</td>";} ?>
+                <?php if($count == 1){echo "<td rowspan=".($num_invoice_items).">".$record->tanker."</td>";} ?>
 
                 <td>
                     <?php

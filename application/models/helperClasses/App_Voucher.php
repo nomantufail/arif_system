@@ -11,6 +11,7 @@ class App_Voucher {
     public $id;
     public $voucher_date;
     public $summary;
+    public $tanker;
     public $voucher_type;
     public $inserted_at;
     public $updated_at;

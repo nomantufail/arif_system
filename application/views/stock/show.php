@@ -3,7 +3,7 @@
     <div class="col-lg-12">
         <section class="col-md-6">
             <h3 class="">
-                Stock <small></small>
+                Stock In Hand <small></small>
             </h3>
         </section>
     </div>

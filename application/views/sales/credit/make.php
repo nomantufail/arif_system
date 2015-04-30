@@ -154,6 +154,15 @@ $default_row_counter = 1;
                                         <?php endforeach; ?>
                                     </select>
                                 </td>
+                                <th style="text-align: right; width: 50px;">Tanker: </th>
+                                <td>
+                                    <select class="select_box" name="tanker">
+                                        <?php foreach($tankers as $tanker):?>
+                                            <option value="<?= $tanker->name ?>"><?= $tanker->name ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+
                                 <th style="text-align: right; width: 100px;">Invoice Date: </th>
                                 <td><input class="form-control" value="<?= date("Y-m-d"); ?>" style="width: 200px; margin-left: 10px;" type="date" name="invoice_date"></td>
                             </tr>
