@@ -11,7 +11,6 @@ class Admin extends ParentController {
 
     public function index()
     {
-
         $target_function = $this->intelligent_router_model->get_last_saved_route_for_current_controller();
 
         if($target_function != 'index' && $target_function != 'login')
@@ -55,5 +54,32 @@ class Admin extends ParentController {
         $this->load->view('components/footer');
     }
 
+    public function update_bank_entries()
+    {
+        $this->db->select('id');
+        $this->db->where('ac_type','bank');
+        $result = $this->db->get('voucher_entries')->result();
+        $entry_ids = array();
+        foreach($result as $record)
+        {
+            array_push($entry_ids, $record->id);
+        }
+
+        $bank_1 = "Yasir Ali (Al-Falah 12****789)";
+        $bank_2 = "Mukhtar Shah (Standard Charted 98****321)";
+        $this->db->where_in('id',$entry_ids);
+        $this->db->where('id >',39);
+        $data = array(
+            'ac_title'=>$bank_1,
+        );
+        $this->db->update('voucher_entries',$data);
+
+        $this->db->where_in('id',$entry_ids);
+        $this->db->where('id <=',39);
+        $data = array(
+            'ac_title'=>$bank_2,
+        );
+        $this->db->update('voucher_entries',$data);
+    }
 
 }

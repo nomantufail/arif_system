@@ -3,8 +3,70 @@ class Accounts_Model extends Parent_Model {
 
     public function __construct(){
         parent::__construct();
+
+        $this->table = 'vouchers';
     }
 
+    /**
+    * Ledgers Area
+    **/
+
+    public function opening_balance_for_customer_ledger($keys)
+    {
+        $this->db->select('SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr');
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active();
+        $this->db->where('vouchers.voucher_date <',$keys['from']);
+        $this->get_customer_vouchers();
+        $this->where_customer($keys['customer']);
+        $this->db->group_by('voucher_entries.dr_cr');
+        $result = $this->db->get()->result();
+        $opening_balance = $this->fetch_opening_balance($result);
+        return $opening_balance;
+        return $result;
+    }
+    public function customer_ledger($keys)
+    {
+        $this->select_whole_voucher_content();
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active();
+        $this->voucher_duration($keys['from'], $keys['to']);
+        $this->get_customer_vouchers();
+        $this->where_customer($keys['customer']);
+        $result = $this->db->get()->result();
+        return $result;
+    }
+
+    public function opening_balance_for_supplier_ledger($keys)
+    {
+        $this->db->select('SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr');
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active();
+        $this->db->where('vouchers.voucher_date <',$keys['from']);
+        $this->get_supplier_vouchers();
+        $this->where_supplier($keys['supplier']);
+        $this->db->group_by('voucher_entries.dr_cr');
+        $result = $this->db->get()->result();
+        $opening_balance = $this->fetch_opening_balance($result);
+        return $opening_balance;
+        return $result;
+    }
+    public function supplier_ledger($keys)
+    {
+        $this->select_whole_voucher_content();
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active();
+        $this->voucher_duration($keys['from'], $keys['to']);
+        $this->get_supplier_vouchers();
+        $this->where_supplier($keys['supplier']);
+        $result = $this->db->get()->result();
+        return $result;
+    }
+    /*********************************/
     public function bank_accounts_status()
     {
         $this->db->select("voucher_entries.ac_title, voucher_entries.ac_sub_title,

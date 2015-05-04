@@ -23,6 +23,7 @@ class App_Voucher {
     public function __construct()
     {
         $this->entries = array();
+        $this->tanker = '';
     }
 
     public function balance()

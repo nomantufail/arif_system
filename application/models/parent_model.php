@@ -221,7 +221,64 @@ class Parent_Model extends CI_Model {
         $this->db->where('ac_type', 'bank');
     }
 
+    public function get_customer_vouchers()
+    {
+        $this->db->where('voucher_entries.related_customer !=','');
+    }
+    public function get_supplier_vouchers()
+    {
+        $this->db->where('voucher_entries.related_supplier !=','');
+    }
+    public function where_customer($customerName)
+    {
+        $this->db->where('voucher_entries.related_customer',$customerName);
+    }
+    public function where_supplier($customerName)
+    {
+        $this->db->where('voucher_entries.related_supplier',$customerName);
+    }
 
+    public function select_whole_voucher_content()
+    {
+        $this->db->select("
+            vouchers.id as voucher_id, vouchers.summary, voucher_entries.ac_title,
+            vouchers.tanker,
+            voucher_entries.ac_sub_title, voucher_entries.amount, vouchers.voucher_date,
+            voucher_entries.id as entry_id, voucher_entries.ac_type,
+            voucher_entries.dr_cr,
+            voucher_entries.related_supplier, voucher_entries.related_customer,
+            voucher_entries.related_business, voucher_entries.related_other_agent,
+        ");
+    }
+
+    public function fetch_opening_balance($rows)
+    {
+        $total_debit = 0;
+        $total_credit = 0;
+        if($rows != null)
+        {
+            foreach($rows as $row)
+            {
+                if($row->dr_cr == 0)
+                {
+                    $total_credit += $row->total_amount;
+                }
+                if($row->dr_cr == 1)
+                {
+                    $total_debit += $row->total_amount;
+                }
+            }
+        }
+        return round($total_debit - $total_credit, 3);
+    }
+
+    public function voucher_duration($from, $to)
+    {
+        $this->db->where(array(
+            'vouchers.voucher_date >='=>$from,
+            'vouchers.voucher_date <='=>$to,
+        ));
+    }
 }
 
 ?>

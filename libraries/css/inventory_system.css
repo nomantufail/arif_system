@@ -31,3 +31,7 @@
 .total_amount{
     background-color: lightblue;
 }
+.table_footer_row_totals{
+    background-color: #444444;
+    color: #ffffff;
+}

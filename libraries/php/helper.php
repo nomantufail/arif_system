@@ -6,6 +6,23 @@
  * Time: 3:38 AM
  */
 
+
+function first_day_of_month($date = ''){
+    $date = ($date == '')?date('Y-m-d'):$date;
+    $parts_of_date = explode('-',$date);
+    return $parts_of_date[0]."-".$parts_of_date[1]."-"."01";
+}
+function last_day_of_month($date = ''){
+    $date = ($date == '')?date('Y-m-d'):$date;
+    $parts_of_date = explode('-',$date);
+    $total_days_in_month=cal_days_in_month(CAL_GREGORIAN,$parts_of_date[1],$parts_of_date[0]);
+    return $parts_of_date[0]."-".$parts_of_date[1]."-".$total_days_in_month;
+}
+
+function bn_masking($number) {
+    return substr($number, 0, 2) . str_repeat("*", strlen($number) -5) . substr($number, -3);
+}
+
 function exporting_file_name($file_name)
 {
     return $file_name;

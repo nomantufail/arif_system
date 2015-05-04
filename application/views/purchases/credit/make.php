@@ -157,7 +157,7 @@ $default_row_counter = 1;
                                 <td>
                                     <select class="select_box" name="tanker">
                                         <?php foreach($tankers as $tanker):?>
-                                            <option value="<?= $tanker->name ?>"><?= $tanker->name ?></option>
+                                            <option value="<?= $tanker->number ?>"><?= $tanker->number ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </td>
