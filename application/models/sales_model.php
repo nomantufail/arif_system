@@ -398,6 +398,7 @@ class Sales_Model extends Parent_Model {
                 /*----------Managing Stack-------------*/
                 $stock_entry['product_name']=$product;
                 $stock_entry['quantity']=$quantity;
+                $stock_entry['tanker'] = $this->input->post('tanker');
                 array_push($stock_entries, $stock_entry);
                 /*------------------------------------*/
             }

@@ -48,7 +48,7 @@ class Products_Model extends Parent_Model {
 
         $this->db->insert($this->table, $data);
         $product_id = $this->db->insert_id();
-        $this->stock_model->insert($product_id, 0);
+        $this->stock_model->insert_product($product_id, 0);
 
         return $this->db->trans_complete();
     }

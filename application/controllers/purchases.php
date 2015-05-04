@@ -32,7 +32,6 @@ class Purchases extends ParentController {
         $headerData['title']='Purchase';
         $this->bodyData['products'] = $this->products_model->get();
         $this->bodyData['suppliers'] = $this->suppliers_model->get();
-        $this->bodyData['tankers'] = $this->tankers_model->get();
 
         if(isset($_POST['save_credit_purchase']))
         {
@@ -44,9 +43,11 @@ class Purchases extends ParentController {
             }
 
         }
+        $this->bodyData['tankers'] = $this->tankers_model->get_free();
         $this->bodyData['invoice_number'] = $this->purchases_model->next_invoice();
         $purchases = $this->purchases_model->few_invoices();
         $this->bodyData['purchases']= $purchases;
+
         $this->load->view('components/header',$headerData);
         $this->load->view('purchases/credit/make', $this->bodyData);
         $this->load->view('components/footer');

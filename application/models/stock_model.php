@@ -9,7 +9,7 @@ class Stock_Model extends Parent_Model {
 
     public function get(){
         $this->db->select("stock.id as stock_id, stock.product_id, products.name as product_name,
-        stock.quantity,
+        stock.quantity, stock.tanker,
         ");
         $this->db->from('stock');
         $this->db->join('products','products.id = stock.product_id','left');
@@ -50,42 +50,72 @@ class Stock_Model extends Parent_Model {
             return null;
         }
     }
-    public function increase($stock_entries)
+
+    public function generate_where_statement_for_updating_stock($stock_entries)
     {
-        $product_names = array();
+        $where = "(";
         foreach($stock_entries as $entry)
         {
-            array_push($product_names, $entry['product_name']);
+            /**
+             * -----------------------
+             *Making Where Statement
+             * to update stock entries
+             *------------------------
+             * */
+            $where.="(products.name = '".$entry['product_name']."' && stock.tanker = '".$entry['tanker']."') OR";
+            /*--------------------------------*/
         }
+        $where .="__cut";
+        $where_parts = explode(' OR__cut',$where);
+        $where = $where_parts[0];
+        $where.=')';
+        return $where;
+    }
+    public function process_product_quantities($stock_entries)
+    {
+        $product_quantities = array();
+        foreach($stock_entries as $entry)
+        {
+            if(isset($product_quantities[$entry['product_name']]))
+            {
+                $product_quantities[$entry['product_name']] += $entry['quantity'];
 
-        if(sizeof($product_names) > 0)
+            }
+            else
+            {
+                $product_quantities[$entry['product_name']] = $entry['quantity'];
+            }
+        }
+        //var_dump($product_quantities); die();
+        return $product_quantities;
+    }
+    public function increase($stock_entries)
+    {
+        $product_quantities = $this->process_product_quantities($stock_entries);
+        if(sizeof($stock_entries) > 0)
         {
             $this->db->trans_start();
 
-            $this->db->select('products.id as product_id, products.name as product_name, stock.quantity');
+            $where_statement = $this->generate_where_statement_for_updating_stock($stock_entries);
+            $this->db->select('stock.id as stock_id, products.id as product_id, products.name as product_name, stock.quantity, stock.tanker,');
             $this->db->from($this->table);
             $this->db->join('products','products.id = stock.product_id', 'left');
-            $this->db->where_in("products.name", $product_names);
+            $this->db->where($where_statement);
             $result = $this->db->get()->result();
             $modified_stock_entries = array();
             foreach($result as $record)
             {
-                foreach($stock_entries as $entry)
-                {
-                    if($entry['product_name'] == $record->product_name)
-                    {
-                        $modified_stock_entry = array(
-                            'product_id' => $record->product_id,
-                            'quantity' => $record->quantity + $entry['quantity'],
-                            'updated_at' => date('Y-m-d h:i:s', time()),
-                        );
-                        array_push($modified_stock_entries, $modified_stock_entry);
-                    }
-                }
+                $modified_stock_entry = array(
+                    'id' => $record->stock_id,
+                    'quantity' => $record->quantity + $product_quantities[$record->product_name],
+                    'tanker'=>$stock_entries[0]['tanker'],
+                    'updated_at' => date('Y-m-d h:i:s', time()),
+                );
+                array_push($modified_stock_entries, $modified_stock_entry);
             }
             if(sizeof($modified_stock_entries) > 0)
             {
-                $this->db->update_batch($this->table, $modified_stock_entries, 'product_id');
+                $this->db->update_batch($this->table, $modified_stock_entries, 'id');
             }
 
             return $this->db->trans_complete();
@@ -96,41 +126,30 @@ class Stock_Model extends Parent_Model {
     }
     public function decrease($stock_entries)
     {
-        $product_names = array();
-        foreach($stock_entries as $entry)
-        {
-            array_push($product_names, $entry['product_name']);
-        }
-
-        if(sizeof($product_names) > 0)
+        $product_quantities = $this->process_product_quantities($stock_entries);
+        if(sizeof($stock_entries) > 0)
         {
             $this->db->trans_start();
 
-            $this->db->select('products.id as product_id, products.name as product_name, stock.quantity');
+            $where_statement = $this->generate_where_statement_for_updating_stock($stock_entries);
+            $this->db->select('stock.id as stock_id, products.id as product_id, products.name as product_name, stock.quantity, stock.tanker');
             $this->db->from($this->table);
             $this->db->join('products','products.id = stock.product_id', 'left');
-            $this->db->where_in("products.name", $product_names);
+            $this->db->where($where_statement);
             $result = $this->db->get()->result();
             $modified_stock_entries = array();
             foreach($result as $record)
             {
-                foreach($stock_entries as $entry)
-                {
-
-                    if($entry['product_name'] == $record->product_name)
-                    {
-                        $modified_stock_entry = array(
-                            'product_id' => $record->product_id,
-                            'quantity' => $record->quantity - $entry['quantity'],
-                            'updated_at' => date('Y-m-d h:i:s', time()),
-                        );
-                        array_push($modified_stock_entries, $modified_stock_entry);
-                    }
-                }
+                $modified_stock_entry = array(
+                    'id' => $record->stock_id,
+                    'quantity' => $record->quantity - $product_quantities[$record->product_name],
+                    'updated_at' => date('Y-m-d h:i:s', time()),
+                );
+                array_push($modified_stock_entries, $modified_stock_entry);
             }
             if(sizeof($modified_stock_entries) > 0)
             {
-                $this->db->update_batch($this->table, $modified_stock_entries, 'product_id');
+                $this->db->update_batch($this->table, $modified_stock_entries, 'id');
             }
 
             return $this->db->trans_complete();
@@ -140,17 +159,73 @@ class Stock_Model extends Parent_Model {
 
 
 
-    public function insert($product_id, $qty){
-       $data = array(
-           'product_id'=>$product_id,
-           'quantity'=>$qty,
-        );
-        $result = $this->db->insert($this->table, $data);
-        if($result == true){
-            return true;
-        }else{
-            return false;
+    public function insert_product($product_id, $qty){
+
+        /*fetching tankers*/
+        $tankers = $this->tankers_model->get();
+        if(sizeof($tankers) > 0)
+        {
+            $stock = array();
+            foreach($tankers as $tanker)
+            {
+                $data = array(
+                    'product_id'=>$product_id,
+                    'tanker'=>$tanker->number,
+                    'quantity'=>$qty,
+                );
+                array_push($stock, $data);
+            }
+
+            $result = $this->db->insert_batch($this->table, $stock);
+            if($result == true){
+                return true;
+            }else{
+                return false;
+            }
         }
+        else
+        {
+            return true;
+        }
+
+    }
+    public function insert_tanker($tanker){
+
+        /*fetching tankers*/
+        $products = $this->products_model->get();
+        if(sizeof($products) > 0)
+        {
+            $stock = array();
+            foreach($products as $product)
+            {
+                $data = array(
+                    'product_id'=>$product->id,
+                    'tanker'=>$tanker,
+                    'quantity'=>0,
+                );
+                array_push($stock, $data);
+            }
+
+            $result = $this->db->insert_batch($this->table, $stock);
+            if($result == true){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public function busy_tankers()
+    {
+        $this->db->select("stock.tanker");
+        $this->db->distinct();
+        $this->db->where('stock.quantity >',0);
+        $result = $this->db->get($this->table)->result();
+        return $result;
     }
 
 }

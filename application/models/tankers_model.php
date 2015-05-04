@@ -12,6 +12,46 @@ class Tankers_model extends Parent_Model {
         $tankers = $this->db->get($this->table)->result();
         return $tankers;
     }
+    public function get_busy($orderby = 'asc')
+    {
+        $busy_tankers = $this->stock_model->busy_tankers();
+        $busy_tankers_array = array();
+        foreach($busy_tankers as $tanker)
+        {
+            array_push($busy_tankers_array, $tanker->tanker);
+        }
+        if(sizeof($busy_tankers_array) > 0)
+        {
+            $this->db->select('tankers.number');
+            $this->db->where_in('tankers.number',$busy_tankers_array);
+            $result = $this->db->get($this->table)->result();
+            return $result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    public function get_free()
+    {
+        $busy_tankers = $this->stock_model->busy_tankers();
+        $busy_tankers_array = array();
+        foreach($busy_tankers as $tanker)
+        {
+            array_push($busy_tankers_array, $tanker->tanker);
+        }
+        if(sizeof($busy_tankers_array) > 0)
+        {
+            $this->db->select('tankers.number');
+            $this->db->where_not_in('tankers.number',$busy_tankers_array);
+            $result = $this->db->get($this->table)->result();
+            return $result;
+        }
+        else
+        {
+            return $this->get();
+        }
+    }
     public function get_limited($limit, $start, $keys, $sort) {
 
         $this->db->order_by($sort['sort_by'], $sort['order']);
@@ -56,12 +96,11 @@ class Tankers_model extends Parent_Model {
            'number'=>$this->input->post('number'),
            'chambers'=>$this->input->post('chambers'),
        );
-        $result = $this->db->insert('tankers', $data);
-        if($result == true){
-            return true;
-        }else{
-            return false;
-        }
+        $this->db->trans_start();
+        $this->db->insert('tankers', $data);
+        $this->stock_model->insert_tanker($this->input->post('number'));
+
+        return $this->db->trans_complete();
     }
 
 }
