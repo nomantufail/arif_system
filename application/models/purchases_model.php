@@ -403,6 +403,7 @@ class Purchases_Model extends Parent_Model {
                 $stock_entry['product_name']=$product;
                 $stock_entry['quantity']=$quantity;
                 $stock_entry['tanker'] = $this->input->post('tanker');
+                $stock_entry['cost_per_item'] = $cost_per_item;
                 array_push($stock_entries, $stock_entry);
                 /*------------------------------------*/
             }
@@ -416,7 +417,7 @@ class Purchases_Model extends Parent_Model {
         $this->db->trans_begin();
 
         $voucher_inserted = $this->accounts_model->insert_voucher($voucher);
-        $stock_updated = $this->stock_model->increase($stock_entries);
+        $stock_updated = $this->stock_model->increase($stock_entries, $voucher_inserted);
 
 
         if($this->db->trans_status() == false || $voucher_inserted == false || $stock_updated == false)

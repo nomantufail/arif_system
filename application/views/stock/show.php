@@ -38,6 +38,7 @@
                             <th class="column_heading">Product</th>
                             <th class="column_heading">Tanker</th>
                             <th class="column_heading">Quantity</th>
+                            <th class="column_heading">Price / Unit</th>
                         </tr>
                         </thead>
                         <tbody class="table_body">
@@ -46,6 +47,7 @@
                                 <td class="table_td"><?= ucwords($entry->product_name)?></td>
                                 <td class="table_td"><?= ucwords($entry->tanker)?></td>
                                 <td class="table_td"><?= ucwords($entry->quantity)?></td>
+                                <td class="table_td"><?= ucwords($entry->price_per_unit)?></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>

@@ -32,6 +32,7 @@ class Tankers_model extends Parent_Model {
             return null;
         }
     }
+
     public function get_free()
     {
         $busy_tankers = $this->stock_model->busy_tankers();
@@ -52,6 +53,7 @@ class Tankers_model extends Parent_Model {
             return $this->get();
         }
     }
+
     public function get_limited($limit, $start, $keys, $sort) {
 
         $this->db->order_by($sort['sort_by'], $sort['order']);

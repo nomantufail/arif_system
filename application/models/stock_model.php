@@ -9,7 +9,7 @@ class Stock_Model extends Parent_Model {
 
     public function get(){
         $this->db->select("stock.id as stock_id, stock.product_id, products.name as product_name,
-        stock.quantity, stock.tanker,
+        stock.quantity, stock.tanker, stock.price_per_unit,
         ");
         $this->db->from('stock');
         $this->db->join('products','products.id = stock.product_id','left');
@@ -89,9 +89,24 @@ class Stock_Model extends Parent_Model {
         //var_dump($product_quantities); die();
         return $product_quantities;
     }
-    public function increase($stock_entries)
+
+    /**
+     * Below function is used to generate seperate price per units
+     * for each stock entry
+     **/
+    public function process_price_per_units($stock_entries)
+    {
+        $price_per_units = array();
+        foreach($stock_entries as $entry)
+        {
+                $price_per_units[$entry['product_name']] = $entry['cost_per_item'];
+        }
+        return $price_per_units;
+    }
+    public function increase($stock_entries, $purchase_id)
     {
         $product_quantities = $this->process_product_quantities($stock_entries);
+        $price_per_units = $this->process_price_per_units($stock_entries);
         if(sizeof($stock_entries) > 0)
         {
             $this->db->trans_start();
@@ -108,7 +123,9 @@ class Stock_Model extends Parent_Model {
                 $modified_stock_entry = array(
                     'id' => $record->stock_id,
                     'quantity' => $record->quantity + $product_quantities[$record->product_name],
+                    'price_per_unit' =>$price_per_units[$record->product_name],
                     'tanker'=>$stock_entries[0]['tanker'],
+                    'purchase_id'=>$purchase_id,
                     'updated_at' => date('Y-m-d h:i:s', time()),
                 );
                 array_push($modified_stock_entries, $modified_stock_entry);
