@@ -98,6 +98,22 @@ class Parent_Model extends CI_Model {
     }
 
     /**
+     * Used to fetch only receipt vouchers
+     */
+    public function expense_payable_vouchers()
+    {
+        $this->db->where('vouchers.voucher_type','expense_payable');
+    }
+
+    /**
+     * Used to fetch only receipt vouchers
+     */
+    public function expense_payment_vouchers()
+    {
+       $this->db->where('vouchers.voucher_type','expense payment');
+    }
+
+    /**
      * Used to join vouchers table with voucher_entries table
      */
     public function join_vouchers()
@@ -164,6 +180,29 @@ class Parent_Model extends CI_Model {
             voucher_entries.dr_cr,
             voucher_entries.related_supplier, voucher_entries.related_customer,
             voucher_entries.related_business, voucher_entries.related_other_agent,
+        ");
+    }
+
+    /**
+     * Used to select all the expense contents which are needed
+     */
+    public function select_expense_content()
+    {
+        $this->db->select("
+            vouchers.id as invoice_id, vouchers.voucher_date as expense_date, vouchers.summary as invoice_summary,
+            voucher_entries.related_tanker as tanker, voucher_entries.ac_title as expense_title,
+            voucher_entries.amount,
+        ");
+    }
+
+    /**
+     * Used to select all the expense payment contents which are needed
+     */
+    public function select_expense_payment_content()
+    {
+        $this->db->select("
+            vouchers.id as voucher_id, vouchers.voucher_date as voucher_date, vouchers.summary as summary,
+            voucher_entries.ac_title as bank_ac, voucher_entries.amount,
         ");
     }
 

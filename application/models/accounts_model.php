@@ -169,6 +169,7 @@ class Accounts_Model extends Parent_Model {
                 'related_business'=>$entry->related_business,
                 'related_other_agent'=>$entry->related_other_agent,
                 'related_supplier'=>$entry->related_supplier,
+                'related_tanker'=>$entry->related_tanker,
                 'quantity'=>$entry->quantity,
                 'cost_per_item'=>$entry->cost_per_item,
                 'amount'=>$entry->amount,

@@ -17,6 +17,7 @@ class App_voucher_Entry {
     public $related_supplier;
     public $related_business;
     public $related_other_agent;
+    public $related_tanker;
     public $quantity;
     public $cost_per_item;
     public $dr_cr;
