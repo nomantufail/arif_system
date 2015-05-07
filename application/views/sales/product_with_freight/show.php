@@ -20,7 +20,7 @@
     <div class="container-fluid">
         <div class="row">
             <?php
-            include_once(APPPATH."views/sales/components/nav_bar.php");
+            include_once(APPPATH."views/sales/product_with_freight/components/nav_bar.php");
             ?>
         </div>
         <!--Notifications Area-->

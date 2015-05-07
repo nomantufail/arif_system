@@ -17,97 +17,12 @@ class Sales_Model extends Parent_Model {
         $this->db->from($this->table);
         $this->join_vouchers();
         $this->active();
-        $this->sale_vouchers();
+        $this->product_sale_vouchers();
         $this->with_debit_entries_only();
         $this->latest($this->table);
         $result = $this->db->get()->result();
         $total_sales = ($result[0]->total_sales != null)?$result[0]->total_sales:0;
         return round($total_sales, 3);
-    }
-
-    public function cash()
-    {
-        include_once(APPPATH."models/helperClasses/Sale_Invoice.php");
-        include_once(APPPATH."models/helperClasses/Sale_Invoice_Entry.php");
-        include_once(APPPATH."models/helperClasses/Customer.php");
-        include_once(APPPATH."models/helperClasses/Product.php");
-
-        $this->db->select("
-            sale_invoices.id as invoice_id, sale_invoices.invoice_date, sale_invoices.extra_info,
-            customers.id as customer_id, customers.name as customer_name,
-            sale_invoice_items.id as entry_id, sale_invoice_items.quantity as product_quantity,
-            sale_invoice_items.sale_price_per_item,
-            products.id as product_id, products.name as product_name,
-        ");
-        $this->db->from($this->table);
-        $this->db->join('sale_invoice_items','sale_invoice_items.invoice_id = sale_invoices.id','left');
-        $this->db->join('customers','customers.id = sale_invoices.customer_id','left');
-        $this->db->join('products','products.id = sale_invoice_items.product_id','left');
-
-        $this->db->where(array(
-            'sale_invoices.deleted'=>0,
-            'sale_invoices.transaction_type'=>1,
-        ));
-        $this->db->order_by('sale_invoices.id, sale_invoice_items.id');
-        $raw_invoices = $this->db->get()->result();
-
-        $final_invoices_array = array();
-
-        $previous_invoice_id = -1;
-        $previous_entry_id = -1;
-
-        $temp_invoice = new Sale_Invoice();
-        $temp_invoice_item = new Sale_Invoice_Entry($temp_invoice);
-
-        $count = 0;
-        foreach($raw_invoices as $record){
-            $count++;
-
-            //setting the parent details
-            if($record->invoice_id != $previous_invoice_id)
-            {
-                $previous_invoice_id = $record->invoice_id;
-
-                $temp_invoice = new Sale_Invoice();
-
-                //setting data in the parent object
-                $temp_invoice->id = $record->invoice_id;
-                $temp_invoice->date = $record->invoice_date;
-                $temp_invoice->customer = new Customer($record->customer_id, $record->customer_name);
-                $temp_invoice->extra_info = $record->extra_info;
-
-            }/////////////////////////////////////////////////
-
-            /////////////////////////////////////////////////
-            if($record->entry_id != $previous_entry_id)
-            {
-                $previous_entry_id = $record->entry_id;
-
-                $temp_invoice_item = new Sale_Invoice_Entry($temp_invoice);
-
-                //setting data in the Trip_Product_Data object
-                $temp_invoice_item->id = $record->entry_id;
-                $temp_invoice_item->product = new Product($record->product_id, $record->product_name);
-                $temp_invoice_item->salePricePerItem = $record->sale_price_per_item;
-                $temp_invoice_item->quantity = $record->product_quantity;
-            }/////////////////////////////////////////////////
-
-            //pushing particals
-            if($count != sizeof($raw_invoices)){
-                if($raw_invoices[$count]->entry_id != $record->entry_id){
-                    array_push($temp_invoice->entries, $temp_invoice_item);
-                }
-                if($raw_invoices[$count]->invoice_id != $record->invoice_id){
-                    array_push($final_invoices_array, $temp_invoice);
-                }
-            }else{
-
-                array_push($temp_invoice->entries, $temp_invoice_item);
-                array_push($final_invoices_array, $temp_invoice);
-            }
-        }
-
-        return $final_invoices_array;
     }
 
     public function make_invoices_from_raw($raw_invoices)
@@ -177,13 +92,13 @@ class Sales_Model extends Parent_Model {
         return $final_invoices_array;
     }
 
-    public function invoices()
+    public function product_sale_invoices()
     {
         $this->select_sale_content();
         $this->db->from($this->table);
         $this->join_vouchers();
         $this->active();
-        $this->sale_vouchers();
+        $this->product_sale_vouchers();
         $this->with_debit_entries_only();
         $this->latest($this->table);
         $raw_invoices = $this->db->get()->result();
@@ -191,7 +106,21 @@ class Sales_Model extends Parent_Model {
         return $this->sales_model->make_invoices_from_raw($raw_invoices);
     }
 
-    public function few_invoices()
+    public function product_sale_with_freight_invoices()
+    {
+        $this->select_sale_content();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->product_with_freight_vouchers();
+        $this->with_debit_entries_only();
+        $this->latest($this->table);
+        $raw_invoices = $this->db->get()->result();
+
+        return $this->sales_model->make_invoices_from_raw($raw_invoices);
+    }
+
+    public function few_product_sale_invoices()
     {
         //fetching the vocuher ids
         $this->select_voucher_ids();
@@ -199,7 +128,7 @@ class Sales_Model extends Parent_Model {
         $this->db->from($this->table);
         $this->join_vouchers();
         $this->active();
-        $this->sale_vouchers();
+        $this->product_sale_vouchers();
         $this->with_debit_entries_only();
         $this->db->limit(5);
         $this->latest($this->table);
@@ -220,7 +149,45 @@ class Sales_Model extends Parent_Model {
         $this->join_vouchers();
         $this->active();
         $this->db->where_in('vouchers.id',$voucher_ids);
-        $this->sale_vouchers();
+        $this->product_sale_vouchers();
+        $this->with_debit_entries_only();
+        $this->latest($this->table);
+        $raw_invoices = $this->db->get()->result();
+        /*****************************************/
+
+        return $this->sales_model->make_invoices_from_raw($raw_invoices);
+    }
+
+    public function few_product_with_freight_invoices()
+    {
+        //fetching the vocuher ids
+        $this->select_voucher_ids();
+        $this->db->distinct();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->product_with_freight_vouchers();
+        $this->with_debit_entries_only();
+        $this->db->limit(5);
+        $this->latest($this->table);
+        $result = $this->db->get()->result();
+        $voucher_ids = array(0,);
+        if(sizeof($result) > 0)
+        {
+            foreach($result as $record)
+            {
+                array_push($voucher_ids, $record->voucher_id);
+            }
+        }
+        /*************************************/
+
+        //fetching the vouchers
+        $this->select_sale_content();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->db->where_in('vouchers.id',$voucher_ids);
+        $this->product_with_freight_vouchers();
         $this->with_debit_entries_only();
         $this->latest($this->table);
         $raw_invoices = $this->db->get()->result();
@@ -235,13 +202,28 @@ class Sales_Model extends Parent_Model {
         $this->db->from($this->table);
         $this->join_vouchers();
         $this->active();
-        $this->sale_vouchers();
+        $this->product_sale_vouchers();
         $this->today_vouchers();
         $this->with_debit_entries_only();
         $this->latest($this->table);
         $raw_invoices = $this->db->get()->result();
 
-        return $this->sales_model->make_invoices_from_raw($raw_invoices);
+        $product_sales = $this->sales_model->make_invoices_from_raw($raw_invoices);
+
+        $this->select_sale_content();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->product_with_freight_vouchers();
+        $this->today_vouchers();
+        $this->with_debit_entries_only();
+        $this->latest($this->table);
+        $raw_invoices = $this->db->get()->result();
+
+        $product_sales_with_freight = $this->sales_model->make_invoices_from_raw($raw_invoices);
+
+        $today_sales = array_merge($product_sales, $product_sales_with_freight);
+        return $today_sales;
     }
 
     public function get_limited($limit, $start, $keys, $sort) {
@@ -344,7 +326,7 @@ class Sales_Model extends Parent_Model {
         return false;
     }
 
-    public function insert_credit_sale(){
+    public function insert_product_sale($voucher_type='product_sale'){
         include_once(APPPATH."models/helperClasses/App_Voucher.php");
         include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
 
@@ -355,7 +337,7 @@ class Sales_Model extends Parent_Model {
         $voucher->voucher_date = $this->input->post('invoice_date');
         $voucher->summary = $this->input->post('extra_info');
         $voucher->tanker = $this->input->post('tanker');
-        $voucher->voucher_type = 'sale';
+        $voucher->voucher_type = $voucher_type;
 
         $voucher_entries = array();
         $stock_entries = array();
@@ -427,7 +409,100 @@ class Sales_Model extends Parent_Model {
         }
         return false;
     }
+    public function insert_freight_sale($sale_id = 0){
+        include_once(APPPATH."models/helperClasses/App_Voucher.php");
+        include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
 
+
+        $pannel_count = $this->input->post('pannel_count');
+
+        $voucher = new App_Voucher();
+        $voucher->voucher_date = $this->input->post('invoice_date');
+        $voucher->summary = $this->input->post('extra_info');
+        $voucher->tanker = $this->input->post('tanker');
+        $voucher->voucher_type = 'freight_sale';
+        $voucher->product_sale_id = $sale_id;
+
+        $voucher_entries = array();
+        for($i = 1; $i<$pannel_count; $i++)
+        {
+
+            $product = $this->input->post('product_'.$i);
+            $freight_amount = $this->input->post('freight_amount_'.$i);
+
+            /* if product is empty than entry will not be added */
+            if($product != '')
+            {
+                /*---------First ENTRY--------*/
+                $voucher_entry_1 = new App_voucher_Entry();
+                $voucher_entry_1->ac_title = 'freight_cash';
+                $voucher_entry_1->ac_type = 'receivable';
+                $voucher_entry_1->related_business = $this->admin_model->business_name();
+                $voucher_entry_1->amount = $freight_amount;
+                $voucher_entry_1->dr_cr = 1;
+
+                array_push($voucher_entries, $voucher_entry_1);
+                /*----------------------------------*/
+
+                /*---------Second ENTRY--------*/
+                $voucher_entry_2 = new App_voucher_Entry();
+                $voucher_entry_2->ac_title = 'freight a/c';
+                $voucher_entry_2->ac_type = 'revenue';
+                $voucher_entry_2->related_tanker = $this->input->post('tanker');
+                $voucher_entry_2->amount = $freight_amount;
+                $voucher_entry_2->dr_cr = 0;
+
+                array_push($voucher_entries, $voucher_entry_2);
+                /*----------------------------------*/
+
+            }
+        }
+
+        /*------------inserting voucher entries in the voucher container---------*/
+        $voucher->entries = $voucher_entries;
+        /*---------------------------------------------------------------------*/
+
+        /*--------------Lets the game begin---------------*/
+        $this->db->trans_begin();
+
+        $voucher_inserted = $this->accounts_model->insert_voucher($voucher);
+
+
+        if($this->db->trans_status() == false || $voucher_inserted == false)
+        {
+            $this->db->trans_rollback();
+            return false;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return $voucher_inserted;
+        }
+        return false;
+    }
+
+    public function insert_product_with_freight()
+    {
+        $this->db->trans_begin();
+
+        $sale_id = $this->insert_product_sale('product_sale_with_freight');
+        if($this->db->trans_status() == false || $sale_id == false)
+        {
+            $this->db->trans_rollback();
+        }
+        else
+        {
+            $freight_id = $this->insert_freight_sale($sale_id);
+            if($this->db->trans_status() == false || $freight_id == false)
+            {
+                $this->db->trans_rollback();
+            }else{
+                $this->db->trans_commit();
+                return $sale_id;
+            }
+        }
+        return false;
+    }
 
     public function next_invoice()
     {

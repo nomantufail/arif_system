@@ -42,6 +42,8 @@ class Payments extends ParentController {
             }
 
         }
+        $this->bodyData['suppliers_balance'] = $this->accounts_model->suppliers_balance();
+        $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
         $this->bodyData['payment_history'] = $this->payments_model->few_payments();
         $this->load->view('components/header',$headerData);
         $this->load->view('payments/make', $this->bodyData);

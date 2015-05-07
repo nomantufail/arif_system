@@ -7,10 +7,154 @@ class Accounts_Model extends Parent_Model {
         $this->table = 'vouchers';
     }
 
+    public function customers_balance()
+    {
+        $this->db->select('voucher_entries.related_customer as customerName,
+                    SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr,
+        ');
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active();
+        $this->get_customer_vouchers();
+        $this->db->group_by('voucher_entries.related_customer, voucher_entries.dr_cr');
+        $result = $this->db->get()->result();
+        $grouped = Arrays::groupBy($result, Functions::extractField('customerName'));
+        $balances = array();
+        foreach($grouped as $group)
+        {
+            $total_debit = 0;
+            $total_credit = 0;
+            $customer_name = '';
+            foreach($group as $record)
+            {
+                $customer_name = $record->customerName;
+                if($record->dr_cr == 1)
+                {
+                    $total_debit += $record->total_amount;
+                }else if($record->dr_cr == 0){
+                    $total_credit += $record->total_amount;
+                }
+            }
+            $balance = round($total_debit - $total_credit, 3);
+
+            $balances[$customer_name] = $balance;
+        }
+        return $balances;
+
+    }
+
+    public function suppliers_balance()
+    {
+        $this->db->select('voucher_entries.related_supplier as supplierName,
+                    SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr,
+        ');
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active();
+        $this->get_supplier_vouchers();
+        $this->db->group_by('voucher_entries.related_supplier, voucher_entries.dr_cr');
+        $result = $this->db->get()->result();
+        $grouped = Arrays::groupBy($result, Functions::extractField('supplierName'));
+        $balances = array();
+        foreach($grouped as $group)
+        {
+            $total_debit = 0;
+            $total_credit = 0;
+            $supplier_name = '';
+            foreach($group as $record)
+            {
+                $supplier_name = $record->supplierName;
+                if($record->dr_cr == 1)
+                {
+                    $total_debit += $record->total_amount;
+                }else if($record->dr_cr == 0){
+                    $total_credit += $record->total_amount;
+                }
+            }
+            $balance = round($total_debit - $total_credit, 3);
+
+            $balances[$supplier_name] = $balance;
+        }
+        return $balances;
+
+    }
+
+
+    public function banks_balance()
+    {
+        $this->db->select('voucher_entries.ac_title as bank_title,
+                    SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr,
+        ');
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active();
+        $this->bank_entries();
+        $this->db->group_by('voucher_entries.ac_title, voucher_entries.dr_cr');
+        $result = $this->db->get()->result();
+        $grouped = Arrays::groupBy($result, Functions::extractField('bank_title'));
+        $balances = array();
+        foreach($grouped as $group)
+        {
+            $total_debit = 0;
+            $total_credit = 0;
+            $bank_name = '';
+            foreach($group as $record)
+            {
+                $bank_name = $record->bank_title;
+                if($record->dr_cr == 1)
+                {
+                    $total_debit += $record->total_amount;
+                }else if($record->dr_cr == 0){
+                    $total_credit += $record->total_amount;
+                }
+            }
+            $balance = round($total_debit - $total_credit, 3);
+
+            $balances[$bank_name] = $balance;
+        }
+        return $balances;
+
+    }
+    public function withdraw_accounts_balance()
+    {
+        $this->db->select('voucher_entries.ac_title as withdraw_account,
+                    SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr,
+        ');
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active();
+        $this->withdraw_vouchers();
+        $this->with_debit_entries_only();
+        $this->db->group_by('voucher_entries.ac_title, voucher_entries.dr_cr');
+        $result = $this->db->get()->result();
+        $grouped = Arrays::groupBy($result, Functions::extractField('withdraw_account'));
+        $balances = array();
+        foreach($grouped as $group)
+        {
+            $total_debit = 0;
+            $total_credit = 0;
+            $withdraw_account = '';
+            foreach($group as $record)
+            {
+                $withdraw_account = $record->withdraw_account;
+                if($record->dr_cr == 1)
+                {
+                    $total_debit += $record->total_amount;
+                }else if($record->dr_cr == 0){
+                    $total_credit += $record->total_amount;
+                }
+            }
+            $balance = round($total_debit - $total_credit, 3);
+
+            $balances[$withdraw_account] = $balance;
+        }
+        return $balances;
+
+    }
+
     /**
     * Ledgers Area
     **/
-
     public function opening_balance_for_customer_ledger($keys)
     {
         $this->db->select('SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr');
@@ -152,6 +296,7 @@ class Accounts_Model extends Parent_Model {
             'voucher_date'=>$voucher->voucher_date,
             'summary'=>$voucher->summary,
             'tanker'=>$voucher->tanker,
+            'product_sale_id'=>$voucher->product_sale_id,
             'voucher_type'=>$voucher->voucher_type,
         );
         $this->db->insert('vouchers',$voucher_data);

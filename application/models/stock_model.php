@@ -14,8 +14,9 @@ class Stock_Model extends Parent_Model {
         $this->db->from('stock');
         $this->db->join('products','products.id = stock.product_id','left');
         $records = $this->db->get()->result();
-        //var_dump($records);die();
-        return $records;
+        $grouped = Arrays::groupBy($records, Functions::extractField('product_name'));
+        ksort($grouped);
+        return $grouped;
     }
     public function get_limited($limit, $start, $keys, $sort) {
 
@@ -141,12 +142,15 @@ class Stock_Model extends Parent_Model {
 
 
     }
-    public function decrease($stock_entries)
+    public function decrease($stock_entries ,$transactions = true)
     {
         $product_quantities = $this->process_product_quantities($stock_entries);
         if(sizeof($stock_entries) > 0)
         {
-            $this->db->trans_start();
+            if($transactions == true)
+            {
+                $this->db->trans_start();
+            }
 
             $where_statement = $this->generate_where_statement_for_updating_stock($stock_entries);
             $this->db->select('stock.id as stock_id, products.id as product_id, products.name as product_name, stock.quantity, stock.tanker');
@@ -169,7 +173,14 @@ class Stock_Model extends Parent_Model {
                 $this->db->update_batch($this->table, $modified_stock_entries, 'id');
             }
 
-            return $this->db->trans_complete();
+            if($transactions == true)
+            {
+                return $this->db->trans_complete();
+            }
+            else
+            {
+                return true;
+            }
         }
         return false;
     }

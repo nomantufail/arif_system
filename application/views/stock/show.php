@@ -42,12 +42,25 @@
                         </tr>
                         </thead>
                         <tbody class="table_body">
-                        <?php foreach($stock as $entry):?>
+                        <?php foreach($stock as $group):?>
+                            <?php
+                                $total_quantity = 0;
+                            ?>
+                            <?php foreach($group as $entry):?>
+                                <?php
+                                    $total_quantity += $entry->quantity;
+                                ?>
                             <tr class="table_row table_body_row">
                                 <td class="table_td"><?= ucwords($entry->product_name)?></td>
                                 <td class="table_td"><?= ucwords($entry->tanker)?></td>
                                 <td class="table_td"><?= ucwords($entry->quantity)?></td>
                                 <td class="table_td"><?= ucwords($entry->price_per_unit)?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <tr style="background-color: lightgray;">
+                                <th colspan="2"><?= ucwords($group[0]->product_name) ?> Totals</th>
+                                <th><?= $total_quantity ?></th>
+                                <th></th>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>

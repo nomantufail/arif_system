@@ -12,6 +12,7 @@ class App_Voucher {
     public $voucher_date;
     public $summary;
     public $tanker;
+    public $product_sale_id;
     public $voucher_type;
     public $inserted_at;
     public $updated_at;
@@ -24,6 +25,7 @@ class App_Voucher {
     {
         $this->entries = array();
         $this->tanker = '';
+        $this->product_sale_id = 0;
     }
 
     public function balance()

@@ -43,6 +43,8 @@ class Receipts extends ParentController {
             }
         }
 
+        $this->bodyData['customers_balance'] = $this->accounts_model->customers_balance();
+        $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
         $this->bodyData['receipt_history'] = $this->receipts_model->few_receipts();
         $this->load->view('components/header',$headerData);
         $this->load->view('receipts/make', $this->bodyData);

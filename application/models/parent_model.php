@@ -74,11 +74,18 @@ class Parent_Model extends CI_Model {
     }
 
     /**
-     * Used to fetch only sale vouchers
+     * Used to fetch only product sale vouchers
      */
-    public function sale_vouchers()
+    public function product_sale_vouchers()
     {
-        $this->db->where('vouchers.voucher_type','sale');
+        $this->db->where('vouchers.voucher_type','product_sale');
+    }
+    /**
+     * Used to fetch only product_with_freight vouchers
+     */
+    public function product_with_freight_vouchers()
+    {
+        $this->db->where('vouchers.voucher_type','product_sale_with_freight');
     }
 
     /**
@@ -110,7 +117,14 @@ class Parent_Model extends CI_Model {
      */
     public function expense_payment_vouchers()
     {
-       $this->db->where('vouchers.voucher_type','expense payment');
+        $this->db->where('vouchers.voucher_type','expense payment');
+    }
+    /**
+     * Used to fetch only receipt vouchers
+     */
+    public function withdraw_vouchers()
+    {
+        $this->db->where('vouchers.voucher_type','withdraw');
     }
 
     /**
@@ -193,6 +207,14 @@ class Parent_Model extends CI_Model {
             voucher_entries.related_tanker as tanker, voucher_entries.ac_title as expense_title,
             voucher_entries.amount,
         ");
+    }
+
+    /**
+     * Used to select all the withdraw accounts contents which are needed
+     */
+    public function select_withdraw_accounts_content()
+    {
+        $this->db->select('withdraw_accounts.title, withdraw_accounts.description, withdraw_accounts.id');
     }
 
     /**

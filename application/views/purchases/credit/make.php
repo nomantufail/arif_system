@@ -18,6 +18,20 @@ $default_row_counter = 1;
     }
 </style>
 <script>
+
+    /*----------------------------------------------------------*/
+
+    /* making array of supplier balances at this point */
+    var SupplierBalance = {};
+    <?php foreach($suppliers as $supplier): ?>
+    <?php
+        $key = $supplier->name;
+        $value = (isset($suppliers_balance[$key]))?$suppliers_balance[$key]:0;
+    ?>
+    SupplierBalance["<?= $key ?>"] = "<?= $value ?>";
+    <?php endforeach; ?>
+    /*----------------------------------------------------------*/
+
     function display_row(row_num){
         var pannel_count = document.getElementById("pannel_count");
         var row_id = "row_"+row_num;
@@ -88,6 +102,15 @@ $default_row_counter = 1;
         document.getElementById("total_cost_label_"+row_num).innerHTML = to_rupees(total_cost_temp);
         grand_total_or_paid_changed();
     }
+
+    function supplier_changed(e)
+    {
+        var id = (e == undefined)?'supplier':e.params.data.element.parentElement.id;
+        var supplier_selected_index = document.getElementById("supplier").selectedIndex;
+        var supplier = document.getElementById("supplier").options[supplier_selected_index].value;
+        document.getElementById("supplier_balance").innerHTML = to_rupees(SupplierBalance[supplier]);
+    }
+
     function product_changed(e)
     {
         var id = e.params.data.element.parentElement.id;
@@ -106,6 +129,9 @@ $default_row_counter = 1;
         document.getElementById('cross_'+row_num).innerHTML='';
     }
 
+    $( document ).ready(function() {
+        supplier_changed();
+    });
 </script>
 
 <div id="page-wrapper" class="whole_page_container">
@@ -151,7 +177,8 @@ $default_row_counter = 1;
                                         <?php foreach($suppliers as $supplier):?>
                                             <option value="<?= $supplier->name ?>"><?= $supplier->name ?></option>
                                         <?php endforeach; ?>
-                                    </select>
+                                    </select><br>
+                                    <span style="color: #808080;">Balance: </span><span style="color: gray;" id="supplier_balance"></span>
                                 </td>
                                 <th style="text-align: right; width: 50px;">Tanker: </th>
                                 <td>
@@ -247,8 +274,12 @@ $default_row_counter = 1;
 
 </div>
 <script>
-    var $eventSelect = $(".product_select_box");
-    $eventSelect.on("select2:select", function (e) {
+    var $productSelect = $(".product_select_box");
+    var $supplierSelect = $(".suppliers_select_box");
+    $productSelect.on("select2:select", function (e) {
         product_changed(e);
+    });
+    $supplierSelect.on("select2:select", function (e) {
+        supplier_changed(e);
     });
 </script>

@@ -18,6 +18,33 @@ $default_row_counter = 1;
     }
 </style>
 <script>
+
+    /* making array of available stock at this point */
+
+    var Stock = {};
+    <?php foreach($available_stock as $group): ?>
+    <?php foreach($group as $stock): ?>
+    <?php
+        $key = $stock->product_name.'_'.$stock->tanker;
+        $value = $stock->quantity;
+    ?>
+    Stock["<?= $key ?>"] = "<?= $value ?>";
+    <?php endforeach; ?>
+    <?php endforeach; ?>
+    /*----------------------------------------------------------*/
+
+    /* making array of Customer balances at this point */
+    var CustomerBalance = {};
+    <?php foreach($customers as $customer): ?>
+    <?php
+        $key = $customer->name;
+        $value = (isset($customers_balance[$key]))?$customers_balance[$key]:0;
+    ?>
+    CustomerBalance["<?= $key ?>"] = "<?= $value ?>";
+    <?php endforeach; ?>
+    /*----------------------------------------------------------*/
+
+
     function display_row(row_num){
         var pannel_count = document.getElementById("pannel_count");
         var row_id = "row_"+row_num;
@@ -31,7 +58,6 @@ $default_row_counter = 1;
             place_cross(row_num);
             remove_cross(row_num-1);
         }
-
     }
     function hide_row(row_num){
         var pannel_count = document.getElementById("pannel_count");
@@ -53,6 +79,19 @@ $default_row_counter = 1;
         var received = document.getElementById("received").value;
         document.getElementById("remaining").innerHTML = limit_number(grand_total_temp - received);
 
+    }
+
+    function check_for_stock_availability(row_number)
+    {
+        var tanker_selected_index = document.getElementById("tanker").selectedIndex;
+        var tanker = document.getElementById("tanker").options[tanker_selected_index].value;
+
+        var product_selected_index = document.getElementById("product_"+row_number).selectedIndex;
+        var product = document.getElementById("product_"+row_number).options[product_selected_index].value;
+        var key = product+"_"+tanker;
+        var quantity = Stock[key];
+        document.getElementById("quantity_"+row_number).max = quantity;
+        document.getElementById("available_"+row_number).innerHTML = quantity;
     }
 
     function total_cost(row_num)
@@ -89,11 +128,28 @@ $default_row_counter = 1;
         document.getElementById("total_cost_label_"+row_num).innerHTML = to_rupees(total_cost_temp);
         grand_total_or_received_changed();
     }
+    function tanker_changed(e)
+    {
+        var pannel_count = document.getElementById("pannel_count");
+        for(var i = 1; i < pannel_count.value; i++)
+        {
+            check_for_stock_availability(i);
+        }
+    }
+    function customer_changed(e)
+    {
+        var id = (e == undefined)?'customer':e.params.data.element.parentElement.id;
+        var customer_selected_index = document.getElementById("customer").selectedIndex;
+        var customer = document.getElementById("customer").options[customer_selected_index].value;
+        document.getElementById("customer_balance").innerHTML = to_rupees(CustomerBalance[customer]);
+    }
+
     function product_changed(e)
     {
         var id = e.params.data.element.parentElement.id;
         id = id.split("_");
         id = id[1];
+        check_for_stock_availability(id);
         display_row(parseInt(id)+1);
         grand_total_or_received_changed();
     }
@@ -107,6 +163,9 @@ $default_row_counter = 1;
         document.getElementById('cross_'+row_num).innerHTML='';
     }
 
+    $( document ).ready(function() {
+        customer_changed();
+    });
 </script>
 
 <div id="page-wrapper" class="whole_page_container">
@@ -114,7 +173,7 @@ $default_row_counter = 1;
     <div class="container-fluid">
         <div class="row">
             <?php
-            include_once(APPPATH."views/sales/components/nav_bar.php");
+            include_once(APPPATH."views/sales/product_sale/components/nav_bar.php");
             ?>
         </div>
 
@@ -135,7 +194,7 @@ $default_row_counter = 1;
         </div>
         <!--notifications area ends-->
 
-        <div class="row actual_body_contents" style="background-color: rgba(0,0,0,0.03); margin-top: 20px;">
+        <div class="row actual_body_contents" style="margin-top: 20px;">
             <form method="post">
                 <div class="row">
                     <div class="col-sm-12">
@@ -148,15 +207,16 @@ $default_row_counter = 1;
                             <tr>
                                 <th style="text-align: right; width: 100px; text-align: center;">Customer: </th>
                                 <td>
-                                    <select class="select_box suppliers_select_box" style="width: 200px;" name="customer" id="supplier">
+                                    <select class="select_box customers_select_box" style="width: 200px;" name="customer" id="customer">
                                         <?php foreach($customers as $customer):?>
                                             <option value="<?= $customer->name ?>"><?= $customer->name ?></option>
                                         <?php endforeach; ?>
-                                    </select>
+                                    </select><br>
+                                    <span style="color: #808080;">Balance: </span><span style="color: gray;" id="customer_balance"></span>
                                 </td>
                                 <th style="text-align: right; width: 50px;">Tanker: </th>
                                 <td>
-                                    <select class="select_box" name="tanker">
+                                    <select class="select_box tanker_select_box" name="tanker" id="tanker">
                                         <?php foreach($tankers as $tanker):?>
                                             <option value="<?= $tanker->number ?>"><?= $tanker->number ?></option>
                                         <?php endforeach; ?>
@@ -196,7 +256,8 @@ $default_row_counter = 1;
                                                 <?php foreach($products as $product):?>
                                                     <option value="<?= $product->name ?>"><?= $product->name ?></option>
                                                 <?php endforeach; ?>
-                                            </select>
+                                            </select><br>
+                                            <span style="color: #808080;">Available: </span><span style="color: gray;" id="available_<?= $row_counter ?>"></span>
                                         </td>
                                         <td><input type="number" step="any" name="quantity_<?= $row_counter ?>" id="quantity_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)"></td>
                                         <td><input type="number" step="any" name="salePricePerItem_<?= $row_counter ?>" id="salePricePerItem_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)"></td>
@@ -228,7 +289,7 @@ $default_row_counter = 1;
                             <section style="font-size: 20px; font-weight: normal; color: red;">Total Cost: <span id="grand_total_cost_label">0</span> Rs.</section>
                         </div>
                         <div class="col-md-4" style="margin: 0px; float: right;">
-                            <button name="save_credit_sale" class="btn btn-success" style="font-size: 20px;"><i class="fa fa-save" style="color: white;"></i> Save Invoice</button>
+                            <button name="add_product_sale" class="btn btn-success" style="font-size: 20px;"><i class="fa fa-save" style="color: white;"></i> Save Invoice</button>
                         </div>
                     </div>
                 </div>
@@ -236,7 +297,7 @@ $default_row_counter = 1;
 
             <div class="row" style="margin-top: 20px;">
                 <?php
-                include_once(APPPATH."views/sales/components/few_sales.php");
+                include_once(APPPATH."views/sales/product_sale/components/few_sales.php");
                 ?>
             </div>
         </div>
@@ -247,8 +308,16 @@ $default_row_counter = 1;
 
 </div>
 <script>
-    var $eventSelect = $(".product_select_box");
-    $eventSelect.on("select2:select", function (e) {
+    var $productSelect = $(".product_select_box");
+    var $tankerSelect = $(".tanker_select_box");
+    var $customerSelect = $(".customers_select_box");
+    $productSelect.on("select2:select", function (e) {
         product_changed(e);
+    });
+    $tankerSelect.on("select2:select", function (e) {
+        tanker_changed(e);
+    });
+    $customerSelect.on("select2:select", function (e) {
+        customer_changed(e);
     });
 </script>

@@ -52,7 +52,12 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database');
+$autoload['libraries'] = array(
+    'database',
+    'ouzo_goodies/Arrays',
+    'ouzo_goodies/Objects',
+    'ouzo_goodies/Functions',
+);
 
 
 /*

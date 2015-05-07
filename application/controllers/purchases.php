@@ -43,6 +43,8 @@ class Purchases extends ParentController {
             }
 
         }
+
+        $this->bodyData['suppliers_balance'] = $this->accounts_model->suppliers_balance();
         $this->bodyData['tankers'] = $this->tankers_model->get_free();
         $this->bodyData['invoice_number'] = $this->purchases_model->next_invoice();
         $purchases = $this->purchases_model->few_invoices();

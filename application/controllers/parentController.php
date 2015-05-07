@@ -45,6 +45,8 @@ class ParentController extends CI_Controller {
             'receipts_model',
             'expenses_model',
             'expense_titles_model',
+            'withdrawls_model',
+            'source_destination_model',
             'intelligent_router_model',
         ));
 
