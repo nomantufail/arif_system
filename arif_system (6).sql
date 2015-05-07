@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2015 at 10:44 PM
+-- Generation Time: May 07, 2015 at 10:56 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -65,7 +65,6 @@ CREATE TABLE IF NOT EXISTS `cities` (
 
 INSERT INTO `cities` (`id`, `name`, `inserted_at`, `updated_at`, `deleted_at`, `deleted`) VALUES
 (1, 'lahore', '2015-05-06 19:10:49', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0),
-(2, 'lahore', '2015-05-06 19:10:52', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0),
 (3, 'karachi', '2015-05-06 19:11:39', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0),
 (4, 'faisalabad', '2015-05-06 19:11:48', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
 
@@ -136,7 +135,15 @@ CREATE TABLE IF NOT EXISTS `products` (
   `inserted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `name`, `description`, `inserted_at`, `updated_at`) VALUES
+(1, 'HSD', 'High speed deisel', '2015-05-07 20:50:15', '0000-00-00 00:00:00'),
+(2, 'PMG', 'Premier Motor Gasoline', '2015-05-07 20:50:32', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -212,9 +219,9 @@ INSERT INTO `router` (`id`, `controller`, `function`) VALUES
 (1, 'customers', 'index'),
 (2, 'products', 'index'),
 (3, 'purchases', 'credit_purchase'),
-(4, 'sales', 'add_product_sale'),
+(4, 'sales', 'add_product_with_freight'),
 (5, 'stock', 'index'),
-(6, 'accounts', 'suppliers_ledger'),
+(6, 'accounts', 'customers_ledger'),
 (7, 'reports', 'index'),
 (8, 'suppliers', 'index'),
 (9, 'settings', 'accounts'),
@@ -297,7 +304,17 @@ CREATE TABLE IF NOT EXISTS `stock` (
   `price_per_unit` double NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `stock`
+--
+
+INSERT INTO `stock` (`id`, `product_id`, `quantity`, `tanker`, `purchase_id`, `price_per_unit`, `updated_at`) VALUES
+(1, 1, 3000, 'tlv-238', 1, 90, '2015-05-07 10:53:18'),
+(2, 2, 0, 'tlv-238', 0, 0, '0000-00-00 00:00:00'),
+(3, 1, 0, 'tlu-249', 0, 0, '0000-00-00 00:00:00'),
+(4, 2, 0, 'tlu-249', 0, 0, '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -343,7 +360,15 @@ CREATE TABLE IF NOT EXISTS `tankers` (
   `deleted_at` datetime NOT NULL,
   `deleted` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `tankers`
+--
+
+INSERT INTO `tankers` (`id`, `name`, `number`, `capacity`, `chambers`, `inserted_at`, `updated_at`, `deleted_at`, `deleted`) VALUES
+(1, 'Hino', 'tlv-238', 50000, 4, '2015-05-07 20:50:47', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0),
+(2, 'Hino(2)', 'tlu-249', 40000, 4, '2015-05-07 20:51:13', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -390,7 +415,17 @@ CREATE TABLE IF NOT EXISTS `vouchers` (
   `updated_at` datetime NOT NULL,
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `vouchers`
+--
+
+INSERT INTO `vouchers` (`id`, `voucher_date`, `summary`, `tanker`, `voucher_type`, `product_sale_id`, `inserted_at`, `deleted_at`, `updated_at`, `deleted`) VALUES
+(1, '2015-05-07', '', 'tlv-238', 'purchase', 0, '2015-05-07 20:51:54', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0),
+(2, '2015-05-07', '', 'tlv-238', 'product_sale', 0, '2015-05-07 20:52:27', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0),
+(3, '2015-05-07', '', 'tlv-238', 'product_sale_with_freight', 0, '2015-05-07 20:53:18', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0),
+(4, '2015-05-07', '', 'tlv-238', 'freight_sale', 3, '2015-05-07 20:53:18', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -417,7 +452,21 @@ CREATE TABLE IF NOT EXISTS `voucher_entries` (
   `dr_cr` tinyint(4) NOT NULL,
   `description` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `voucher_entries`
+--
+
+INSERT INTO `voucher_entries` (`id`, `voucher_id`, `ac_title`, `ac_sub_title`, `ac_type`, `related_customer`, `related_supplier`, `related_business`, `related_other_agent`, `related_tanker`, `quantity`, `cost_per_item`, `amount`, `source`, `destination`, `dr_cr`, `description`) VALUES
+(1, 1, 'HSD', '', 'asset', '', '', 'Malik Petroleum', '', '', 12000, 90, 1080000, '', '', 1, ''),
+(2, 1, 'HSD', '', 'payable', '', 'noman', '', '', '', 12000, 90, 1080000, '', '', 0, ''),
+(3, 2, 'HSD', '', 'receivable', 'akram', '', '', '', '', 5000, 92, 460000, '', '', 1, ''),
+(4, 2, 'HSD', '', 'revenue', '', '', 'Malik Petroleum', '', '', 5000, 92, 460000, '', '', 0, ''),
+(5, 3, 'HSD', '', 'receivable', 'akram', '', '', '', '', 4000, 100, 400000, '', '', 1, ''),
+(6, 3, 'HSD', '', 'revenue', '', '', 'Malik Petroleum', '', '', 4000, 100, 400000, '', '', 0, ''),
+(7, 4, 'freight_cash', '', 'receivable', '', '', 'Malik Petroleum', '', '', 0, 0, 23000, '', '', 1, ''),
+(8, 4, 'freight a/c', '', 'revenue', '', '', '', '', 'tlv-238', 0, 0, 23000, '', '', 0, '');
 
 -- --------------------------------------------------------
 
