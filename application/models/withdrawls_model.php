@@ -161,6 +161,17 @@ class Withdrawls_model extends Parent_Model {
         return $result;
     }
 
+    public function withdraw_account_titles()
+    {
+        $accounts = $this->accounts();
+        $titles = array();
+        foreach($accounts as $account)
+        {
+            array_push($titles, $account->title);
+        }
+        return $titles;
+    }
+
     public function add_account()
     {
         $data = array(

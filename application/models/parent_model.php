@@ -87,6 +87,14 @@ class Parent_Model extends CI_Model {
     {
         $this->db->where('vouchers.voucher_type','product_sale_with_freight');
     }
+    /**
+     * Used to fetch all types of sale vouchers
+     */
+    public function all_sale_vouchers()
+    {
+        $where = "(vouchers.voucher_type = 'product_sale' OR vouchers.voucher_type = 'product_sale_with_freight')";
+        $this->db->where($where);
+    }
 
     /**
      * Used to fetch only payment vouchers
@@ -119,6 +127,17 @@ class Parent_Model extends CI_Model {
     {
         $this->db->where('vouchers.voucher_type','expense payment');
     }
+
+    /**
+     * Used to fetch only those vouchers which have
+     * a bank account as ac_title in voucher_entry
+     * Simply it fetch all bank accounts vouchers
+     */
+    public function bank_account_titles($titles)
+    {
+        $this->db->where_in('voucher_entries.ac_title',$titles);
+    }
+
     /**
      * Used to fetch only receipt vouchers
      */
@@ -127,12 +146,23 @@ class Parent_Model extends CI_Model {
         $this->db->where('vouchers.voucher_type','withdraw');
     }
 
+    public function withdraw_titles($titles)
+    {
+        $this->db->where_in('voucher_entries.ac_title',$titles);
+    }
     /**
      * Used to join vouchers table with voucher_entries table
      */
     public function join_vouchers()
     {
         $this->db->join('voucher_entries','voucher_entries.voucher_id = vouchers.id','left');
+    }
+    /**
+     * Used to join stock table with products table
+     */
+    public function join_stock_and_products()
+    {
+        $this->db->join('products','products.id = stock.product_id','left');
     }
 
     /**
@@ -148,6 +178,16 @@ class Parent_Model extends CI_Model {
             voucher_entries.id as entry_id,
 
         ");
+    }
+
+    /**
+     * Used to select all the sale contents which are needed
+     */
+    public function select_profit_loss_content()
+    {
+        $this->db->select('SUM(voucher_entries.cost_per_item * voucher_entries.quantity) as total_sale_price,
+                SUM(voucher_entries.purchase_price_per_item_for_sale * voucher_entries.quantity) as total_purchase_price,
+        ');
     }
 
     /**
@@ -290,6 +330,10 @@ class Parent_Model extends CI_Model {
     {
         $this->db->where('voucher_entries.related_supplier !=','');
     }
+    public function get_tanker_vouchers()
+    {
+        $this->db->where('voucher_entries.related_tanker !=','');
+    }
     public function where_customer($customerName)
     {
         $this->db->where('voucher_entries.related_customer',$customerName);
@@ -297,6 +341,20 @@ class Parent_Model extends CI_Model {
     public function where_supplier($customerName)
     {
         $this->db->where('voucher_entries.related_supplier',$customerName);
+    }
+    public function where_tanker($tankerName)
+    {
+        $this->db->where('voucher_entries.related_tanker',$tankerName);
+    }
+
+    public function where_ac_title($title)
+    {
+        $this->db->where('voucher_entries.ac_title', $title);
+    }
+
+    public function where_ac_type($type)
+    {
+        $this->db->where('voucher_entries.ac_type', $type);
     }
 
     public function select_whole_voucher_content()
@@ -309,6 +367,7 @@ class Parent_Model extends CI_Model {
             voucher_entries.dr_cr,
             voucher_entries.related_supplier, voucher_entries.related_customer,
             voucher_entries.related_business, voucher_entries.related_other_agent,
+            voucher_entries.related_tanker,
         ");
     }
 

@@ -11,13 +11,13 @@ class Sales_Model extends Parent_Model {
 
     }
 
-    public function total_sales()
+    public function total_sales($from, $to)
     {
         $this->db->select("SUM(voucher_entries.amount) as total_sales");
         $this->db->from($this->table);
         $this->join_vouchers();
         $this->active();
-        $this->product_sale_vouchers();
+        $this->all_sale_vouchers();
         $this->with_debit_entries_only();
         $this->latest($this->table);
         $result = $this->db->get()->result();
@@ -332,11 +332,32 @@ class Sales_Model extends Parent_Model {
 
 
         $pannel_count = $this->input->post('pannel_count');
+        $tanker = $this->input->post('tanker');
+        /**
+         * Fetching the purchase price per unit of the selling
+         * products
+         * */
+        $stock_elements = array();
+        for($i = 1; $i<$pannel_count; $i++)
+        {
+            $product = $this->input->post('product_'.$i);
+            $temp_arr = array(
+                'tanker'=>$tanker,
+                'product'=>$product,
+            );
+            if($product != '')
+            {
+                array_push($stock_elements, $temp_arr);
+            }
+        }
+        $purchase_prices = $this->stock_model->purchase_prices_of($stock_elements);
+        /*--------------------------------------------------*/
+
 
         $voucher = new App_Voucher();
         $voucher->voucher_date = $this->input->post('invoice_date');
         $voucher->summary = $this->input->post('extra_info');
-        $voucher->tanker = $this->input->post('tanker');
+        $voucher->tanker = $tanker;
         $voucher->voucher_type = $voucher_type;
 
         $voucher_entries = array();
@@ -357,6 +378,7 @@ class Sales_Model extends Parent_Model {
                 $voucher_entry_1->ac_type = 'receivable';
                 $voucher_entry_1->related_customer = $this->input->post('customer');
                 $voucher_entry_1->cost_per_item = $cost_per_item;
+                $voucher_entry_1->purchase_price_per_item_for_sale = $purchase_prices[strtolower($product."_".$tanker)];
                 $voucher_entry_1->quantity = $quantity;
                 $voucher_entry_1->amount = $cost_per_item * $quantity;
                 $voucher_entry_1->dr_cr = 1;
@@ -370,6 +392,7 @@ class Sales_Model extends Parent_Model {
                 $voucher_entry_2->ac_type = 'revenue';
                 $voucher_entry_2->related_business = $this->admin_model->business_name();
                 $voucher_entry_2->cost_per_item = $cost_per_item;
+                $voucher_entry_2->purchase_price_per_item_for_sale = $purchase_prices[strtolower($product."_".$tanker)];
                 $voucher_entry_2->quantity = $quantity;
                 $voucher_entry_2->amount = $cost_per_item * $quantity;
                 $voucher_entry_2->dr_cr = 0;
@@ -415,11 +438,12 @@ class Sales_Model extends Parent_Model {
 
 
         $pannel_count = $this->input->post('pannel_count');
+        $tanker = $this->input->post('tanker');
 
         $voucher = new App_Voucher();
         $voucher->voucher_date = $this->input->post('invoice_date');
         $voucher->summary = $this->input->post('extra_info');
-        $voucher->tanker = $this->input->post('tanker');
+        $voucher->tanker = $tanker;
         $voucher->voucher_type = 'freight_sale';
         $voucher->product_sale_id = $sale_id;
 

@@ -12,6 +12,26 @@ class Bank_Ac_Model extends Parent_Model {
         $records = $this->db->get($this->table)->result();
         return $records;
     }
+    public function get_formatted(){
+        $this->active();
+        $records = $this->db->get($this->table)->result();
+
+        foreach($records as &$record)
+        {
+            $record->formatted_title = $record->title." (".$record->bank." ".bn_masking($record->account_number).")";
+        }
+        return $records;
+    }
+    public function formatted_bank_ac_titles()
+    {
+        $bank_accounts = $this->get_formatted();
+        $bank_accounts_titles = array();
+        foreach($bank_accounts as $account)
+        {
+            array_push($bank_accounts_titles, $account->formatted_title);
+        }
+        return $bank_accounts_titles;
+    }
     public function get_limited($limit, $start, $keys, $sort) {
 
         $this->db->order_by($sort['sort_by'], $sort['order']);

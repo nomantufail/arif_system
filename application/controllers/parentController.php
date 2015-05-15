@@ -41,6 +41,7 @@ class ParentController extends CI_Controller {
             'stock_model',
             'bank_ac_model',
             'accounts_model',
+            'ledgers_model',
             'payments_model',
             'receipts_model',
             'expenses_model',

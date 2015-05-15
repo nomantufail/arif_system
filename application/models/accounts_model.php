@@ -317,6 +317,7 @@ class Accounts_Model extends Parent_Model {
                 'related_tanker'=>$entry->related_tanker,
                 'quantity'=>$entry->quantity,
                 'cost_per_item'=>$entry->cost_per_item,
+                'purchase_price_per_item_for_sale'=>$entry->purchase_price_per_item_for_sale,
                 'amount'=>$entry->amount,
                 'dr_cr'=>$entry->dr_cr,
                 'description'=>$entry->description,
@@ -419,6 +420,53 @@ class Accounts_Model extends Parent_Model {
             }
         }
         return $final_voucher_array;
+    }
+
+    public function account_titles($for = '')
+    {
+        $this->db->select('voucher_entries.ac_title');
+        $this->join_vouchers();
+        switch($for)
+        {
+            case "customers":
+                $this->get_customer_vouchers();
+                break;
+            case "suppliers":
+                $this->get_supplier_vouchers();
+                break;
+            case "tankers":
+                $this->get_tanker_vouchers();
+                break;
+        }
+        $this->active();
+        $this->db->distinct();
+        $result = $this->db->get($this->table)->result();
+        return $result;
+    }
+
+    public function account_types()
+    {
+        $this->db->select('voucher_entries.ac_type');
+        $this->join_vouchers();
+        $this->active();
+        $this->db->distinct();
+        $result = $this->db->get($this->table)->result();
+        return $result;
+    }
+
+    public function profit_loss($from, $to)
+    {
+        $this->select_profit_loss_content();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->voucher_duration($from, $to);
+        $this->all_sale_vouchers();
+        $this->with_debit_entries_only();
+        $this->with_debit_entries_only();
+        $result = $this->db->get()->result();
+        var_dump($result);die();
+
     }
 }
 

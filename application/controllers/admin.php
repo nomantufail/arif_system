@@ -40,15 +40,22 @@ class Admin extends ParentController {
 
     public function home()
     {
+        $date = Carbon::now()->toDateString();
+        $from = first_day_of_month($date);
+        $to = $date;
+
         $headerData['title']='Home';
         $this->bodyData['section'] = 'home';
 
-        $this->bodyData['total_sales'] = $this->sales_model->total_sales();
-        $this->bodyData['total_purchases'] = $this->purchases_model->total_purchases();
-        $this->bodyData['total_payables'] = $this->payments_model->total_payables();
-        $this->bodyData['total_receivables'] = $this->receipts_model->total_receivables();
+        $this->bodyData['total_sales'] = $this->sales_model->total_sales($from, $to);
+        $this->bodyData['total_purchases'] = $this->purchases_model->total_purchases($from, $to);
+        $this->bodyData['total_payables'] = $this->payments_model->total_payables($from, $to);
+        $this->bodyData['total_receivables'] = $this->receipts_model->total_receivables($from, $to);
 
         $this->bodyData['bank_accounts'] = $this->accounts_model->bank_accounts_status();
+
+        $this->bodyData['profit_loss'] = $this->accounts_model->profit_loss($from, $to);
+
         $this->load->view('components/header',$headerData);
         $this->load->view('admin/home', $this->bodyData);
         $this->load->view('components/footer');

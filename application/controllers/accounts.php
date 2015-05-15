@@ -22,11 +22,24 @@ class Accounts extends ParentController {
         }else{
             if($this->bodyData['section'] == 'index')
             {
-                $this->bodyData['section'] = 'ledger';
+                $this->bodyData['section'] = 'customers_ledger';
             }
-            $this->ledger();
+            $this->customers_ledger();
         }
     }
+
+//    public function welcome()
+//    {
+//        /*$this->bodyData['agents'] = $this->accounts_model->related_agents();
+//        $this->bodyData['titles'] = $this->accounts_model->titles();
+//        $this->bodyData['types'] = $this->accounts_model->account_types();*/
+//
+//        $headerData['title']="Accounts";
+//
+//        $this->load->view('components/header', $headerData);
+//        $this->load->view('accounts/welcome', $this->bodyData);
+//        $this->load->view('components/footer');
+//    }
 
     public function customers_ledger()
     {

@@ -11,7 +11,7 @@ class Purchases_Model extends Parent_Model {
 
     }
 
-    public function total_purchases()
+    public function total_purchases($from, $to)
     {
         $this->db->select("SUM(voucher_entries.amount) as total_purchases");
         $this->db->from($this->table);

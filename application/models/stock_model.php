@@ -12,7 +12,7 @@ class Stock_Model extends Parent_Model {
         stock.quantity, stock.tanker, stock.price_per_unit,
         ");
         $this->db->from('stock');
-        $this->db->join('products','products.id = stock.product_id','left');
+        $this->join_stock_and_products();
         $records = $this->db->get()->result();
         $grouped = Arrays::groupBy($records, Functions::extractField('product_name'));
         ksort($grouped);
@@ -254,6 +254,35 @@ class Stock_Model extends Parent_Model {
         $this->db->where('stock.quantity >',0);
         $result = $this->db->get($this->table)->result();
         return $result;
+    }
+
+    public function purchase_prices_of($stock_elements)
+    {
+        $stock_where = '(';
+        $count = 0;
+        foreach($stock_elements as $element)
+        {
+            $count++;
+            $stock_where.="(tanker = '".$element['tanker']."' AND "."products.name = '".$element['product']."')";
+            if($count < sizeof($stock_elements))
+            {
+                $stock_where.=" OR ";
+            }
+        }
+        $stock_where.=")";
+
+        $this->db->select('stock.price_per_unit, stock.tanker, products.name as product_name');
+        $this->db->from('stock');
+        $this->join_stock_and_products();
+        $this->db->where($stock_where);
+        $result = $this->db->get()->result();
+        $price_per_units = array();
+        foreach($result as $record)
+        {
+            $key = strtolower($record->product_name."_".$record->tanker);
+            $price_per_units[$key] = $record->price_per_unit;
+        }
+        return $price_per_units;
     }
 
 }

@@ -20,6 +20,7 @@ class App_voucher_Entry {
     public $related_tanker;
     public $quantity;
     public $cost_per_item;
+    public $purchase_price_per_item_for_sale;
     public $dr_cr;
     public $amount;
     public $description;

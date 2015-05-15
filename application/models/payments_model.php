@@ -7,7 +7,7 @@ class Payments_Model extends Parent_Model {
         $this->table = "vouchers";
     }
 
-    public function total_payables()
+    public function total_payables($from, $to)
     {
         $this->db->select('SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr');
         $this->db->from($this->table);
