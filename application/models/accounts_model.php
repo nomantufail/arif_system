@@ -456,6 +456,15 @@ class Accounts_Model extends Parent_Model {
 
     public function profit_loss($from, $to)
     {
+        $profit_loss_data = array(
+            'total_sale_price'=>0,
+            'total_purchase_price'=>0,
+            'total_expense'=>0,
+        );
+
+        /**
+         * Fetching total sale price and purchase price
+         */
         $this->select_profit_loss_content();
         $this->db->from($this->table);
         $this->join_vouchers();
@@ -465,8 +474,26 @@ class Accounts_Model extends Parent_Model {
         $this->with_debit_entries_only();
         $this->with_debit_entries_only();
         $result = $this->db->get()->result();
-        var_dump($result);die();
+        if(sizeof($result) > 0)
+        {
+            $result = $result[0];
+        }else{
+            $result = null;
+        }
 
+        if($result != null)
+        {
+            $profit_loss_data['total_sale_price'] = ($result->total_sale_price == null)?0: round(doubleval($result->total_sale_price), 3);
+            $profit_loss_data['total_purchase_price'] = ($result->total_purchase_price == null)?0: round(doubleval($result->total_purchase_price), 3);
+        }
+
+        /**
+         * Fetching total expenses
+         */
+        $total_expense = $this->expenses_model->total_expense($from, $to);
+        $profit_loss_data['total_expense'] = $total_expense;
+
+        return $profit_loss_data;
     }
 }
 

@@ -107,6 +107,18 @@ $default_row_counter = 1;
         document.getElementById("available_"+row_number).innerHTML = quantity;
     }
 
+    function check_for_purchase_price(row_number)
+    {
+        var tanker_selected_index = document.getElementById("tanker").selectedIndex;
+        var tanker = document.getElementById("tanker").options[tanker_selected_index].value;
+
+        var product_selected_index = document.getElementById("product_"+row_number).selectedIndex;
+        var product = document.getElementById("product_"+row_number).options[product_selected_index].value;
+        var key = product+"_"+tanker;
+        var purchase_price = Purchase_Price[key];
+        document.getElementById("purchase_price_per_unit_"+row_number).innerHTML = to_rupees(purchase_price);
+    }
+
     function total_cost(row_num)
     {
         var qty = document.getElementById("quantity_"+row_num).value;
@@ -147,6 +159,7 @@ $default_row_counter = 1;
         for(var i = 1; i < pannel_count.value; i++)
         {
             check_for_stock_availability(i);
+            check_for_purchase_price(i);
         }
     }
     function customer_changed(e)
@@ -163,6 +176,7 @@ $default_row_counter = 1;
         id = id.split("_");
         id = id[1];
         check_for_stock_availability(id);
+        check_for_purchase_price(id);
         display_row(parseInt(id)+1);
         grand_total_or_received_changed();
     }
@@ -273,7 +287,11 @@ $default_row_counter = 1;
                                             <span style="color: #808080;">Available: </span><span style="color: gray;" id="available_<?= $row_counter ?>"></span>
                                         </td>
                                         <td><input type="number" step="any" name="quantity_<?= $row_counter ?>" id="quantity_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)"></td>
-                                        <td><input type="number" step="any" name="salePricePerItem_<?= $row_counter ?>" id="salePricePerItem_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)"></td>
+                                        <td>
+                                            <input type="number" step="any" name="salePricePerItem_<?= $row_counter ?>" id="salePricePerItem_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
+                                            <br>
+                                            <span style="color: #808080;">Purchase Price: </span><span style="color: gray;" id="purchase_price_per_unit_<?= $row_counter ?>"></span>
+                                        </td>
                                         <td><span id="total_cost_label_<?= $row_counter ?>"></span></td>
                                         <td><span onclick="hide_row(<?= $row_counter ?>)" style="color: red; cursor: pointer; font-weight: bold;" id="cross_<?= $row_counter ?>"><?= (($row_counter == $default_row_counter)?'':'') ?></span></td>
                                     </tr>

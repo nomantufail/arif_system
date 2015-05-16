@@ -46,6 +46,16 @@ class Products extends ParentController {
                 }
             }
         }
+        if(isset($_POST['delete_product'])){
+            if($this->form_validation->run('delete_product') == true){
+                if( $this->deleting_model->force_delete_where('products', array('name'=>$_POST['name'])) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'product Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
+
         $this->bodyData['products'] = $this->products_model->get();
 
         $this->load->view('components/header', $headerData);
@@ -53,4 +63,16 @@ class Products extends ParentController {
         $this->load->view('components/footer');
 
     }
+
+    public function _check_product_deletable($product)
+    {
+
+        if($this->products_model->have_usages($product) == true)
+        {
+            $this->form_validation->set_message('_check_product_deletable','product Cannot be deleted! Its being used in vouchers.');
+            return false;
+        }
+        return true;
+    }
+
 }

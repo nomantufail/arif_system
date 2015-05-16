@@ -43,6 +43,16 @@ class Tankers extends ParentController {
             }
         }
 
+        if(isset($_POST['delete_tanker'])){
+            if($this->form_validation->run('delete_tanker') == true){
+                if( $this->deleting_model->force_delete_where('tankers', array('number'=>$_POST['number'])) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'Tanker Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
+
         $this->bodyData['tankers'] = $this->tankers_model->get();
         $this->load->view('components/header', $headerData);
         $this->load->view('tankers/welcome', $this->bodyData);
@@ -61,5 +71,15 @@ class Tankers extends ParentController {
         }
         return true;
     }
-    
+
+
+    public function _check_tanker_deletable($tanker)
+    {
+        if($this->tankers_model->have_usages($tanker) == true)
+        {
+            $this->form_validation->set_message('_check_tanker_deletable','Tanker Cannot be deleted! Its being used in the system.');
+            return false;
+        }
+        return true;
+    }
 }

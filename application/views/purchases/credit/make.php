@@ -160,7 +160,7 @@ $default_row_counter = 1;
         </div>
         <!--notifications area ends-->
 
-        <div class="row actual_body_contents" style="background-color: rgba(0,0,0,0.03); margin-top: 20px;">
+        <div class="row actual_body_contents" style="margin-top: 20px;">
             <form method="post">
                 <div class="row">
                     <div class="col-sm-12">

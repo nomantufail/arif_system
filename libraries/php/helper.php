@@ -6,6 +6,13 @@
  * Time: 3:38 AM
  */
 
+function deleting_btn($key, $value, $btn_name)
+{
+    echo '<form method="post" action="" onsubmit="return confirm_deleting()">';
+    echo '<input type="hidden" name="'.$key.'" value="'.$value.'">';
+    echo '<button name="'.$btn_name.'" class="btn btn-danger btn-xs"><i class="fa fa-minus-circle"></i> Delete</button>';
+    echo '</form>';
+}
 
 function first_day_of_month($date = ''){
     $date = ($date == '')?date('Y-m-d'):$date;

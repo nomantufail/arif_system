@@ -44,6 +44,9 @@ class Admin extends ParentController {
         $from = first_day_of_month($date);
         $to = $date;
 
+        $this->bodyData['from'] = $from;
+        $this->bodyData['to'] = $to;
+
         $headerData['title']='Home';
         $this->bodyData['section'] = 'home';
 

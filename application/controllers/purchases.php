@@ -21,9 +21,9 @@ class Purchases extends ParentController {
         }else{
             if($this->bodyData['section'] == 'index')
             {
-                $this->bodyData['section'] = 'cash_purchase';
+                $this->bodyData['section'] = 'credit_purchase';
             }
-            $this->cash_purchase();
+            $this->credit_purchase();
         }
     }
 

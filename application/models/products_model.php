@@ -53,4 +53,29 @@ class Products_Model extends Parent_Model {
         return $this->db->trans_complete();
     }
 
+    public function have_usages($product)
+    {
+        $this->db->select("vouchers.id as voucher_id");
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active();
+        $this->db->where('voucher_entries.ac_title',$product);
+        $vouchers = $this->db->get()->num_rows();
+
+        $this->db->select("stock.id as stock_id");
+        $this->db->from('stock');
+        $this->join_stock_and_products();
+        $this->db->where(array(
+            'products.name'=>$product,
+            'stock.quantity !='=>0,
+        ));
+        $stock = $this->db->get()->num_rows();
+
+        if($stock != 0 || $vouchers != 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

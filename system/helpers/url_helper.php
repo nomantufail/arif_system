@@ -155,7 +155,7 @@ if ( ! function_exists('anchor'))
 
 		if ($title == '')
 		{
-			$title = $site_url;
+			//$title = $site_url;
 		}
 
 		if ($attributes != '')

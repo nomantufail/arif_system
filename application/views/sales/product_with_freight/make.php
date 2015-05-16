@@ -32,6 +32,19 @@ $default_row_counter = 1;
     <?php endforeach; ?>
     /*----------------------------------------------------------*/
 
+    /* making array of available stock at this point */
+    var Purchase_Price = {};
+    <?php foreach($available_stock as $group): ?>
+    <?php foreach($group as $stock): ?>
+    <?php
+        $key = $stock->product_name.'_'.$stock->tanker;
+        $value = $stock->price_per_unit;
+    ?>
+    Purchase_Price["<?= $key ?>"] = "<?= $value ?>";
+    <?php endforeach; ?>
+    <?php endforeach; ?>
+    /*----------------------------------------------------------*/
+
     /* making array of Customer balances at this point */
     var CustomerBalance = {};
     <?php foreach($customers as $customer): ?>
@@ -118,6 +131,19 @@ $default_row_counter = 1;
         document.getElementById("quantity_"+row_number).max = quantity;
         document.getElementById("available_"+row_number).innerHTML = quantity;
     }
+
+    function check_for_purchase_price(row_number)
+    {
+        var tanker_selected_index = document.getElementById("tanker").selectedIndex;
+        var tanker = document.getElementById("tanker").options[tanker_selected_index].value;
+
+        var product_selected_index = document.getElementById("product_"+row_number).selectedIndex;
+        var product = document.getElementById("product_"+row_number).options[product_selected_index].value;
+        var key = product+"_"+tanker;
+        var purchase_price = Purchase_Price[key];
+        document.getElementById("purchase_price_per_unit_"+row_number).innerHTML = to_rupees(purchase_price);
+    }
+
     function numbers_changed(row_num)
     {
 
@@ -131,6 +157,7 @@ $default_row_counter = 1;
         id = id.split("_");
         id = id[1];
         check_for_stock_availability(id);
+        check_for_purchase_price(id);
         display_row(parseInt(id)+1);
         grand_total_or_received_changed();
     }
@@ -140,6 +167,7 @@ $default_row_counter = 1;
         for(var i = 1; i < pannel_count.value; i++)
         {
             check_for_stock_availability(i);
+            check_for_purchase_price(i);
         }
     }
 
@@ -236,12 +264,10 @@ $default_row_counter = 1;
                             <table class="table">
                                 <thead>
                                 <tr style="background-color: lightblue;">
-                                    <th style="width: 100px;">Product</th>
-                                    <th style="width: 5%;">Qty</th>
-                                    <th style="width: 5%;">Sale Price / Item</th>
-                                    <th style="width: 10%;">Total Price</th>
-                                    <th>Source</th>
-                                    <th>Destination</th>
+                                    <th style="">Product</th>
+                                    <th style="width: 10%;">Qty</th>
+                                    <th style="width: 10%;">Sale Price / Item</th>
+                                    <th style="width: 12%;">Total Price</th>
                                     <th>Freight</th>
                                     <th style="width: 10%;"></th>
                                 </tr>
@@ -256,30 +282,18 @@ $default_row_counter = 1;
                                                 <?php foreach($products as $product):?>
                                                     <option value="<?= $product->name ?>"><?= $product->name ?></option>
                                                 <?php endforeach; ?>
-                                            </select>
+                                            </select><br>
                                             <span style="color: #808080;">Available: </span><span style="color: gray;" id="available_<?= $row_counter ?>"></span>
                                         </td>
-                                        <td><input style="width: 70px;" type="number" step="any" name="quantity_<?= $row_counter ?>" id="quantity_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)"></td>
-                                        <td><input style="width: 70px;" type="number" step="any" name="salePricePerItem_<?= $row_counter ?>" id="salePricePerItem_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)"></td>
+                                        <td><input style="width: ;" type="number" step="any" name="quantity_<?= $row_counter ?>" id="quantity_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)"></td>
+                                        <td>
+                                            <input style="width: ;" type="number" step="any" name="salePricePerItem_<?= $row_counter ?>" id="salePricePerItem_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
+                                            <br>
+                                            <span style="color: #808080;">Purchase Price: </span><span style="color: gray;" id="purchase_price_per_unit_<?= $row_counter ?>"></span>
+                                        </td>
                                         <td><span id="total_cost_label_<?= $row_counter ?>"></span></td>
                                         <td>
-                                            <select class="select_box product_select_box" style="width: 200px;" name="source_<?= $row_counter ?>" id="source_<?= $row_counter ?>">
-
-                                                <?php foreach($cities as $city):?>
-                                                    <option value="<?= $city->name ?>"><?= $city->name ?></option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="select_box product_select_box" style="width: 200px;" name="destination_<?= $row_counter ?>" id="destination_<?= $row_counter ?>">
-
-                                                <?php foreach($cities as $city):?>
-                                                    <option value="<?= $city->name ?>"><?= $city->name ?></option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="number" step="any" name="freight_amount_<?= $row_counter ?>" style="width: 70px;">
+                                            <input type="number" step="any" name="freight_amount_<?= $row_counter ?>" style="width: ;">
                                         </td>
                                         <td><span onclick="hide_row(<?= $row_counter ?>)" style="color: red; cursor: pointer; font-weight: bold;" id="cross_<?= $row_counter ?>"><?= (($row_counter == $default_row_counter)?'':'') ?></span></td>
                                     </tr>

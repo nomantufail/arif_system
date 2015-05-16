@@ -96,9 +96,18 @@ class ledgers extends ParentController {
         $this->bodyData['account_types'] = $this->accounts_model->account_types();
         $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance("customers", $keys);
         $this->bodyData['ledger'] = $this->ledgers_model->customer_ledger($keys);
-        $this->load->view('components/header', $headerData);
-        $this->load->view('ledgers/customer', $this->bodyData);
-        $this->load->view('components/footer');
+
+        if(isset($_GET['print']))
+        {
+            $this->load->view('ledgers/print/customer', $this->bodyData);
+        }
+        else
+        {
+            $this->load->view('components/header', $headerData);
+            $this->load->view('ledgers/customer', $this->bodyData);
+            $this->load->view('components/footer');
+        }
+
     }
 
     public function suppliers()
@@ -168,9 +177,16 @@ class ledgers extends ParentController {
         $this->bodyData['account_types'] = $this->accounts_model->account_types();
         $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance("suppliers", $keys);
         $this->bodyData['ledger'] = $this->ledgers_model->supplier_ledger($keys);
-        $this->load->view('components/header', $headerData);
-        $this->load->view('ledgers/supplier', $this->bodyData);
-        $this->load->view('components/footer');
+        if(isset($_GET['print']))
+        {
+            $this->load->view('ledgers/print/supplier', $this->bodyData);
+        }
+        else
+        {
+            $this->load->view('components/header', $headerData);
+            $this->load->view('ledgers/supplier', $this->bodyData);
+            $this->load->view('components/footer');
+        }
     }
 
 
@@ -207,7 +223,7 @@ class ledgers extends ParentController {
         else
         {
             $current_tanker = $this->bodyData['tankers'][0];
-            $tanker = $current_tanker->name;
+            $tanker = $current_tanker->number;
         }
 
         $ac_title = '';
@@ -241,9 +257,16 @@ class ledgers extends ParentController {
         $this->bodyData['account_types'] = $this->accounts_model->account_types();
         $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance("tankers", $keys);
         $this->bodyData['ledger'] = $this->ledgers_model->tanker_ledger($keys);
-        $this->load->view('components/header', $headerData);
-        $this->load->view('ledgers/tanker', $this->bodyData);
-        $this->load->view('components/footer');
+        if(isset($_GET['print']))
+        {
+            $this->load->view('ledgers/print/tanker', $this->bodyData);
+        }
+        else
+        {
+            $this->load->view('components/header', $headerData);
+            $this->load->view('ledgers/tanker', $this->bodyData);
+            $this->load->view('components/footer');
+        }
     }
     public function bank_accounts()
     {
@@ -303,9 +326,16 @@ class ledgers extends ParentController {
         $this->bodyData['account_types'] = $this->accounts_model->account_types();
         $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance_of_bank_accounts($keys);
         $this->bodyData['ledger'] = $this->ledgers_model->bank_ac_ledger($keys);
-        $this->load->view('components/header', $headerData);
-        $this->load->view('ledgers/bank_accounts', $this->bodyData);
-        $this->load->view('components/footer');
+        if(isset($_GET['print']))
+        {
+            $this->load->view('ledgers/print/bank_accounts', $this->bodyData);
+        }
+        else
+        {
+            $this->load->view('components/header', $headerData);
+            $this->load->view('ledgers/bank_accounts', $this->bodyData);
+            $this->load->view('components/footer');
+        }
     }
 
 

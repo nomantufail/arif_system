@@ -74,14 +74,46 @@
                             <th class="column_heading">ID</th>
                             <th class="column_heading">Name</th>
                             <th class="column_heading">Description</th>
+                            <td></td>
                         </tr>
                         </thead>
                         <tbody class="table_body">
                         <?php foreach($products as $product):?>
                             <tr class="table_row table_body_row">
                                 <td class="table_td"><?= ucwords($product->id)?></td>
-                                <td class="table_td"><?= ucwords($product->name)?></td>
-                                <td class="table_td"><?= ucwords($product->description)?></td>
+                                <td class="table_td">
+                                    <?php
+                                    $properties = array(
+                                        'class'=>'x-editable',
+                                        'id'=>'name',
+                                        'data-type'=>'text',
+                                        'data-pk'=>$product->name,
+                                        'data-url'=> base_url().'editing/edit_record_in_multiple_tables/product/required|is_unique[products.name]|xss_clean',
+                                        'data-title'=>"Change Product Name",
+                                    );
+                                    echo anchor('#',$product->name, $properties);
+                                    ?>
+
+                                </td>
+                                <td class="table_td">
+                                    <?php
+                                    $properties = array(
+                                        'class'=>'x-editable',
+                                        'id'=>'description',
+                                        'data-type'=>'text',
+                                        'data-pk'=>$product->id,
+                                        'data-url'=> base_url().'editing/edit_global_record/products/required|xss_clean',
+                                        'data-title'=>"Change Product Name",
+                                    );
+                                    echo anchor('#',ucwords($product->description), $properties);
+                                    ?>
+                                </td>
+
+                                <td>
+                                    <?php
+                                    deleting_btn('name',$product->name, 'delete_product');
+                                    ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>

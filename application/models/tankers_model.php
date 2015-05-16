@@ -105,4 +105,29 @@ class Tankers_model extends Parent_Model {
         return $this->db->trans_complete();
     }
 
+
+    public function have_usages($tanker)
+    {
+        $this->db->select("vouchers.id as voucher_id");
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active();
+        $where = "(vouchers.tanker = '".$tanker."' OR voucher_entries.related_tanker = '".$tanker."')";
+        $this->db->where($where);
+        $vouchers = $this->db->get()->num_rows();
+
+        $this->db->select("stock.id as stock_id");
+        $this->db->from('stock');
+        $this->db->where(array(
+            'stock.tanker'=>$tanker,
+            'stock.quantity !='=>0,
+        ));
+        $stock = $this->db->get()->num_rows();
+
+        if($stock != 0 || $vouchers != 0)
+        {
+            return true;
+        }
+        return false;
+    }
 }

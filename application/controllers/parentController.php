@@ -49,6 +49,8 @@ class ParentController extends CI_Controller {
             'withdrawls_model',
             'source_destination_model',
             'intelligent_router_model',
+            'editing_model',
+            'deleting_model',
         ));
 
         //saving the latest route

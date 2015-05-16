@@ -216,4 +216,17 @@ class Expenses_Model extends Parent_Model {
 
         return $result;
     }
+
+    public function total_expense($from, $to)
+    {
+        $this->db->select("SUM(voucher_entries.amount) as total_expense");
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->expense_payable_vouchers();
+        $this->with_debit_entries_only();
+        $result = $this->db->get()->result();
+
+        return ($result[0]->total_expense != null)?round(doubleval($result[0]->total_expense), 3): 0;
+    }
 }

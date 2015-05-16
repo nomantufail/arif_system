@@ -31,7 +31,7 @@
                 <div class="col-md-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"> Business Status</h3>
+                            <h3 class="panel-title"> Business Status ( <?= Carbon::createFromFormat('Y-m-d',$from)->toFormattedDateString()." to ".Carbon::createFromFormat('Y-m-d',$to)->toFormattedDateString() ?> )</h3>
                         </div>
                         <div class="panel-body">
                             <table class="table">
@@ -52,9 +52,39 @@
                                     <th class="amount"><?= rupee_format($total_receivables) ?></th>
                                 </tr>
                             </table>
-                            <div style="text-align: center;">
-                                <h4 style="color: green;">Profit = <?= rupee_format($total_sales - $total_purchases) ?> Rs.</h4>
-                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"> Profit & Loss ( <?= Carbon::createFromFormat('Y-m-d',$from)->toFormattedDateString()." to ".Carbon::createFromFormat('Y-m-d',$to)->toFormattedDateString() ?> )</h3>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table">
+                                <tr>
+                                    <th class="title">Total Sales</th>
+                                    <th class="amount"><?= rupee_format($profit_loss['total_sale_price']) ?></th>
+                                </tr>
+                                <tr>
+                                    <th class="title">Total Purchase Price</th>
+                                    <th class="amount"><?= rupee_format($profit_loss['total_purchase_price']) ?></th>
+                                </tr>
+                                <tr>
+                                    <th class="title">Total Expenses</th>
+                                    <th class="amount"><?= rupee_format($profit_loss['total_expense']) ?></th>
+                                </tr>
+                                <tr style="color: #2a6496;">
+                                    <th class="" colspan="2">Profit/Loss: Sales - Purchases - Expenses</th>
+                                </tr>
+                                <tr>
+                                    <th class="" colspan="2" style="text-align: center;">
+                                        <?php
+                                        $profit = $profit_loss['total_sale_price'] - $profit_loss['total_purchase_price'] - $profit_loss['total_expense'];
+                                        ?>
+                                        <h3 style="color: <?= (($profit < 0)?"red;":"green") ?>"><?= ($profit < 0)?"Loss":"Profit" ?>: <?= rupee_format($profit) ?> Rs.</h3>
+                                    </th>
+                                </tr>
+                            </table>
                         </div>
                     </div>
 

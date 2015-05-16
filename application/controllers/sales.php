@@ -95,7 +95,7 @@ class Sales extends ParentController {
         $this->bodyData['section'] = 'add';
         $this->bodyData['products'] = $this->products_model->get();
         $this->bodyData['customers'] = $this->customers_model->get();
-        $this->bodyData['cities'] = $this->source_destination_model->get();
+        /*$this->bodyData['cities'] = $this->source_destination_model->get();*/
         if(isset($_POST['add_product_with_freight']))
         {
             if($this->form_validation->run('add_product_with_freight') == true){

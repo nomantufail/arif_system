@@ -43,6 +43,16 @@ class Suppliers extends ParentController {
             }
         }
 
+        if(isset($_POST['delete_supplier'])){
+            if($this->form_validation->run('delete_supplier') == true){
+                if( $this->deleting_model->force_delete_where('suppliers', array('name'=>$_POST['name'])) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'Supplier Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
+
         $this->bodyData['suppliers'] = $this->suppliers_model->get();
         $this->load->view('components/header', $headerData);
         $this->load->view('suppliers/welcome', $this->bodyData);
@@ -61,5 +71,16 @@ class Suppliers extends ParentController {
         }
         return true;
     }
-    
+
+
+    public function _check_supplier_deletable($supplier)
+    {
+        if($this->suppliers_model->have_vouchers($supplier) == true)
+        {
+            $this->form_validation->set_message('_check_supplier_deletable','Supplier Cannot be deleted! Its being used in vouchers.');
+            return false;
+        }
+        return true;
+    }
+
 }

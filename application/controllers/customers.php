@@ -42,6 +42,15 @@ class Customers extends ParentController {
                 }
             }
         }
+        if(isset($_POST['delete_customer'])){
+            if($this->form_validation->run('delete_customer') == true){
+                if( $this->deleting_model->force_delete_where('customers', array('name'=>$_POST['name'])) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'customer Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
 
         $this->bodyData['customers'] = $this->customers_model->get();
         $this->load->view('components/header', $headerData);
@@ -57,6 +66,16 @@ class Customers extends ParentController {
         if(sizeof($existing_customers) > 0)
         {
             $this->form_validation->set_message('_check_unique_customer','Customer already exist. Please try again');
+            return false;
+        }
+        return true;
+    }
+    public function _check_customer_deletable($customer)
+    {
+
+        if($this->customers_model->have_vouchers($customer) == true)
+        {
+            $this->form_validation->set_message('_check_customer_deletable','Customer Cannot be deleted! Its being used in vouchers.');
             return false;
         }
         return true;
