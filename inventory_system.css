@@ -35,3 +35,9 @@
     background-color: #444444;
     color: #ffffff;
 }
+.debit_amount{
+    color: green;
+}
+.credit_amount{
+    color:red;
+}

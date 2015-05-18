@@ -48,7 +48,7 @@ class Products extends ParentController {
         }
         if(isset($_POST['delete_product'])){
             if($this->form_validation->run('delete_product') == true){
-                if( $this->deleting_model->force_delete_where('products', array('name'=>$_POST['name'])) == true){
+                if( $this->deleting_model->delete_product($_POST['name']) == true){
                     $this->bodyData['someMessage'] = array('message'=>'product Removed Successfully!', 'type'=>'alert-success');
                 }else{
                     $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');

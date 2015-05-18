@@ -54,7 +54,7 @@ class Bank_Ac_Model extends Parent_Model {
 
     public function find($id){
         $this->active();
-        $result = $this->db->get_where($this->table, array('id'=>$id))->result();
+        $result = $this->db->get_where($this->table, array('id'=>$id, 'deleted'=>0))->result();
         if($result){
             $record = $result[0];
             return $record;

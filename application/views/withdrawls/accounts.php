@@ -18,7 +18,7 @@
     <div class="col-lg-12">
         <section class="col-md-6">
             <h3 class="">
-                Expense Titles <small></small>
+                Withdrawls Titles <small></small>
             </h3>
         </section>
     </div>
@@ -78,8 +78,32 @@
                         <?php foreach($accounts as $title):?>
                             <tr class="table_row table_body_row">
                                 <td class="table_td"><?= ucwords($title->id)?></td>
-                                <td class="table_td"><?= ucwords($title->title)?></td>
-                                <td class="table_td"><?= ucwords($title->description)?></td>
+                                <td class="table_td">
+                                    <?php
+                                    $properties = array(
+                                        'class'=>'x-editable',
+                                        'id'=>'title',
+                                        'data-type'=>'text',
+                                        'data-pk'=>$title->title,
+                                        'data-url'=> base_url().'editing/edit_record_in_multiple_tables/withdraw_account_title/required|is_unique[expense_titles.title]|xss_clean',
+                                        'data-title'=>"Change Withdraw Title",
+                                    );
+                                    echo anchor('#',$title->title, $properties);
+                                    ?>
+                                </td>
+                                <td class="table_td">
+                                    <?php
+                                    $properties = array(
+                                        'class'=>'x-editable',
+                                        'id'=>'description',
+                                        'data-type'=>'text',
+                                        'data-pk'=>$title->id,
+                                        'data-url'=> base_url().'editing/edit_global_record/withdraw_accounts/required|is_unique[expense_titles.title]|xss_clean',
+                                        'data-title'=>"Change Description",
+                                    );
+                                    echo anchor('#',$title->description, $properties);
+                                    ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>

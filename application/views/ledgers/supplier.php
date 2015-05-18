@@ -65,7 +65,7 @@
                                 </select>
                             </td>
                             <td><b>Type: </b><br>
-                                <select name="ac_type" class="select_box">
+                                <select name="ac_type" class="select_box" style="min-width: 100px;">
                                     <option value="">--All--</option>
                                     <?php foreach($account_types as $type): ?>
                                         <?php

@@ -36,19 +36,27 @@ class Customers extends ParentController {
         if(isset($_POST['addCustomer'])){
             if($this->form_validation->run('add_customer') == true){
                 if( $this->customers_model->insert() == true){
+                    redirect(page_url());
                     $this->bodyData['someMessage'] = array('message'=>'customer Added Successfully!', 'type'=>'alert-success');
                 }else{
                     $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
                 }
+            }else{
+                $this->helper_model->redirect_with_errors(validation_errors());
             }
         }
         if(isset($_POST['delete_customer'])){
             if($this->form_validation->run('delete_customer') == true){
                 if( $this->deleting_model->force_delete_where('customers', array('name'=>$_POST['name'])) == true){
+                    redirect(page_url());
                     $this->bodyData['someMessage'] = array('message'=>'customer Removed Successfully!', 'type'=>'alert-success');
                 }else{
                     $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
                 }
+            }
+            else
+            {
+                $this->helper_model->redirect_with_errors(validation_errors());
             }
         }
 

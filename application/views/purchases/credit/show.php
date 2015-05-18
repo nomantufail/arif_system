@@ -40,6 +40,22 @@
             <div class="row">
 
                 <div class="col-lg-12">
+                    <form action="" method="get">
+                        <table class="search-table" style="width:100%;">
+                            <tr>
+                                <td style="width: 25%;"><b>From: </b><input class="form-control" type="date" value="<?= $from ?>" name="from"></td>
+                                <td style="width: 25%;"><b>To: </b><input class="form-control" type="date" value="<?= $to ?>" name="to"></td>
+                                <td style="width: 25%;"><b>Supplier: </b>
+                                    <select name="supplier" class="select_box">
+                                        <?php foreach($suppliers as $supplier):?>
+                                            <option value="<?= $supplier->name ?>"><?= $supplier->name ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td style="width: 25%;"><br><button style="width: 100%; height: 30px;"><i class="fa fa-search"></i> Search</button></td>
+                            </tr>
+                        </table>
+                    </form>
 
                     <table class="my_table list_table table table-bordered">
                         <thead class="table_header">

@@ -84,6 +84,15 @@ class Editing extends ParentController {
                 case "tanker":
                     $result = $this->editing_model->edit_tanker($name, $value, $key);
                     break;
+                case "bank_account":
+                    $result = $this->editing_model->edit_bank_account($name, $value, $key);
+                    break;
+                case "expense_title":
+                    $result = $this->editing_model->edit_expense_title($name, $value, $key);
+                    break;
+                case "withdraw_account_title":
+                    $result = $this->editing_model->edit_withdraw_account_title($name, $value, $key);
+                    break;
             }
 
             if($result != true)

@@ -171,8 +171,8 @@ $default_row_counter = 1;
                         </table>
                         <table style="width: 100%;" class="">
                             <tr>
-                                <th style="text-align: right; width: 100px; text-align: center;">Supplier: </th>
                                 <td>
+                                    <span><b>Supplier:</b></span><br>
                                     <select class="select_box suppliers_select_box" style="width: 200px;" name="supplier" id="supplier">
                                         <?php foreach($suppliers as $supplier):?>
                                             <option value="<?= $supplier->name ?>"><?= $supplier->name ?></option>
@@ -180,17 +180,19 @@ $default_row_counter = 1;
                                     </select><br>
                                     <span style="color: #808080;">Balance: </span><span style="color: gray;" id="supplier_balance"></span>
                                 </td>
-                                <th style="text-align: right; width: 50px;">Tanker: </th>
                                 <td>
-                                    <select class="select_box" name="tanker">
+                                    <span><b>Tanker:</b></span><br>
+                                    <select class="select_box" name="tanker" style="min-width: 70px;">
                                         <?php foreach($tankers as $tanker):?>
                                             <option value="<?= $tanker->number ?>"><?= $tanker->number ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </td>
 
-                                <th style="text-align: right; width: 100px;">Invoice Date: </th>
-                                <td><input class="form-control" value="<?= date("Y-m-d"); ?>" style="width: 200px; margin-left: 10px;" type="date" name="invoice_date"></td>
+                                <td>
+                                    <span><b>Invoice Date:</b></span><br>
+                                    <input class="form-control" value="<?= date("Y-m-d"); ?>" style="width: 200px;" type="date" name="invoice_date">
+                                </td>
                             </tr>
                         </table>
                     </div>

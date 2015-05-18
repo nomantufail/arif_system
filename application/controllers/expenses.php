@@ -74,6 +74,7 @@ class Expenses extends ParentController {
             }
         }
         $this->bodyData['few_payments'] = $this->expenses_model->few_payments();
+        $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
 
         $this->load->view('components/header', $headerData);
         $this->load->view('expenses/add_payment', $this->bodyData);

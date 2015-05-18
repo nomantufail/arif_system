@@ -26,7 +26,7 @@ class ParentController extends CI_Controller {
         include_once("libraries/php/helper.php");
 
         $this->load->helper(array('form', 'url', 'captcha'));
-        $this->load->library(array('form_validation','email','Carbon','Helper','pagination'));
+        $this->load->library(array('form_validation','email','Carbon','Helper','pagination', 'session'));
         $this->load->model(array(
             'parent_model',
             'admin_model',

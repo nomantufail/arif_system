@@ -1,3 +1,17 @@
+function to_dr_cr_string(num)
+{
+    var dr_cr = 'Dr';
+    var css_class = 'debit_amount';
+    if(parseFloat(num) < 0)
+    {
+        dr_cr = 'Cr'
+        num = num*-1;
+        css_class = 'credit_amount';
+    }
+
+    return '<span class="'+css_class+'">'+dr_cr+': '+to_rupees(num)+'</span>'
+
+}
 
 function confirm_deleting()
 {
@@ -36,6 +50,12 @@ function limit_number(number)
 }
 function to_rupees(num)
 {
+    var prefix = '';
+    if(parseFloat(num) < 0)
+    {
+        prefix = '-';
+        num = num*-1;
+    }
     var x=num;
     x=x.toString();
     var afterPoint = '';
@@ -49,7 +69,7 @@ function to_rupees(num)
         lastThree = ',' + lastThree;
     var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
 
-    return res;
+    return prefix+''+res;
 }
 function showDiv(id)
 	{

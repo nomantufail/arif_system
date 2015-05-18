@@ -7,6 +7,14 @@ class Products_Model extends Parent_Model {
         $this->table = "products";
     }
 
+    public function get_where($where)
+    {
+        $this->db->select('products.id, products.name, products.description');
+        $result = $this->db->get_where('products',$where)->result();
+        $product = ($result != null)?$result[0]:null;
+        return $product;
+    }
+
     public function get(){
         $records = $this->db->get($this->table)->result();
         return $records;

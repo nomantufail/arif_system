@@ -61,8 +61,34 @@
                     ?>
                     <tr>
                         <td><?= $title->id; ?></td>
-                        <td><?= $title->title; ?></td>
-                        <td><?= $title->account_number; ?></td>
+                        <td class="table_td">
+                            <?php
+                            $properties = array(
+                                'class'=>'x-editable',
+                                'id'=>'title',
+                                'data-type'=>'text',
+                                'data-pk'=>$title->id,
+                                'data-url'=> base_url().'editing/edit_record_in_multiple_tables/bank_account/required|is_unique[user_bank_accounts.title]|xss_clean',
+                                'data-title'=>"Change Account Title",
+                            );
+                            echo anchor('#',$title->title, $properties);
+                            ?>
+
+                        </td>
+                        <td class="table_td">
+                            <?php
+                            $properties = array(
+                                'class'=>'x-editable',
+                                'id'=>'account_number',
+                                'data-type'=>'text',
+                                'data-pk'=>$title->id,
+                                'data-url'=> base_url().'editing/edit_record_in_multiple_tables/bank_account/required|is_unique[user_bank_accounts.account_number]|xss_clean|min_length[4]|max_length[20]',
+                                'data-title'=>"Change Account Number",
+                            );
+                            echo anchor('#',$title->account_number, $properties);
+                            ?>
+
+                        </td>
                         <td><?= $title->bank; ?></td>
 
                         <td>

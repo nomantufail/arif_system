@@ -6,6 +6,26 @@
  * Time: 3:38 AM
  */
 
+function page_url(){
+
+    $pageURL = 'http';
+
+    $pageURL .= "://";
+
+    if ($_SERVER["SERVER_PORT"] != "80") {
+
+        $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+
+    } else {
+
+        $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+
+    }
+
+    return $pageURL;
+
+}
+
 function deleting_btn($key, $value, $btn_name)
 {
     echo '<form method="post" action="" onsubmit="return confirm_deleting()">';

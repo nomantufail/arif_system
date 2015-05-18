@@ -73,7 +73,19 @@
                         <?php foreach($titles as $title):?>
                             <tr class="table_row table_body_row">
                                 <td class="table_td"><?= ucwords($title->id)?></td>
-                                <td class="table_td"><?= ucwords($title->title)?></td>
+                                <td class="table_td">
+                                    <?php
+                                    $properties = array(
+                                        'class'=>'x-editable',
+                                        'id'=>'title',
+                                        'data-type'=>'text',
+                                        'data-pk'=>$title->title,
+                                        'data-url'=> base_url().'editing/edit_record_in_multiple_tables/expense_title/required|is_unique[expense_titles.title]|xss_clean',
+                                        'data-title'=>"Change Expense Title",
+                                    );
+                                    echo anchor('#',$title->title, $properties);
+                                    ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>

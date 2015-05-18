@@ -85,9 +85,38 @@ class Purchases extends ParentController {
     public function invoices()
     {
         $headerData['title']= 'Purchase Invoices';
+
+
+        $from = '';
+        $to ='';
+        $customer = '';
+        if(isset($_GET['from']))
+        {
+            $from = $_GET['from'];
+        }
+        else
+        {
+            $date = Carbon::now()->toDateString();
+            $from = first_day_of_month($date);
+        }
+
+        if(isset($_GET['to']))
+        {
+            $to = $_GET['to'];
+        }
+        else
+        {
+            $date = Carbon::now()->toDateString();
+            $to = $date;
+        }
+        $this->bodyData['from'] = $from;
+        $this->bodyData['to'] = $to;
+
+
         $purchases = $this->purchases_model->invoices();
         $this->bodyData['purchases']= $purchases;
         $this->bodyData['section'] = 'invoices';
+        $this->bodyData['suppliers'] = $this->suppliers_model->get();
 
         $this->load->view('components/header', $headerData);
         $this->load->view('purchases/credit/show', $this->bodyData);

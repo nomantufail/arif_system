@@ -50,7 +50,7 @@
         var bank = document.getElementById("bank_ac").options[bank_selected_index].value;
         parts_of_bank = bank.split('_&&_');
         bank = parts_of_bank[0];
-        document.getElementById("bank_balance").innerHTML = to_rupees(BankBalance[bank]);
+        document.getElementById("bank_balance").innerHTML = to_dr_cr_string(BankBalance[bank]);
     }
     function withdraw_ac_changed(e)
     {
@@ -58,7 +58,7 @@
         var withdraw_ac_selected_index = document.getElementById("withdraw_account").selectedIndex;
         var withdraw_account = document.getElementById("withdraw_account").options[withdraw_ac_selected_index].value;
 
-        document.getElementById("withdraw_account_balance").innerHTML = to_rupees(WithdrawAccountBalance[withdraw_account]);
+        document.getElementById("withdraw_account_balance").innerHTML = to_dr_cr_string(WithdrawAccountBalance[withdraw_account]);
     }
 
     $( document ).ready(function() {

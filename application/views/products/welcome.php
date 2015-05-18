@@ -91,7 +91,14 @@
                                         'data-url'=> base_url().'editing/edit_record_in_multiple_tables/product/required|is_unique[products.name]|xss_clean',
                                         'data-title'=>"Change Product Name",
                                     );
-                                    echo anchor('#',$product->name, $properties);
+
+                                    if(strtolower($product->name) != 'hsd' && strtolower($product->name) != 'pmg')
+                                    {
+                                        echo anchor('#',$product->name, $properties);
+                                    }
+                                    else{
+                                        echo $product->name;
+                                    }
                                     ?>
 
                                 </td>
@@ -105,13 +112,23 @@
                                         'data-url'=> base_url().'editing/edit_global_record/products/required|xss_clean',
                                         'data-title'=>"Change Product Name",
                                     );
-                                    echo anchor('#',ucwords($product->description), $properties);
+
+                                    if(strtolower($product->name) != 'hsd' && strtolower($product->name) != 'pmg')
+                                    {
+                                        echo anchor('#',$product->description, $properties);
+                                    }
+                                    else{
+                                        echo $product->description;
+                                    }
                                     ?>
                                 </td>
 
                                 <td>
                                     <?php
-                                    deleting_btn('name',$product->name, 'delete_product');
+                                    if(strtolower($product->name) != 'hsd' && strtolower($product->name) != 'pmg')
+                                    {
+                                        deleting_btn('name',$product->name, 'delete_product');
+                                    }
                                     ?>
                                 </td>
                             </tr>
