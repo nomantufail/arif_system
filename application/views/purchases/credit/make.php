@@ -116,7 +116,7 @@ $default_row_counter = 1;
         var id = e.params.data.element.parentElement.id;
         id = id.split("_");
         id = id[1];
-        display_row(parseInt(id)+1);
+        //display_row(parseInt(id)+1);
         grand_total_or_paid_changed();
     }
 
@@ -154,6 +154,12 @@ $default_row_counter = 1;
                 <div class="alert <?= $someMessage['type']; ?> alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <?= $someMessage['message']; ?>
+                </div>
+            <?php } ?>
+            <?php if(sizeof($tankers) == 0){ ?>
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    Warning: No tankers available for now. <br>
                 </div>
             <?php } ?>
 
@@ -229,7 +235,10 @@ $default_row_counter = 1;
                                         <td><input type="number" step="any" name="quantity_<?= $row_counter ?>" id="quantity_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)"></td>
                                         <td><input type="number" step="any" name="costPerItem_<?= $row_counter ?>" id="costPerItem_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)"></td>
                                         <td><span id="total_cost_label_<?= $row_counter ?>"></span></td>
-                                        <td><span onclick="hide_row(<?= $row_counter ?>)" style="color: red; cursor: pointer; font-weight: bold;" id="cross_<?= $row_counter ?>"><?= (($row_counter == $default_row_counter)?'':'') ?></span></td>
+                                        <td>
+                                            <span onclick="hide_row(<?= $row_counter ?>)" style="margin-left: 10px; color: red; cursor: pointer; font-weight: bold;" id="cross_<?= $row_counter ?>"><?= (($row_counter == $default_row_counter)?'':'') ?></span>
+                                            <span onclick="display_row(<?= $row_counter+1 ?>)" style="margin-left: 10px; color: green; cursor: pointer; font-weight: bold;" id="add_row_<?= $row_counter ?>"><i class="fa fa-plus-circle"></i></span>
+                                        </td>
                                     </tr>
                                 <?php endfor; ?>
 

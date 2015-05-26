@@ -66,6 +66,16 @@ class Sales extends ParentController {
             }
         }
 
+        if(isset($_POST['delete_invoice'])){
+            if($this->form_validation->run('delete_sale_invoice') == true){
+                if( $this->deleting_model->delete_sale_invoice($_POST['invoice_number']) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
+
         $this->bodyData['customers_balance'] = $this->accounts_model->customers_balance();
         $this->bodyData['available_stock'] = $this->stock_model->get();
         $this->bodyData['tankers'] = $this->tankers_model->get_busy();
@@ -81,6 +91,17 @@ class Sales extends ParentController {
     public function product_sale_history()
     {
         $headerData['title']= 'Sale Invoices';
+
+        if(isset($_POST['delete_invoice'])){
+            if($this->form_validation->run('delete_sale_invoice') == true){
+                if( $this->deleting_model->delete_product_and_freight_sale_invoice($_POST['invoice_number']) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
+
         $sales = $this->sales_model->product_sale_invoices();
         $this->bodyData['sales']= $sales;
         $this->bodyData['section'] = 'invoices';
@@ -107,6 +128,17 @@ class Sales extends ParentController {
                 }
             }
         }
+
+        if(isset($_POST['delete_invoice'])){
+            if($this->form_validation->run('delete_sale_invoice') == true){
+                if( $this->deleting_model->delete_product_and_freight_sale_invoice($_POST['invoice_number']) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
+
         $this->bodyData['customers_balance'] = $this->accounts_model->customers_balance();
         $this->bodyData['available_stock'] = $this->stock_model->get();
         $this->bodyData['tankers'] = $this->tankers_model->get_busy();
@@ -122,6 +154,18 @@ class Sales extends ParentController {
     public function product_with_freight_history()
     {
         $headerData['title']= 'Sale Invoices';
+
+
+        if(isset($_POST['delete_invoice'])){
+            if($this->form_validation->run('delete_sale_invoice') == true){
+                if( $this->deleting_model->delete_product_and_freight_sale_invoice($_POST['invoice_number']) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
+
         $sales = $this->sales_model->product_sale_with_freight_invoices();
         $this->bodyData['sales']= $sales;
         $this->bodyData['section'] = 'invoices';

@@ -158,7 +158,7 @@ $default_row_counter = 1;
         id = id[1];
         check_for_stock_availability(id);
         check_for_purchase_price(id);
-        display_row(parseInt(id)+1);
+        //display_row(parseInt(id)+1);
         grand_total_or_received_changed();
     }
     function tanker_changed(e)
@@ -297,7 +297,10 @@ $default_row_counter = 1;
                                         <td>
                                             <input type="number" step="any" name="freight_amount_<?= $row_counter ?>" style="width: ;">
                                         </td>
-                                        <td><span onclick="hide_row(<?= $row_counter ?>)" style="color: red; cursor: pointer; font-weight: bold;" id="cross_<?= $row_counter ?>"><?= (($row_counter == $default_row_counter)?'':'') ?></span></td>
+                                        <td>
+                                            <span onclick="hide_row(<?= $row_counter ?>)" style="color: red; cursor: pointer; font-weight: bold;" id="cross_<?= $row_counter ?>"><?= (($row_counter == $default_row_counter)?'':'') ?></span>
+                                            <span onclick="display_row(<?= $row_counter+1 ?>)" style="margin-left: 10px; color: green; cursor: pointer; font-weight: bold;" id="add_row_<?= $row_counter ?>"><i class="fa fa-plus-circle"></i></span>
+                                        </td>
                                     </tr>
                                 <?php endfor; ?>
 

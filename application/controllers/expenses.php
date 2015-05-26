@@ -47,6 +47,17 @@ class Expenses extends ParentController {
                 }
             }
         }
+
+        if(isset($_POST['delete_invoice'])){
+            if($this->form_validation->run('delete_expense_invoice') == true){
+                if( $this->deleting_model->delete_expense_invoice($_POST['invoice_number']) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
+
         $this->bodyData['few_expenses'] = $this->expenses_model->few_expenses();
 
         $this->load->view('components/header', $headerData);
@@ -73,6 +84,17 @@ class Expenses extends ParentController {
                 }
             }
         }
+
+        if(isset($_POST['delete_invoice'])){
+            if($this->form_validation->run('delete_expense_payment_invoice') == true){
+                if( $this->deleting_model->delete_expense_invoice($_POST['invoice_number']) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
+
         $this->bodyData['few_payments'] = $this->expenses_model->few_payments();
         $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
 
@@ -85,6 +107,17 @@ class Expenses extends ParentController {
     {
         $headerData['title']='Expense Payment History';
         $this->bodyData['section'] = 'history';
+
+        if(isset($_POST['delete_invoice'])){
+            if($this->form_validation->run('delete_expense_payment_invoice') == true){
+                if( $this->deleting_model->delete_expense_invoice($_POST['invoice_number']) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
+
         $this->bodyData['payment_history'] = $this->expenses_model->payment_history();
 
         $this->load->view('components/header',$headerData);
@@ -97,6 +130,17 @@ class Expenses extends ParentController {
         $headerData = array(
             'title' => 'Expense History',
         );
+
+        if(isset($_POST['delete_invoice'])){
+            if($this->form_validation->run('delete_expense_invoice') == true){
+                if( $this->deleting_model->delete_expense_invoice($_POST['invoice_number']) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
+
         $this->bodyData['expense_history'] = $this->expenses_model->get();
 
         $this->load->view('components/header', $headerData);

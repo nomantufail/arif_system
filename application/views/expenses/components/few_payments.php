@@ -47,7 +47,11 @@
                 echo $record->summary;
                 ?>
             </td>
-            <td></td>
+
+            <td style="vertical-align: middle;">
+                <?php deleting_btn('invoice_number', $record->voucher_id, 'delete_invoice') ?>
+            </td>
+
 
         </tr>
     <?php endforeach; ?>

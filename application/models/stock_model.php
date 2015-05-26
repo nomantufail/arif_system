@@ -18,6 +18,24 @@ class Stock_Model extends Parent_Model {
         ksort($grouped);
         return $grouped;
     }
+    public function get_where($select, $where)
+    {
+        if($select != '*')
+        {
+            $select = join(', ',$select);
+        }
+        else
+        {
+            $select = "products.name as product_name, stock.id, stock.quantity, stock.price_per_unit,
+                stock.tanker, stock.purchase_id,
+            ";
+        }
+        $this->db->select($select);
+        $this->join_stock_and_products();
+        $this->db->where($where);
+        $result = $this->db->get($this->table)->result();
+        return $result;
+    }
     public function get_limited($limit, $start, $keys, $sort) {
 
         $this->db->order_by($sort['sort_by'], $sort['order']);
@@ -127,7 +145,7 @@ class Stock_Model extends Parent_Model {
                     'price_per_unit' =>$price_per_units[$record->product_name],
                     'tanker'=>$stock_entries[0]['tanker'],
                     'purchase_id'=>$purchase_id,
-                    'updated_at' => date('Y-m-d h:i:s', time()),
+                    'updated_at' => current_time(),
                 );
                 array_push($modified_stock_entries, $modified_stock_entry);
             }
@@ -164,7 +182,7 @@ class Stock_Model extends Parent_Model {
                 $modified_stock_entry = array(
                     'id' => $record->stock_id,
                     'quantity' => $record->quantity - $product_quantities[$record->product_name],
-                    'updated_at' => date('Y-m-d h:i:s', time()),
+                    'updated_at' => current_time(),
                 );
                 array_push($modified_stock_entries, $modified_stock_entry);
             }

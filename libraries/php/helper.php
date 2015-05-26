@@ -6,6 +6,15 @@
  * Time: 3:38 AM
  */
 
+function current_time()
+{
+    return Carbon::now(new DateTimeZone('Asia/Karachi'))->toDateTimeString();
+}
+function current_date()
+{
+    return Carbon::now(new DateTimeZone('Asia/Karachi'))->toDateString();
+}
+
 function page_url(){
 
     $pageURL = 'http';

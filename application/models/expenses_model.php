@@ -122,6 +122,21 @@ class Expenses_Model extends Parent_Model {
         return $result;
     }
 
+    public function today_expenses()
+    {
+        $this->select_expense_content();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->expense_payable_vouchers();
+        $this->with_debit_entries_only();
+        $this->voucher_duration(date('Y-m-d'),date('Y-m-d'));
+        $this->latest($this->table);
+        $result = $this->db->get()->result();
+
+        return $result;
+    }
+
 
     public function insert_payment()
     {

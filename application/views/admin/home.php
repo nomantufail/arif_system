@@ -66,7 +66,7 @@
                                     <th class="amount"><?= rupee_format($profit_loss['total_sale_price']) ?></th>
                                 </tr>
                                 <tr>
-                                    <th class="title">Total Purchase Price</th>
+                                    <th class="title">Total Cost</th>
                                     <th class="amount"><?= rupee_format($profit_loss['total_purchase_price']) ?></th>
                                 </tr>
                                 <tr>

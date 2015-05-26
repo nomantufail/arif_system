@@ -35,13 +35,23 @@ class Purchases extends ParentController {
 
         if(isset($_POST['save_credit_purchase']))
         {
-            $saved_invoice = $this->purchases_model->insert_credit_purchase();
-            if($saved_invoice != 0){
-                $this->bodyData['someMessage'] = array('message'=>'Invoice Saved Successfully! Invoice# was <b>'.$saved_invoice.'</b>', 'type'=>'alert-success');
-            }else{
-                $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+            if($this->form_validation->run('add_product_purchase') == true){
+                $saved_invoice = $this->purchases_model->insert_credit_purchase();
+                if($saved_invoice != 0){
+                    $this->bodyData['someMessage'] = array('message'=>'Invoice Saved Successfully! Invoice# was <b>'.$saved_invoice.'</b>', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
             }
-
+        }
+        if(isset($_POST['delete_invoice'])){
+            if($this->form_validation->run('delete_purchase_invoice') == true){
+                if( $this->deleting_model->delete_purchase_invoice($_POST['invoice_number']) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
         }
 
         $this->bodyData['suppliers_balance'] = $this->accounts_model->suppliers_balance();
@@ -112,6 +122,15 @@ class Purchases extends ParentController {
         $this->bodyData['from'] = $from;
         $this->bodyData['to'] = $to;
 
+        if(isset($_POST['delete_invoice'])){
+            if($this->form_validation->run('delete_purchase_invoice') == true){
+                if( $this->deleting_model->delete_purchase_invoice($_POST['invoice_number']) == true){
+                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
+                }else{
+                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
+                }
+            }
+        }
 
         $purchases = $this->purchases_model->invoices();
         $this->bodyData['purchases']= $purchases;

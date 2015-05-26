@@ -151,6 +151,27 @@ class Withdrawls_model extends Parent_Model {
         }
         return $withdrawls;
     }
+    public function today_withdrawls()
+    {
+        include_once(APPPATH."models/helperClasses/Withdraw_Entry.php");
+
+        $this->select_whole_voucher_content();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active();
+        $this->withdraw_vouchers();
+        $this->voucher_duration(date('Y-m-d'), date('Y-m-d'));
+        $this->latest($this->table);
+        $result = $this->db->get()->result();
+
+        $journal = $this->accounts_model->make_vouchers_from_raw($result);
+        $withdrawls = array();
+        foreach($journal as $voucher)
+        {
+            array_push($withdrawls, new Withdraw_Entry($voucher));
+        }
+        return $withdrawls;
+    }
 
     public function accounts()
     {

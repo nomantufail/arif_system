@@ -34,6 +34,8 @@ class DayBook extends ParentController {
         $this->bodyData['purchases'] = $this->purchases_model->today_purchases();
         $this->bodyData['payments'] = $this->payments_model->today_payments();
         $this->bodyData['receipts'] = $this->receipts_model->today_receipts();
+        $this->bodyData['expenses'] = $this->expenses_model->today_expenses();
+        $this->bodyData['withdrawls'] = $this->withdrawls_model->today_withdrawls();
         $this->load->view('components/header',$headerData);
         $this->load->view('daybook/welcome', $this->bodyData);
         $this->load->view('components/footer');

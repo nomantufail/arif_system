@@ -131,7 +131,7 @@
                                     <?php endif; ?>
                                     <?php if($count == 1):?>
                                         <td rowspan="<?=($num_invoice_items)?>" style="vertical-align: middle;">
-
+                                            <?php deleting_btn('invoice_number', $record->id, 'delete_invoice') ?>
                                         </td>
                                     <?php endif; ?>
 

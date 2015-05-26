@@ -294,8 +294,7 @@
                    </tr>
                    </thead>
                    <tbody>
-                   <tr>
-                       <?php
+                   <?php
                        $total_product_quantity = 0;
                        $total_cost = 0;
                        $total_credit = 0;
@@ -347,13 +346,145 @@
 
                    </tr>
                    <?php endforeach; ?>
-                   </tr>
                    <tr>
                        <th colspan="7" style='text-align:right;'>Totals</th>
                        <th class='total_amount'><?= rupee_format($total_debit) ?></th>
                        <th class='total_amount'><?= rupee_format($total_credit) ?></th>
                    </tr>
                    </tbody>
+
+                   <thead>
+                   <tr class="table_header_row">
+                       <th colspan="9" style="text-align: center; font-size: 18px;">
+                           Expenses
+                       </th>
+                   </tr>
+                   <tr>
+                       <th>Voucher#</th>
+                       <th>Date</th>
+                       <th>Tanker</th>
+                       <th colspan="4">Title</th>
+                       <th>Debit</th>
+                       <th>Credit</th>
+                   </tr>
+                   </thead>
+                   <tbody>
+
+                   <?php
+                   $total_credit = 0;
+                   $total_debit = 0;
+                   ?>
+                   <?php $parent_count = 0; ?>
+                   <?php  foreach($expenses as $record): ?>
+
+                       <tr style="">
+
+                           <td>
+                               <?php
+                               echo $record->invoice_id;
+                               ?>
+                           </td>
+
+                           <td>
+                               <?php
+                               echo Carbon::createFromFormat('Y-m-d',$record->expense_date)->toFormattedDateString();
+                               ?>
+                           </td>
+                           <td>
+                               <?php
+                               echo $record->tanker;
+                               ?>
+                           </td>
+                           <td colspan="4">
+                               <?php
+                               echo $record->expense_title;
+                               ?>
+                           </td>
+                           <td>
+                               <?php
+                               $total_debit += $record->amount;
+                               echo rupee_format($record->amount);
+                               ?>
+                           </td>
+                           <td>
+
+                           </td>
+
+                       </tr>
+                   <?php endforeach; ?>
+                   <tr>
+                       <th colspan="7" style='text-align:right;'>Totals</th>
+                       <th class='total_amount'><?= rupee_format($total_debit) ?></th>
+                       <th class='total_amount'><?= rupee_format($total_credit) ?></th>
+                   </tr>
+                   </tbody>
+
+
+                   <thead>
+                   <tr class="table_header_row">
+                       <th colspan="9" style="text-align: center; font-size: 18px;">
+                           Withdrawls
+                       </th>
+                   </tr>
+                   <tr>
+                       <th>Voucher#</th>
+                       <th>Date</th>
+                       <th colspan="2">Bank a/c</th>
+                       <th colspan="3">Withdraw A/c</th>
+                       <th>Debit</th>
+                       <th>Credit</th>
+                   </tr>
+                   </thead>
+                   <tbody>
+
+                   <?php
+                   $total_credit = 0;
+                   $total_debit = 0;
+                   ?>
+                   <?php $parent_count = 0; ?>
+                   <?php  foreach($withdrawls as $record): ?>
+
+                       <tr style="">
+
+                           <td>
+                               <?php
+                               echo $record->voucher_id;
+                               ?>
+                           </td>
+
+                           <td>
+                               <?php
+                               echo Carbon::createFromFormat('Y-m-d',$record->voucher_date)->toFormattedDateString();
+                               ?>
+                           </td>
+                           <td colspan="2">
+                               <?php
+                               echo $record->bank_ac;
+                               ?>
+                           </td>
+                           <td colspan="3">
+                               <?php
+                               echo $record->withdraw_account;
+                               ?>
+                           </td>
+                           <td>
+                               <?php
+                               $total_debit += $record->amount;
+                               echo rupee_format($record->amount);
+                               ?>
+                           </td>
+                           <td></td>
+
+                       </tr>
+                   <?php endforeach; ?>
+                   <tr>
+                       <th colspan="7" style='text-align:right;'>Totals</th>
+                       <th class='total_amount'><?= rupee_format($total_debit) ?></th>
+                       <th class='total_amount'><?= rupee_format($total_credit) ?></th>
+                   </tr>
+                   </tbody>
+
+
                </table>
            </div>
         </div>

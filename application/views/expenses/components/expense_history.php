@@ -1,4 +1,4 @@
-<h4 style="color: #006dcc">Payment History</h4>
+<h3 style="color: #2a6496;">Expense History</h3>
 <table class="my_table list_table table table-bordered">
     <thead class="table_header">
     <tr class="table_row table_header_row">
@@ -16,7 +16,7 @@
     $total_cost = 0;
     ?>
     <?php $parent_count = 0; ?>
-    <?php  foreach($few_expenses as $record): ?>
+    <?php  foreach($expense_history as $record): ?>
 
         <tr style="">
 
@@ -52,7 +52,10 @@
                 echo $record->invoice_summary;
                 ?>
             </td>
-            <td></td>
+
+            <td style="vertical-align: middle;">
+                <?php deleting_btn('invoice_number', $record->invoice_id, 'delete_invoice') ?>
+            </td>
 
         </tr>
     <?php endforeach; ?>
