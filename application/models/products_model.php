@@ -66,7 +66,7 @@ class Products_Model extends Parent_Model {
         $this->db->select("vouchers.id as voucher_id");
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->db->where('voucher_entries.ac_title',$product);
         $vouchers = $this->db->get()->num_rows();
 

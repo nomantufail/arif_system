@@ -23,17 +23,13 @@
 <h3 style="color: #006dcc; text-align: center;">Expense Voucher</h3>
 
 <?php if(isset($_POST['addExpense'])): ?>
-    <?php echo validation_errors('<div class="alert alert-danger alert-dismissible" role="alert">
 
-                                                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-
-                                                <strong>Error! </strong>', '</div>'); ?>
-    <?php if(is_array(@$someMessage)){ ?>
-        <div class="alert <?= $someMessage['type']; ?> alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <?= $someMessage['message']; ?>
-        </div>
-    <?php } ?>
+    <!--Notifications Area-->
+    <div class="row">
+        <?php echo $this->helper_model->display_flash_errors(); ?>
+        <?php echo $this->helper_model->display_flash_success(); ?>
+    </div>
+    <!--notifications area ends-->
 <?php endif; ?>
 
 <form method="post" action="<?= $this->helper_model->controller_path()."add" ?>">

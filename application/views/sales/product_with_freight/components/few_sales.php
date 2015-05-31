@@ -17,6 +17,7 @@
         <th class="column_heading">Qty</th>
         <th class="column_heading">Sale Price / Item</th>
         <th class="column_heading">Total Price</th>
+        <th class="column_heading">Freight</th>
         <th class="column_heading">Extra Info</th>
         <th class="column_heading"></th>
     </tr>
@@ -67,6 +68,11 @@
                     echo rupee_format($entry->total_cost());
                     ?>
                 </td>
+                <td>
+                    <?php
+                    echo rupee_format($entry->freight);
+                    ?>
+                </td>
 
                 <?php if($count == 1):?>
                     <td rowspan="<?=($num_invoice_items)?>">
@@ -77,11 +83,12 @@
                 <?php endif; ?>
                 <?php if($count == 1):?>
                     <td rowspan="<?=($num_invoice_items)?>" style="vertical-align: middle;">
-                        <?php deleting_btn('invoice_number', $record->id, 'delete_invoice') ?>
+                        <?php deleting_btn_test(array(
+                            'invoice_number'=>$record->id,
+                            'product'=>$entry->product->name,
+                        ), 'delete_freight_sale_invoice') ?>
                     </td>
                 <?php endif; ?>
-
-
             </tr>
         <?php endforeach ?>
     <?php endforeach; ?>

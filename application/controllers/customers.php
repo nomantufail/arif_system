@@ -17,13 +17,13 @@ class Customers extends ParentController {
             //setting section
             $this->bodyData['section'] = $target_function;
             //and there we go...
-            $this->$target_function();
+            redirect(base_url()."customers/".$target_function);
         }else{
             if($this->bodyData['section'] == 'index')
             {
                 $this->bodyData['section'] = 'all';
             }
-            $this->all();
+            redirect(base_url()."customers/all");
         }
     }
     
@@ -31,34 +31,6 @@ class Customers extends ParentController {
     {
         $headerData['title'] = 'Customers';
         $this->bodyData['someMessage'] = '';
-
-
-        if(isset($_POST['addCustomer'])){
-            if($this->form_validation->run('add_customer') == true){
-                if( $this->customers_model->insert() == true){
-                    redirect(page_url());
-                    $this->bodyData['someMessage'] = array('message'=>'customer Added Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }else{
-                $this->helper_model->redirect_with_errors(validation_errors());
-            }
-        }
-        if(isset($_POST['delete_customer'])){
-            if($this->form_validation->run('delete_customer') == true){
-                if( $this->deleting_model->force_delete_where('customers', array('name'=>$_POST['name'])) == true){
-                    redirect(page_url());
-                    $this->bodyData['someMessage'] = array('message'=>'customer Removed Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-            else
-            {
-                $this->helper_model->redirect_with_errors(validation_errors());
-            }
-        }
 
         $this->bodyData['customers'] = $this->customers_model->get();
         $this->load->view('components/header', $headerData);
@@ -88,5 +60,55 @@ class Customers extends ParentController {
         }
         return true;
     }
-    
+
+
+    /**
+     * Below functions are used t save or deleted
+     * records in db if needed
+     **/
+    public function is_any_thing_needs_to_be_deleted()
+    {
+        /**
+         * delete a customer
+         **/
+        if(isset($_POST['delete_customer'])){
+            if($this->form_validation->run('delete_customer') == true){
+                if( $this->deleting_model->force_delete_where('customers', array('name'=>$_POST['name'])) == true){
+                    $this->helper_model->redirect_with_success('customer Removed Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }
+            else
+            {
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+    }
+    public function is_any_thing_needs_to_be_saved()
+    {
+        /**
+         * insert a new customer in system
+         **/
+        if(isset($_POST['addCustomer'])){
+            if($this->form_validation->run('add_customer') == true){
+                if( $this->customers_model->insert() == true){
+                    $this->helper_model->redirect_with_success('customer Added Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }else{
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+    }
+
+    public function set_search_keys_for_required_section()
+    {
+        $area = $this->uri->segment(2);
+        switch($area)
+        {
+
+        }
+    }
 }

@@ -14,7 +14,7 @@ class Accounts_Model extends Parent_Model {
         ');
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->get_customer_vouchers();
         $this->db->group_by('voucher_entries.related_customer, voucher_entries.dr_cr');
         $result = $this->db->get()->result();
@@ -50,7 +50,7 @@ class Accounts_Model extends Parent_Model {
         ');
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->get_supplier_vouchers();
         $this->db->group_by('voucher_entries.related_supplier, voucher_entries.dr_cr');
         $result = $this->db->get()->result();
@@ -87,7 +87,7 @@ class Accounts_Model extends Parent_Model {
         ');
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->bank_entries();
         $this->db->group_by('voucher_entries.ac_title, voucher_entries.dr_cr');
         $result = $this->db->get()->result();
@@ -122,7 +122,7 @@ class Accounts_Model extends Parent_Model {
         ');
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->withdraw_vouchers();
         $this->with_debit_entries_only();
         $this->db->group_by('voucher_entries.ac_title, voucher_entries.dr_cr');
@@ -160,7 +160,7 @@ class Accounts_Model extends Parent_Model {
         $this->db->select('SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr');
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->db->where('vouchers.voucher_date <',$keys['from']);
         $this->get_customer_vouchers();
         $this->where_customer($keys['customer']);
@@ -175,7 +175,7 @@ class Accounts_Model extends Parent_Model {
         $this->select_whole_voucher_content();
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->voucher_duration($keys['from'], $keys['to']);
         $this->get_customer_vouchers();
         $this->where_customer($keys['customer']);
@@ -188,7 +188,7 @@ class Accounts_Model extends Parent_Model {
         $this->db->select('SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr');
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->db->where('vouchers.voucher_date <',$keys['from']);
         $this->get_supplier_vouchers();
         $this->where_supplier($keys['supplier']);
@@ -203,7 +203,7 @@ class Accounts_Model extends Parent_Model {
         $this->select_whole_voucher_content();
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->voucher_duration($keys['from'], $keys['to']);
         $this->get_supplier_vouchers();
         $this->where_supplier($keys['supplier']);
@@ -218,7 +218,7 @@ class Accounts_Model extends Parent_Model {
                   ");
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->bank_entries();
         $this->db->group_by('voucher_entries.ac_title, voucher_entries.ac_sub_title,
                 voucher_entries.dr_cr');
@@ -297,6 +297,7 @@ class Accounts_Model extends Parent_Model {
             'summary'=>$voucher->summary,
             'tanker'=>$voucher->tanker,
             'product_sale_id'=>$voucher->product_sale_id,
+            'product_for_freight_voucher'=>$voucher->product_for_freight_voucher,
             'voucher_type'=>$voucher->voucher_type,
         );
         $this->db->insert('vouchers',$voucher_data);
@@ -319,6 +320,7 @@ class Accounts_Model extends Parent_Model {
                 'cost_per_item'=>$entry->cost_per_item,
                 'purchase_price_per_item_for_sale'=>$entry->purchase_price_per_item_for_sale,
                 'amount'=>$entry->amount,
+                'freight'=>$entry->freight,
                 'dr_cr'=>$entry->dr_cr,
                 'description'=>$entry->description,
             );
@@ -426,6 +428,7 @@ class Accounts_Model extends Parent_Model {
     {
         $this->db->select('voucher_entries.ac_title');
         $this->join_vouchers();
+        $this->active_vouchers();
         switch($for)
         {
             case "customers":
@@ -438,7 +441,6 @@ class Accounts_Model extends Parent_Model {
                 $this->get_tanker_vouchers();
                 break;
         }
-        $this->active();
         $this->db->distinct();
         $result = $this->db->get($this->table)->result();
         return $result;
@@ -448,7 +450,7 @@ class Accounts_Model extends Parent_Model {
     {
         $this->db->select('voucher_entries.ac_type');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->db->distinct();
         $result = $this->db->get($this->table)->result();
         return $result;
@@ -468,7 +470,7 @@ class Accounts_Model extends Parent_Model {
         $this->select_profit_loss_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->voucher_duration($from, $to);
         $this->all_sale_vouchers();
         $this->with_debit_entries_only();

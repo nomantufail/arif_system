@@ -27,16 +27,11 @@
 
     <div class="container-fluid">
 
+
         <!--Notifications Area-->
         <div class="row">
-            <?php echo validation_errors('<div class="alert alert-danger alert-dismissible" role="alert">
-
-                                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-
-                                            <strong>Error! </strong>', '</div>'); ?>
-
-
-
+            <?php echo $this->helper_model->display_flash_errors(); ?>
+            <?php echo $this->helper_model->display_flash_success(); ?>
         </div>
         <!--notifications area ends-->
 

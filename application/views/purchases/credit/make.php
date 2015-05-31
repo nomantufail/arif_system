@@ -129,6 +129,54 @@ $default_row_counter = 1;
         document.getElementById('cross_'+row_num).innerHTML='';
     }
 
+    function validate_purchase_invoice_form()
+    {
+        pannel_count_value = parseInt(pannel_count.value);
+        num_rows = pannel_count_value-1;
+
+        /* Checking if same product is used twice or not */
+        for(var i =0; i<num_rows; i++)
+        {
+            var product_selected_index = document.getElementsByClassName("product_select_box")[i].selectedIndex;
+            var product = document.getElementsByClassName("product_select_box")[i].options[product_selected_index].value;
+
+            for(var c =0; c<num_rows; c++)
+            {
+                var product_selected_index2 = document.getElementsByClassName("product_select_box")[c].selectedIndex;
+                var product2 = document.getElementsByClassName("product_select_box")[c].options[product_selected_index2].value;
+
+                if(product == product2 && i != c)
+                {
+                    alert("Error! Same product cannot be used twice.");
+                    return false;
+                }
+            }
+        }
+        /*----------------------------------------------------*/
+
+        /* Checking if any product is selected or not */
+        var is_any_product_selected = false;
+        for(var i =0; i<num_rows; i++)
+        {
+            var product_selected_index = document.getElementsByClassName("product_select_box")[i].selectedIndex;
+            var product = document.getElementsByClassName("product_select_box")[i].options[product_selected_index].value;
+            if(product != '')
+            {
+                is_any_product_selected = true;
+            }
+        }
+        if(is_any_product_selected == false)
+        {
+            alert("Error! Please Select atleast one product to make this invoice");
+            return false;
+        }
+        /*----------------------------------------------------*/
+
+
+
+        return true;
+    }
+
     $( document ).ready(function() {
         supplier_changed();
     });
@@ -145,29 +193,20 @@ $default_row_counter = 1;
 
         <!--Notifications Area-->
         <div class="row">
-            <?php echo validation_errors('<div class="alert alert-danger alert-dismissible" role="alert">
+            <?php echo $this->helper_model->display_flash_errors(); ?>
+            <?php echo $this->helper_model->display_flash_success(); ?>
 
-                                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-
-                                            <strong>Error! </strong>', '</div>'); ?>
-            <?php if(is_array(@$someMessage)){ ?>
-                <div class="alert <?= $someMessage['type']; ?> alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <?= $someMessage['message']; ?>
-                </div>
-            <?php } ?>
             <?php if(sizeof($tankers) == 0){ ?>
                 <div class="alert alert-warning alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     Warning: No tankers available for now. <br>
                 </div>
             <?php } ?>
-
         </div>
         <!--notifications area ends-->
 
         <div class="row actual_body_contents" style="margin-top: 20px;">
-            <form method="post">
+            <form method="post" onsubmit="return validate_purchase_invoice_form()">
                 <div class="row">
                     <div class="col-sm-12">
                         <table class="">

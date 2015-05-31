@@ -17,13 +17,13 @@ class Stock extends ParentController {
             //setting section
             $this->bodyData['section'] = $target_function;
             //and there we go...
-            $this->$target_function();
+            redirect(base_url()."stock/".$target_function);
         }else{
             if($this->bodyData['section'] == 'index')
             {
                 $this->bodyData['section'] = 'show';
             }
-            $this->show();
+            redirect(base_url()."stock/show");
         }
     }
     public function show()
@@ -38,5 +38,28 @@ class Stock extends ParentController {
         $this->load->view('stock/show', $bodyData);
         $this->load->view('components/footer');
 
+    }
+
+
+    /**
+     * Below functions are used t save or deleted
+     * records in db if needed
+     **/
+    public function is_any_thing_needs_to_be_deleted()
+    {
+
+    }
+    public function is_any_thing_needs_to_be_saved()
+    {
+
+    }
+
+    public function set_search_keys_for_required_section()
+    {
+        $area = $this->uri->segment(2);
+        switch($area)
+        {
+
+        }
     }
 }

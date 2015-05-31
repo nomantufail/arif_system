@@ -13,6 +13,7 @@ class App_Voucher {
     public $summary;
     public $tanker;
     public $product_sale_id;
+    public $product_for_freight_voucher;
     public $voucher_type;
     public $inserted_at;
     public $updated_at;
@@ -25,6 +26,7 @@ class App_Voucher {
     {
         $this->entries = array();
         $this->tanker = '';
+        $this->product_for_freight_voucher = '';
         $this->product_sale_id = 0;
     }
 

@@ -25,13 +25,8 @@
         </div>
         <!--Notifications Area-->
         <div class="row">
-            <?php echo validation_errors('<div class="alert alert-danger alert-dismissible" role="alert">
-
-                                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-
-                                            <strong>Error! </strong>', '</div>'); ?>
-
-
+            <?php echo $this->helper_model->display_flash_errors(); ?>
+            <?php echo $this->helper_model->display_flash_success(); ?>
         </div>
         <!--notifications area ends-->
 
@@ -40,19 +35,50 @@
             <div class="row">
 
                 <div class="col-lg-12">
-
+                    <form action="" method="get">
+                        <table class="search-table" style="width:100%;">
+                            <tr>
+                                <td style="width: 15%;"><b>From: </b><input class="form-control" type="date" value="<?= $search_keys['from'] ?>" name="from"></td>
+                                <td style="width: 15%;"><b>To: </b><input class="form-control" type="date" value="<?= $search_keys['to'] ?>" name="to"></td>
+                                <td style="width: 20%;"><b>Product: </b>
+                                    <select name="product[]" class="select_box" multiple>
+                                        <option value=""> -- All Products --</option>
+                                        <?php foreach($products as $product):?>
+                                            <?php
+                                            $selected = (in_array($product->name, $search_keys['products']))?'selected':''
+                                            ?>
+                                            <option value="<?= $product->name ?>" <?= $selected ?>><?= $product->name ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td style="width: 20%;"><b>Customer: </b>
+                                    <select name="customer[]" class="select_box" multiple>
+                                        <option value=""> -- All Customers --</option>
+                                        <?php foreach($customers as $customer):?>
+                                            <?php
+                                            $selected = (in_array($customer->name, $search_keys['customers']))?'selected':''
+                                            ?>
+                                            <option value="<?= $customer->name ?>" <?= $selected ?>><?= $customer->name ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td style="width: 25%;"><br><button style="width: 100%; height: 30px;"><i class="fa fa-search"></i> Search</button></td>
+                            </tr>
+                        </table>
+                    </form>
                     <table class="my_table list_table table table-bordered">
                         <thead class="table_header">
                         <tr class="table_row table_header_row">
-                            <th class="column_heading">Invoice#</th>
-                            <th class="column_heading">Date</th>
-                            <th class="column_heading">Customer</th>
-                            <th class="column_heading">Tanker</th>
-                            <th class="column_heading">Product</th>
-                            <th class="column_heading">Qty</th>
-                            <th class="column_heading">Sale Price / Item</th>
-                            <th class="column_heading">Total Price</th>
-                            <th class="column_heading">Extra Info</th>
+                            <?= sortable_header('invoice_number','numeric','Invoice#') ?>
+                            <?= sortable_header('invoice_date','date','Date') ?>
+                            <?= sortable_header('Customer', 'string', 'Customer') ?>
+                            <?= sortable_header('tanker', 'string', 'Tanker') ?>
+                            <?= sortable_header('product', 'string', 'Product') ?>
+                            <?= sortable_header('quantity', 'numeric', 'Qty') ?>
+                            <?= sortable_header('cost_per_item', 'numeric', 'Sale Price / Item') ?>
+                            <?= sortable_header('total_cost', 'numeric', 'Total Price') ?>
+                            <?= sortable_header('freight', 'numeric', 'Freight') ?>
+                            <?= sortable_header('extra_info', 'string', 'Extra Info') ?>
                             <th class="column_heading"></th>
                         </tr>
                         </thead>
@@ -60,6 +86,7 @@
                         <?php
                         $total_product_quantity = 0;
                         $grand_total_cost = 0;
+                        $total_freight = 0;
                         ?>
                         <?php $parent_count = 0; ?>
                         <?php  foreach($sales as $record): ?>
@@ -103,6 +130,12 @@
                                         echo rupee_format($entry->total_cost());
                                         ?>
                                     </td>
+                                    <td>
+                                        <?php
+                                        $total_freight += $entry->freight;
+                                        echo rupee_format($entry->freight);
+                                        ?>
+                                    </td>
 
                                     <?php if($count == 1):?>
                                         <td rowspan="<?=($num_invoice_items)?>">
@@ -113,7 +146,10 @@
                                     <?php endif; ?>
                                     <?php if($count == 1):?>
                                         <td rowspan="<?=($num_invoice_items)?>" style="vertical-align: middle;">
-                                            <?php deleting_btn('invoice_number', $record->id, 'delete_invoice') ?>
+                                            <?php deleting_btn_test(array(
+                                                'invoice_number'=>$record->id,
+                                                'product'=>$entry->product->name,
+                                            ), 'delete_freight_sale_invoice') ?>
                                         </td>
                                     <?php endif; ?>
 
@@ -125,6 +161,7 @@
                         <tr class="table_footer_row">
                             <th style="text-align: right;" colspan="7">Totals</th>
                             <th class="total_amount"><?= $grand_total_cost ?></th>
+                            <th class="total_amount"><?= $total_freight ?></th>
                             <th colspan="2"></th>
                         </tr>
                         </tfoot>

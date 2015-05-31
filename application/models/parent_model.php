@@ -13,7 +13,6 @@ class Parent_Model extends CI_Model {
 
     //protected properties
     protected $table;
-
     public function __construct(){
         parent::__construct();
 
@@ -25,6 +24,32 @@ class Parent_Model extends CI_Model {
     public function active()
     {
         $this->db->where('deleted',0);
+    }
+
+    /**
+     * Used to fetch only active voucher_entries
+     */
+    public function active_voucher_entries()
+    {
+        $this->db->where('voucher_entries.deleted',0);
+    }
+
+    /**
+     * Used to fetch only active parent vouchers
+     */
+    public function active_parent_vouchers()
+    {
+        $this->db->where('vouchers.deleted',0);
+    }
+
+    /**
+     * Used to fetch those vouchers which have
+     * both entries and parent active.
+     */
+    public function active_vouchers()
+    {
+        $this->active_parent_vouchers();
+        $this->active_voucher_entries();
     }
 
     /**
@@ -177,6 +202,21 @@ class Parent_Model extends CI_Model {
             voucher_entries.cost_per_item, voucher_entries.amount,
             voucher_entries.id as entry_id,
 
+        ");
+    }
+
+    /**
+     * Used to select all the sale with freight contents which are needed
+     */
+    public function select_sale_with_freight_content()
+    {
+        $this->db->select("
+            vouchers.id as invoice_id, vouchers.voucher_date as invoice_date, vouchers.summary as invoice_summary,
+            vouchers.tanker,
+            voucher_entries.related_customer, voucher_entries.ac_title as product_name, voucher_entries.quantity,
+            voucher_entries.cost_per_item, voucher_entries.amount,
+            voucher_entries.id as entry_id,
+            voucher_entries.freight as freight_amount,
         ");
     }
 
@@ -351,6 +391,10 @@ class Parent_Model extends CI_Model {
     {
         $this->db->where('voucher_entries.ac_title', $title);
     }
+    public function where_ac_titles($titles)
+    {
+        $this->db->where_in('voucher_entries.ac_title', $titles);
+    }
 
     public function where_ac_type($type)
     {
@@ -398,6 +442,52 @@ class Parent_Model extends CI_Model {
             'vouchers.voucher_date >='=>$from,
             'vouchers.voucher_date <='=>$to,
         ));
+    }
+
+    /**
+     * Below functions are used to search by agents
+     **/
+    public function where_related_suppliers($suppliers)
+    {
+        $this->db->where_in('voucher_entries.related_supplier',$suppliers);
+    }
+    public function where_related_customers($customers)
+    {
+        $this->db->where_in('voucher_entries.related_customer',$customers);
+    }
+    public function where_related_tankers($tankers)
+    {
+        $this->db->where_in('voucher_entries.related_tanker',$tankers);
+    }
+    public function where_related_businesses($businesses)
+    {
+        $this->db->where_in('voucher_entries.related_business',$businesses);
+    }
+    public function where_related_other_agents($other_agents)
+    {
+        $this->db->where_in('voucher_entries.related_other_agent',$other_agents);
+    }
+
+
+    public function where_related_supplier($supplier)
+    {
+        $this->db->where('voucher_entries.related_supplier',$supplier);
+    }
+    public function where_related_customer($customer)
+    {
+        $this->db->where('voucher_entries.related_customer',$customer);
+    }
+    public function where_related_tanker($tanker)
+    {
+        $this->db->where('voucher_entries.related_tanker',$tanker);
+    }
+    public function where_related_business($business)
+    {
+        $this->db->where('voucher_entries.related_business',$business);
+    }
+    public function where_related_other_agent($other_agent)
+    {
+        $this->db->where('voucher_entries.related_other_agent',$other_agent);
     }
 }
 

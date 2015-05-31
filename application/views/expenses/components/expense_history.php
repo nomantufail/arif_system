@@ -54,7 +54,7 @@
             </td>
 
             <td style="vertical-align: middle;">
-                <?php deleting_btn('invoice_number', $record->invoice_id, 'delete_invoice') ?>
+                <?php deleting_btn('invoice_number', $record->invoice_id, 'delete_expense_invoice') ?>
             </td>
 
         </tr>

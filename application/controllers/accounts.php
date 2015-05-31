@@ -18,13 +18,13 @@ class Accounts extends ParentController {
             //setting section
             $this->bodyData['section'] = $target_function;
             //and there we go...
-            $this->$target_function();
+            redirect(base_url()."accounts/".$target_function);
         }else{
             if($this->bodyData['section'] == 'index')
             {
                 $this->bodyData['section'] = 'customers_ledger';
             }
-            $this->customers_ledger();
+            redirect(base_url()."accounts/customers_ledger");
         }
     }
 

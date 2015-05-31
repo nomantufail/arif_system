@@ -17,13 +17,13 @@ class Settings extends ParentController {
             //setting section
             $this->bodyData['section'] = $target_function;
             //and there we go...
-            $this->$target_function();
+            redirect(base_url()."settings/".$target_function);
         }else{
             if($this->bodyData['section'] == 'index')
             {
                 $this->bodyData['section'] = 'accounts';
             }
-            $this->accounts();
+            redirect(base_url()."settings/accounts");
         }
     }
     
@@ -34,15 +34,6 @@ class Settings extends ParentController {
             'title' => 'Settings ! Accounts',
         );
         $this->bodyData['someMessage'] = '';
-        if(isset($_POST['addBankAc'])){
-            if($this->form_validation->run('add_bank_ac') == true){
-                if( $this->bank_ac_model->insert() == true){
-                    $this->bodyData['someMessage'] = array('message'=>'Bank Account Added Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
         $this->bodyData['banks'] = $this->bank_ac_model->get();
 
         $this->load->view('components/header', $headerData);
@@ -64,5 +55,41 @@ class Settings extends ParentController {
             return false;
         }
         return true;
+    }
+
+
+    /**
+     * Below functions are used t save or deleted
+     * records in db if needed
+     **/
+    public function is_any_thing_needs_to_be_deleted()
+    {
+
+    }
+    public function is_any_thing_needs_to_be_saved()
+    {
+        /**
+         * insert a bank a/c
+         **/
+        if(isset($_POST['addBankAc'])){
+            if($this->form_validation->run('add_bank_ac') == true){
+                if( $this->bank_ac_model->insert() == true){
+                    $this->helper_model->redirect_with_success('Bank A/c Added Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }else{
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+    }
+
+    public function set_search_keys_for_required_section()
+    {
+        $area = $this->uri->segment(2);
+        switch($area)
+        {
+
+        }
     }
 }

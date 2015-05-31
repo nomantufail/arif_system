@@ -23,6 +23,7 @@ class Editing_Model extends Parent_Model {
          * ---------------------------------
          * products ==> name
          * voucher_entries ==> ac_title
+         * vouchers ==> product_for_freight_voucher
          */
         $this->db->trans_start();
 
@@ -31,6 +32,7 @@ class Editing_Model extends Parent_Model {
             case "name":
                 $this->update_table_column('voucher_entries','ac_title', $value, $pk);
                 $this->update_table_column('products', 'name', $value, $pk);
+                $this->update_table_column('vouchers', 'product_for_freight_voucher', $value, $pk);
                 break;
         }
         return $this->db->trans_complete();

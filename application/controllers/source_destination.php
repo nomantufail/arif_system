@@ -19,13 +19,13 @@ class Source_Destination extends ParentController {
             //setting section
             $this->bodyData['section'] = $target_function;
             //and there we go...
-            $this->$target_function();
+            redirect(base_url()."source_destination/".$target_function);
         }else{
             if($this->bodyData['section'] == 'index')
             {
                 $this->bodyData['section'] = 'show';
             }
-            $this->show();
+            redirect(base_url()."source_destination/show");
         }
     }
 
@@ -35,20 +35,48 @@ class Source_Destination extends ParentController {
             'title' => 'Source / Destination',
         );
         $this->bodyData['someMessage'] = '';
-        if(isset($_POST['addCity'])){
-            if($this->form_validation->run('add_city') == true){
-                if( $this->source_destination_model->insert() == true){
-                    $this->bodyData['someMessage'] = array('message'=>'Freight Point Added Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
+
         $this->bodyData['cities'] = $this->source_destination_model->get();
 
         $this->load->view('components/header', $headerData);
         $this->load->view('source_destination/show', $this->bodyData);
         $this->load->view('components/footer');
 
+    }
+
+
+    /**
+     * Below functions are used t save or deleted
+     * records in db if needed
+     **/
+    public function is_any_thing_needs_to_be_deleted()
+    {
+
+    }
+    public function is_any_thing_needs_to_be_saved()
+    {
+        /**
+         * insert a city
+         **/
+        if(isset($_POST['addCity'])){
+            if($this->form_validation->run('add_city') == true){
+                if( $this->source_destination_model->insert() == true){
+                    $this->helper_model->redirect_with_success('Freight Point Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }else{
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+    }
+
+    public function set_search_keys_for_required_section()
+    {
+        $area = $this->uri->segment(2);
+        switch($area)
+        {
+
+        }
     }
 }

@@ -17,13 +17,13 @@ class Tankers extends ParentController {
             //setting section
             $this->bodyData['section'] = $target_function;
             //and there we go...
-            $this->$target_function();
+            redirect(base_url()."tankers/".$target_function);
         }else{
             if($this->bodyData['section'] == 'index')
             {
                 $this->bodyData['section'] = 'all';
             }
-            $this->all();
+            redirect(base_url()."tankers/all");
         }
     }
     
@@ -31,27 +31,6 @@ class Tankers extends ParentController {
     {
         $headerData['title'] = 'tankers';
         $this->bodyData['someMessage'] = '';
-
-
-        if(isset($_POST['addtanker'])){
-            if($this->form_validation->run('add_tanker') == true){
-                if( $this->tankers_model->insert() == true){
-                    $this->bodyData['someMessage'] = array('message'=>'tanker Added Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
-
-        if(isset($_POST['delete_tanker'])){
-            if($this->form_validation->run('delete_tanker') == true){
-                if( $this->deleting_model->delete_tanker($_POST['number']) == true){
-                    $this->bodyData['someMessage'] = array('message'=>'Tanker Removed Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
 
         $this->bodyData['tankers'] = $this->tankers_model->get();
         $this->load->view('components/header', $headerData);
@@ -81,5 +60,55 @@ class Tankers extends ParentController {
             return false;
         }
         return true;
+    }
+
+
+    /**
+     * Below functions are used t save or deleted
+     * records in db if needed
+     **/
+    public function is_any_thing_needs_to_be_deleted()
+    {
+        /**
+         * Removing a tanker
+         **/
+        if(isset($_POST['delete_tanker'])){
+            if($this->form_validation->run('delete_tanker') == true){
+                if( $this->deleting_model->delete_tanker($_POST['number']) == true){
+                    $this->helper_model->redirect_with_success('Tanker Deleted Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }else{
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+
+    }
+    public function is_any_thing_needs_to_be_saved()
+    {
+        /**
+         * insert a tanker in system
+         **/
+        if(isset($_POST['addtanker'])){
+            if($this->form_validation->run('add_tanker') == true){
+                if( $this->tankers_model->insert() == true){
+                    $this->helper_model->redirect_with_success('Tanker Saved Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }else{
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+    }
+
+    public function set_search_keys_for_required_section()
+    {
+        $area = $this->uri->segment(2);
+        switch($area)
+        {
+
+        }
     }
 }

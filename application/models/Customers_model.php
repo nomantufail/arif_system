@@ -68,7 +68,7 @@ class Customers_model extends Parent_Model {
         $this->db->select("vouchers.id as voucher_id");
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->db->where('voucher_entries.related_customer',$customer);
         $result = $this->db->get()->num_rows();
 

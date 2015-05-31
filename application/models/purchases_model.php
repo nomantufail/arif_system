@@ -16,7 +16,7 @@ class Purchases_Model extends Parent_Model {
         $this->db->select("SUM(voucher_entries.amount) as total_purchases");
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->purchase_vouchers();
         $this->with_credit_entries_only();
         $this->latest($this->table);
@@ -110,7 +110,7 @@ class Purchases_Model extends Parent_Model {
         return $final_invoices_array;
     }
 
-    public function make_invoices_from_raw($raw_invoices)
+    public function make_grouped_invoices_from_raw($raw_invoices)
     {
         include_once(APPPATH."models/helperClasses/Purchase_Invoice.php");
         include_once(APPPATH."models/helperClasses/Purchase_Invoice_Entry.php");
@@ -177,17 +177,105 @@ class Purchases_Model extends Parent_Model {
         //var_dump($final_invoices_array);die();
         return $final_invoices_array;
     }
+    public function make_invoices_from_raw($raw_invoices)
+    {
+        include_once(APPPATH."models/helperClasses/Purchase_Invoice.php");
+        include_once(APPPATH."models/helperClasses/Purchase_Invoice_Entry.php");
+        include_once(APPPATH."models/helperClasses/Supplier.php");
+        include_once(APPPATH."models/helperClasses/Product.php");
+
+        $final_invoices_array = array();
+
+
+        $temp_invoice = new Purchase_Invoice();
+        $temp_invoice_item = new Purchase_Invoice_Entry($temp_invoice);
+
+        foreach($raw_invoices as $record){
+
+            /**
+             * setting data related to parent object (Purchase Invoice)
+             */
+            $temp_invoice = new Purchase_Invoice();
+
+            //setting data in the parent object
+            $temp_invoice->id = $record->invoice_id;
+            $temp_invoice->date = $record->invoice_date;
+            $temp_invoice->supplier = new Supplier(null, $record->related_supplier);
+            $temp_invoice->summary = $record->invoice_summary;
+            $temp_invoice->tanker = $record->tanker;
+
+
+            /**
+             * setting data related to child object (Purchase Invoice Item)
+             */
+            $temp_invoice_item = new Purchase_Invoice_Entry($temp_invoice);
+
+            //setting data in the Trip_Product_Data object
+            $temp_invoice_item->id = $record->entry_id;
+            $temp_invoice_item->product = new Product(null, $record->product_name);
+            $temp_invoice_item->costPerItem = $record->cost_per_item;
+            $temp_invoice_item->quantity = $record->quantity;
+            $temp_invoice_item->amount = $record->amount;
+
+            array_push($temp_invoice->entries, $temp_invoice_item);
+            array_push($final_invoices_array, $temp_invoice);
+
+
+        }
+        return $final_invoices_array;
+    }
+
+    public function search_limited_invoices($keys, $sorting_info)
+    {
+        $this->select_purchases_content();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active_vouchers();
+        $this->purchase_vouchers();
+        $this->with_credit_entries_only();
+
+        /**
+         * applying search keys
+         **/
+        if(sizeof($keys['suppliers']) > 0)
+        {
+            $this->where_related_suppliers($keys['suppliers']);
+        }
+        if(sizeof($keys['products']) > 0)
+        {
+            $this->where_ac_titles($keys['products']);
+        }
+
+        if($keys['to'] != '')
+        {
+            $this->db->where('vouchers.voucher_date <=',$keys['to']);
+        }
+        if($keys['from'] != '')
+        {
+            $this->db->where('vouchers.voucher_date >=',$keys['from']);
+        }
+        /*------- End Of Search Keys-----*/
+
+        /**
+         * Sorting Section
+         **/
+        $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        /*------ Sorting Section Ends ------*/
+
+        $raw_invoices = $this->db->get()->result();
+        return $this->purchases_model->make_invoices_from_raw($raw_invoices);
+    }
     public function invoices()
     {
         $this->select_purchases_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->purchase_vouchers();
         $this->with_credit_entries_only();
         $this->latest($this->table);
         $raw_invoices = $this->db->get()->result();
-
+        //var_dump($raw_invoices); die();
         return $this->purchases_model->make_invoices_from_raw($raw_invoices);
     }
 
@@ -198,7 +286,7 @@ class Purchases_Model extends Parent_Model {
         $this->db->distinct();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->purchase_vouchers();
         $this->with_credit_entries_only();
         $this->db->limit(5);
@@ -218,7 +306,7 @@ class Purchases_Model extends Parent_Model {
         $this->select_purchases_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->purchase_vouchers();
         $this->with_credit_entries_only();
         $this->db->where_in('vouchers.id', $voucher_ids);
@@ -234,7 +322,7 @@ class Purchases_Model extends Parent_Model {
         $this->select_purchases_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->purchase_vouchers();
         $this->today_vouchers();
         $this->with_credit_entries_only();
@@ -438,4 +526,18 @@ class Purchases_Model extends Parent_Model {
         return $this->helper_model->next_id($this->table);
     }
 
+    public function sortable_columns()
+    {
+        return array(
+            'invoice_number'=>'vouchers.id',
+            'invoice_date'=>'vouchers.voucher_date',
+            'supplier'=>'voucher_entries.related_supplier',
+            'tanker'=>'vouchers.tanker',
+            'product'=>'voucher_entries.ac_title',
+            'quantity'=>'voucher_entries.quantity',
+            'cost_per_item'=>'voucher_entries.cost_per_item',
+            'total_cost'=>'voucher_entries.amount',
+            'extra_info'=>'vouchers.summary',
+        );
+    }
 }

@@ -18,13 +18,13 @@ class Admin extends ParentController {
             //setting section
             $this->bodyData['section'] = $target_function;
             //and there we go...
-            $this->$target_function();
+            redirect(base_url()."admin/".$target_function);
         }else{
             if($this->bodyData['section'] == 'index')
             {
                 $this->bodyData['section'] = 'home';
             }
-            $this->home();
+            redirect(base_url()."admin/home");
         }
     }
 

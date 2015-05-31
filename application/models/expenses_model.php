@@ -11,7 +11,7 @@ class Expenses_Model extends Parent_Model {
         $this->select_expense_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->expense_payable_vouchers();
         $this->with_debit_entries_only();
         $this->latest($this->table);
@@ -112,7 +112,7 @@ class Expenses_Model extends Parent_Model {
         $this->select_expense_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->expense_payable_vouchers();
         $this->with_debit_entries_only();
         $this->db->limit(10);
@@ -127,7 +127,7 @@ class Expenses_Model extends Parent_Model {
         $this->select_expense_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->expense_payable_vouchers();
         $this->with_debit_entries_only();
         $this->voucher_duration(date('Y-m-d'),date('Y-m-d'));
@@ -208,7 +208,7 @@ class Expenses_Model extends Parent_Model {
         $this->select_expense_payment_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->expense_payment_vouchers();
         $this->with_credit_entries_only();
         $this->latest($this->table);
@@ -222,7 +222,7 @@ class Expenses_Model extends Parent_Model {
         $this->select_expense_payment_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->expense_payment_vouchers();
         $this->with_credit_entries_only();
         $this->db->limit(10);
@@ -237,7 +237,7 @@ class Expenses_Model extends Parent_Model {
         $this->db->select("SUM(voucher_entries.amount) as total_expense");
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->expense_payable_vouchers();
         $this->with_debit_entries_only();
         $result = $this->db->get()->result();

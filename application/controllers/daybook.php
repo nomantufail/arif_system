@@ -16,13 +16,13 @@ class DayBook extends ParentController {
             //setting section
             $this->bodyData['section'] = $target_function;
             //and there we go...
-            $this->$target_function();
+            redirect(base_url()."daybook/".$target_function);
         }else{
             if($this->bodyData['section'] == 'index')
             {
                 $this->bodyData['section'] = 'summary';
             }
-            $this->summary();
+            redirect(base_url()."daybook/summary");
         }
     }
 

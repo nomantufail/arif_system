@@ -19,13 +19,13 @@ class Expenses extends ParentController {
             //setting section
             $this->bodyData['section'] = $target_function;
             //and there we go...
-            $this->$target_function();
+            redirect(base_url()."expenses/".$target_function);
         }else{
             if($this->bodyData['section'] == 'index')
             {
                 $this->bodyData['section'] = 'add';
             }
-            $this->add();
+            redirect(base_url()."expenses/add");
         }
     }
 
@@ -37,27 +37,6 @@ class Expenses extends ParentController {
         $this->bodyData['someMessage'] = '';
         $this->bodyData['tankers'] = $this->tankers_model->get();
         $this->bodyData['titles'] = $this->expense_titles_model->get();
-
-        if(isset($_POST['addExpense'])){
-            if($this->form_validation->run('addExpense') == true){
-                if( $this->expenses_model->insert() == true){
-                    $this->bodyData['someMessage'] = array('message'=>'Expense Added Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
-
-        if(isset($_POST['delete_invoice'])){
-            if($this->form_validation->run('delete_expense_invoice') == true){
-                if( $this->deleting_model->delete_expense_invoice($_POST['invoice_number']) == true){
-                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
-
         $this->bodyData['few_expenses'] = $this->expenses_model->few_expenses();
 
         $this->load->view('components/header', $headerData);
@@ -74,27 +53,6 @@ class Expenses extends ParentController {
         $this->bodyData['someMessage'] = '';
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
 
-        if(isset($_POST['savePayment'])){
-            if($this->form_validation->run('saveExpensePayment') == true){
-                $saved_payment = $this->expenses_model->insert_payment();
-                if($saved_payment != 0){
-                    $this->bodyData['someMessage'] = array('message'=>'Payment Saved Successfully! Voucher# was <b>'.$saved_payment.'</b>', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
-
-        if(isset($_POST['delete_invoice'])){
-            if($this->form_validation->run('delete_expense_payment_invoice') == true){
-                if( $this->deleting_model->delete_expense_invoice($_POST['invoice_number']) == true){
-                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
-
         $this->bodyData['few_payments'] = $this->expenses_model->few_payments();
         $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
 
@@ -106,18 +64,8 @@ class Expenses extends ParentController {
     public function payment_history()
     {
         $headerData['title']='Expense Payment History';
+
         $this->bodyData['section'] = 'history';
-
-        if(isset($_POST['delete_invoice'])){
-            if($this->form_validation->run('delete_expense_payment_invoice') == true){
-                if( $this->deleting_model->delete_expense_invoice($_POST['invoice_number']) == true){
-                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
-
         $this->bodyData['payment_history'] = $this->expenses_model->payment_history();
 
         $this->load->view('components/header',$headerData);
@@ -131,16 +79,6 @@ class Expenses extends ParentController {
             'title' => 'Expense History',
         );
 
-        if(isset($_POST['delete_invoice'])){
-            if($this->form_validation->run('delete_expense_invoice') == true){
-                if( $this->deleting_model->delete_expense_invoice($_POST['invoice_number']) == true){
-                    $this->bodyData['someMessage'] = array('message'=>'Invoice Removed Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
-
         $this->bodyData['expense_history'] = $this->expenses_model->get();
 
         $this->load->view('components/header', $headerData);
@@ -153,21 +91,118 @@ class Expenses extends ParentController {
             'title' => 'Expense Titles',
         );
         $this->bodyData['someMessage'] = '';
-
-        if(isset($_POST['addTitle'])){
-            if($this->form_validation->run('add_expense_title') == true){
-                if( $this->expense_titles_model->insert() == true){
-                    $this->bodyData['someMessage'] = array('message'=>'Expense Title Added Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
-
         $this->bodyData['titles'] = $this->expense_titles_model->get();
 
         $this->load->view('components/header', $headerData);
         $this->load->view('expenses/expense_titles', $this->bodyData);
         $this->load->view('components/footer');
+    }
+
+
+    /**
+     * Below functions are used t save or deleted
+     * records in db if needed
+     **/
+    public function is_any_thing_needs_to_be_deleted()
+    {
+
+        /**
+         * delete expense invoice
+         **/
+        if(isset($_POST['delete_expense_invoice'])){
+            if($this->form_validation->run('delete_expense_invoice') == true){
+                if( $this->deleting_model->delete_expense_invoice($_POST['invoice_number']) == true){
+                    $this->helper_model->redirect_with_success('Invoice Removed Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }
+            else
+            {
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+
+        /**
+         * delete expense payment voucher
+         **/
+        if(isset($_POST['delete_expense_payment_voucher'])){
+            if($this->form_validation->run('delete_expense_invoice') == true){
+                if( $this->deleting_model->delete_expense_payment_invoice($_POST['invoice_number']) == true){
+                    $this->helper_model->redirect_with_success('Invoice Removed Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }
+            else
+            {
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+    }
+    public function is_any_thing_needs_to_be_saved()
+    {
+
+        /**
+         * insert a new expense title
+         **/
+        if(isset($_POST['addTitle'])){
+            if($this->form_validation->run('add_expense_title') == true){
+                if( $this->expense_titles_model->insert() == true){
+                    $this->helper_model->redirect_with_success('Title Added Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }
+            else
+            {
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+
+        /**
+         * insert Expense voucher
+         **/
+        if(isset($_POST['addExpense'])){
+            if($this->form_validation->run('addExpense') == true){
+                if( $this->expenses_model->insert() == true){
+                    $this->helper_model->redirect_with_success('Expense Added Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }
+            else
+            {
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+
+        /**
+         * save an expense payment voucher
+         **/
+        if(isset($_POST['savePayment'])){
+            if($this->form_validation->run('saveExpensePayment') == true){
+                $saved_payment = $this->expenses_model->insert_payment();
+                if($saved_payment != 0){
+                    $this->helper_model->redirect_with_success('Payment Saved Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }
+            else
+            {
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+
+    }
+
+    public function set_search_keys_for_required_section()
+    {
+        $area = $this->uri->segment(2);
+        switch($area)
+        {
+
+        }
     }
 }

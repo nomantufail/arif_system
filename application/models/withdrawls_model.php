@@ -11,7 +11,7 @@ class Withdrawls_model extends Parent_Model {
         $this->select_expense_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->expense_payable_vouchers();
         $this->with_debit_entries_only();
         $this->latest($this->table);
@@ -116,7 +116,7 @@ class Withdrawls_model extends Parent_Model {
         $this->select_whole_voucher_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->withdraw_vouchers();
         $this->latest($this->table);
         $result = $this->db->get()->result();
@@ -137,7 +137,7 @@ class Withdrawls_model extends Parent_Model {
         $this->select_whole_voucher_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->withdraw_vouchers();
         $this->db->limit(10);
         $this->latest($this->table);
@@ -158,7 +158,7 @@ class Withdrawls_model extends Parent_Model {
         $this->select_whole_voucher_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->withdraw_vouchers();
         $this->voucher_duration(date('Y-m-d'), date('Y-m-d'));
         $this->latest($this->table);

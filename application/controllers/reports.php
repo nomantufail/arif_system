@@ -9,20 +9,21 @@ class Reports extends ParentController {
     }
 
     public function index()
-    {$target_function = $this->intelligent_router_model->get_last_saved_route_for_current_controller();
+    {
+        $target_function = $this->intelligent_router_model->get_last_saved_route_for_current_controller();
 
         if($target_function != 'index')
         {
             //setting section
             $this->bodyData['section'] = $target_function;
             //and there we go...
-            $this->$target_function();
+            redirect(base_url()."reports/".$target_function);
         }else{
             if($this->bodyData['section'] == 'index')
             {
                 $this->bodyData['section'] = 'daily';
             }
-            $this->daily();
+            redirect(base_url()."reports/daily");
         }
     }
 

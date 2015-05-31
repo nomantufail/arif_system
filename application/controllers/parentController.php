@@ -6,6 +6,10 @@ class ParentController extends CI_Controller {
     public $login;
     public $bodyData;
 
+    //protected members
+    protected $search_keys;
+    protected $sorting_info;
+
     public function __construct()
     {
         parent::__construct();
@@ -60,6 +64,22 @@ class ParentController extends CI_Controller {
         $this->login = $this->helper_model->is_login();
 
         $this->set_bodyData();
+
+        //check if user wants to delete some record
+        if(method_exists($this,'is_any_thing_needs_to_be_deleted'))
+            $this->is_any_thing_needs_to_be_deleted();
+
+        //check if user wants to save something.
+        if(method_exists($this,'is_any_thing_needs_to_be_saved'))
+            $this->is_any_thing_needs_to_be_saved();
+
+        //setting search keys.
+        $this->set_search_keys();
+
+        //setting sorting info.
+        $this->set_sorting_info();
+
+
     }
 
     function _remap($method){
@@ -125,6 +145,44 @@ class ParentController extends CI_Controller {
     {
         $this->bodyData['section'] = $this->router->fetch_method();
     }
+
+    /**
+     * Below function first check if
+     * any function for setting search keys
+     * in the child controller is available
+     * or not.
+     * than call that function to set search
+     * keys.
+     **/
+    public function set_search_keys()
+    {
+        //check if user wants to save something.
+        if(method_exists($this,'set_search_keys_for_required_section'))
+            $this->set_search_keys_for_required_section();
+
+        //setting search keys to bodyData array
+        $this->bodyData['search_keys'] = $this->search_keys;
+    }
+
+    /**
+     * Below function first check if
+     * any function for setting sorting info
+     * in the child controller is available
+     * or not.
+     * than call that function to set
+     * sorting info
+     **/
+    public function set_sorting_info()
+    {
+        $this->sorting_info = array();
+        //check if user wants to save something.
+        if(method_exists($this,'set_sort_info_for_required_section'))
+            $this->set_sort_info_for_required_section();
+
+        //setting search keys to bodyData array
+        $this->bodyData['sorting_info'] = $this->sorting_info;
+    }
+
     private function _loggedIn(){
         /*if($this->admin_model->loggedIn() == 1){
             return true;

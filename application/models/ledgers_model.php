@@ -17,7 +17,7 @@ class Ledgers_Model extends Parent_Model {
         $this->db->select('SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr');
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->db->where('vouchers.voucher_date <',$keys['from']);
 
         if($keys['ac_title'] != '')
@@ -45,7 +45,7 @@ class Ledgers_Model extends Parent_Model {
         $this->db->select('SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr');
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->db->where('vouchers.voucher_date <',$keys['from']);
 
         if($keys['ac_title'] != '')
@@ -69,7 +69,7 @@ class Ledgers_Model extends Parent_Model {
         $this->db->select('SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr');
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->db->where('vouchers.voucher_date <',$keys['from']);
         switch($ledger)
         {
@@ -108,7 +108,7 @@ class Ledgers_Model extends Parent_Model {
         $this->select_whole_voucher_content();
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->voucher_duration($keys['from'], $keys['to']);
         $this->get_customer_vouchers();
         if($keys['customer'] != '')
@@ -129,7 +129,7 @@ class Ledgers_Model extends Parent_Model {
         $this->select_whole_voucher_content();
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->voucher_duration($keys['from'], $keys['to']);
         $this->get_supplier_vouchers();
         if($keys['supplier'] != '')
@@ -149,7 +149,7 @@ class Ledgers_Model extends Parent_Model {
         $this->select_whole_voucher_content();
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->voucher_duration($keys['from'], $keys['to']);
         $this->get_tanker_vouchers();
         if($keys['tanker'] != '')
@@ -174,7 +174,7 @@ class Ledgers_Model extends Parent_Model {
         $this->select_whole_voucher_content();
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->voucher_duration($keys['from'], $keys['to']);
 
         if($keys['ac_title'] != '')
@@ -203,7 +203,7 @@ class Ledgers_Model extends Parent_Model {
         $this->select_whole_voucher_content();
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->voucher_duration($keys['from'], $keys['to']);
 
         if($keys['ac_title'] != ''){

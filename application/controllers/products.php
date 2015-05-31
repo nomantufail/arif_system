@@ -19,13 +19,13 @@ class Products extends ParentController {
             //setting section
             $this->bodyData['section'] = $target_function;
             //and there we go...
-            $this->$target_function();
+            redirect(base_url()."products/".$target_function);
         }else{
             if($this->bodyData['section'] == 'index')
             {
                 $this->bodyData['section'] = 'show';
             }
-            $this->show();
+            redirect(base_url()."products/show");
         }
     }
 
@@ -37,24 +37,7 @@ class Products extends ParentController {
         $this->bodyData['someMessage'] = '';
         $this->bodyData['columns'] = array();
 
-        if(isset($_POST['addProduct'])){
-            if($this->form_validation->run('add_product') == true){
-                if( $this->products_model->insert() == true){
-                    $this->bodyData['someMessage'] = array('message'=>'Product Added Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
-        if(isset($_POST['delete_product'])){
-            if($this->form_validation->run('delete_product') == true){
-                if( $this->deleting_model->delete_product($_POST['name']) == true){
-                    $this->bodyData['someMessage'] = array('message'=>'product Removed Successfully!', 'type'=>'alert-success');
-                }else{
-                    $this->bodyData['someMessage'] = array('message'=>'Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You', 'type'=>'alert-warning');
-                }
-            }
-        }
+
 
         $this->bodyData['products'] = $this->products_model->get();
 
@@ -75,4 +58,52 @@ class Products extends ParentController {
         return true;
     }
 
+
+    /**
+     * Below functions are used t save or deleted
+     * records in db if needed
+     **/
+    public function is_any_thing_needs_to_be_deleted()
+    {
+        /**
+         * delete a product
+         **/
+        if(isset($_POST['delete_product'])){
+            if($this->form_validation->run('delete_product') == true){
+                if( $this->deleting_model->delete_product($_POST['name']) == true){
+                    $this->helper_model->redirect_with_success('Product Removed Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }else{
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+    }
+    public function is_any_thing_needs_to_be_saved()
+    {
+        /**
+         * insert a product
+         **/
+        if(isset($_POST['addProduct'])){
+            if($this->form_validation->run('add_product') == true){
+                if( $this->products_model->insert() == true){
+                    $this->helper_model->redirect_with_success('Product Added Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }else{
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+    }
+
+    public function set_search_keys_for_required_section()
+    {
+        $area = $this->uri->segment(2);
+        switch($area)
+        {
+
+        }
+    }
 }

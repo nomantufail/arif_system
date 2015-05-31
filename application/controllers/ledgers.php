@@ -18,13 +18,13 @@ class ledgers extends ParentController {
             //setting section
             $this->bodyData['section'] = $target_function;
             //and there we go...
-            $this->$target_function();
+            redirect(base_url()."ledgers/".$target_function);
         }else{
             if($this->bodyData['section'] == 'index')
             {
                 $this->bodyData['section'] = 'customers';
             }
-            $this->customers();
+            redirect(base_url()."ledgers/customers");
         }
     }
 

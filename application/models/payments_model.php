@@ -12,7 +12,7 @@ class Payments_Model extends Parent_Model {
         $this->db->select('SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr');
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->payables();
         $this->db->group_by('voucher_entries.dr_cr');
         $result = $this->db->get()->result();
@@ -107,7 +107,7 @@ class Payments_Model extends Parent_Model {
         $this->select_payment_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->payment_vouchers();
         $this->latest($this->table);
         $result = $this->db->get()->result();
@@ -121,7 +121,7 @@ class Payments_Model extends Parent_Model {
         $this->select_payment_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->payment_vouchers();
         $this->db->limit(10);
         $this->latest($this->table);
@@ -136,7 +136,7 @@ class Payments_Model extends Parent_Model {
         $this->select_payment_content();
         $this->db->from($this->table);
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->payment_vouchers();
         $this->today_vouchers();
         $this->latest($this->table);

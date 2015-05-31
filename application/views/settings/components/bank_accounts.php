@@ -15,14 +15,8 @@
         <div class="list-group">
 
             <?php if(isset($_POST['addBankAc']) || isset($_GET['del_bank_ac'])): ?>
-                <?php echo validation_errors('<div class="alert-danger">
-                                            <strong>Error! </strong>', '</div>');
-                ?>
-                <?php if(is_array($someMessage)){ ?>
-                    <div class="<?= $someMessage['type']; ?>">
-                        <?= $someMessage['message']; ?>
-                    </div>
-                <?php } ?>
+                <?php echo $this->helper_model->display_flash_errors(); ?>
+                <?php echo $this->helper_model->display_flash_success(); ?>
             <?php endif; ?>
 
             <form method="post" action="<?= base_url()."settings/accounts"?>">

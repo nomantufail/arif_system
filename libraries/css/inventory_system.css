@@ -41,3 +41,7 @@
 .credit_amount{
     color: red;
 }
+
+.sortable_link, .sortable_link:hover{
+    color: white;
+}

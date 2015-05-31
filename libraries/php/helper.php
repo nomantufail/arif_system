@@ -5,7 +5,26 @@
  * Date: 9/16/14
  * Time: 3:38 AM
  */
-
+function sortable_header($sortable_column_value, $type, $column_text)
+{
+    return '<th class="column_heading">'.sortable_link($sortable_column_value, $type, $column_text).'</th>';
+}
+function sortable_link($sortable_column_value, $type, $column_text)
+{
+    return '<a class="sortable_link" href="'.sorting_info($sortable_column_value).'"> <i class="'.sorting_icon($sortable_column_value,$type).'"> </i> '.$column_text.'</a>';
+}
+function sorting_info($column_name)
+{
+    $ci = & get_instance();
+    $sorting_info = $ci->helper_model->sorting_info($column_name);
+    return $sorting_info;
+}
+function sorting_icon($column_name, $type)
+{
+    $ci = & get_instance();
+    $sorting_icon = $ci->helper_model->sorting_icon($column_name, $type);
+    return $sorting_icon;
+}
 function current_time()
 {
     return Carbon::now(new DateTimeZone('Asia/Karachi'))->toDateTimeString();
@@ -39,6 +58,16 @@ function deleting_btn($key, $value, $btn_name)
 {
     echo '<form method="post" action="" onsubmit="return confirm_deleting()">';
     echo '<input type="hidden" name="'.$key.'" value="'.$value.'">';
+    echo '<button name="'.$btn_name.'" class="btn btn-danger btn-xs"><i class="fa fa-minus-circle"></i> Delete</button>';
+    echo '</form>';
+}
+function deleting_btn_test($keys, $btn_name)
+{
+    echo '<form method="post" action="" onsubmit="return confirm_deleting()">';
+    foreach($keys as $key => $value)
+    {
+        echo '<input type="hidden" name="'.$key.'" value="'.$value.'">';
+    }
     echo '<button name="'.$btn_name.'" class="btn btn-danger btn-xs"><i class="fa fa-minus-circle"></i> Delete</button>';
     echo '</form>';
 }

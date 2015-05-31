@@ -23,6 +23,7 @@ class App_voucher_Entry {
     public $purchase_price_per_item_for_sale;
     public $dr_cr;
     public $amount;
+    public $freight;
     public $description;
     public $inserted_at;
     public $updated_at;
@@ -34,6 +35,7 @@ class App_voucher_Entry {
     public function __construct(&$container = null)
     {
         $this->container = $container;
+        $this->freight = 0;
     }
 
 } 

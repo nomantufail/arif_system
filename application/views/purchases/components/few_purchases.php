@@ -70,7 +70,10 @@
                 <?php endif; ?>
                 <?php if($count == 1):?>
                     <td rowspan="<?=($num_invoice_items)?>" style="vertical-align: middle;">
-                        <?php deleting_btn('invoice_number', $record->id, 'delete_invoice') ?>
+                        <?php deleting_btn_test(array(
+                            'invoice_number'=>$record->id,
+                            'product'=>$entry->product->name,
+                        ), 'delete_invoice') ?>
                     </td>
                 <?php endif; ?>
             </tr>

@@ -68,7 +68,7 @@ class suppliers_model extends Parent_Model {
         $this->db->select("vouchers.id as voucher_id");
         $this->db->from('vouchers');
         $this->join_vouchers();
-        $this->active();
+        $this->active_vouchers();
         $this->db->where('voucher_entries.related_supplier',$supplier);
         $result = $this->db->get()->num_rows();
 
