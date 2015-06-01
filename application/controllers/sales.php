@@ -371,6 +371,7 @@ class Sales extends ParentController {
         }
     }
 
+    
     public function set_sort_info_for_required_section()
     {
         $area = $this->uri->segment(2);
