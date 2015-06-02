@@ -154,6 +154,7 @@ class Purchases_Model extends Parent_Model {
 
                 //setting data in the Trip_Product_Data object
                 $temp_invoice_item->id = $record->entry_id;
+                $temp_invoice_item->item_id = $record->item_id;
                 $temp_invoice_item->product = new Product(null, $record->product_name);
                 $temp_invoice_item->costPerItem = $record->cost_per_item;
                 $temp_invoice_item->quantity = $record->quantity;
@@ -212,6 +213,7 @@ class Purchases_Model extends Parent_Model {
 
             //setting data in the Trip_Product_Data object
             $temp_invoice_item->id = $record->entry_id;
+            $temp_invoice_item->item_id = $record->item_id;
             $temp_invoice_item->product = new Product(null, $record->product_name);
             $temp_invoice_item->costPerItem = $record->cost_per_item;
             $temp_invoice_item->quantity = $record->quantity;
@@ -265,6 +267,21 @@ class Purchases_Model extends Parent_Model {
         $raw_invoices = $this->db->get()->result();
         return $this->purchases_model->make_invoices_from_raw($raw_invoices);
     }
+
+    public function grouped_invoices_by_ids($ids)
+    {
+        $this->select_purchases_content();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active_vouchers();
+        $this->purchase_vouchers();
+        $this->with_credit_entries_only();
+        $this->db->where_in('vouchers.id', $ids);
+        $this->latest($this->table);
+        $raw_invoices = $this->db->get()->result();
+        //var_dump($raw_invoices); die();
+        return $this->purchases_model->make_grouped_invoices_from_raw($raw_invoices);
+    }
     public function invoices()
     {
         $this->select_purchases_content();
@@ -281,6 +298,7 @@ class Purchases_Model extends Parent_Model {
 
     public function few_invoices()
     {
+
         //fetching the vocuher ids
         $this->select_voucher_ids();
         $this->db->distinct();
@@ -358,9 +376,9 @@ class Purchases_Model extends Parent_Model {
     }
 
     public function find($id){
-        $result = $this->db->get_where($this->table, array('id'=>$id))->result();
-        if($result){
-            $record = $result[0];
+        $invoices = $this->grouped_invoices_by_ids(array($id,));
+        if(sizeof($invoices) > 0){
+            $record = $invoices[0];
             return $record;
         }else{
             return null;
@@ -463,6 +481,7 @@ class Purchases_Model extends Parent_Model {
             {
                 /*---------First ENTRY--------*/
                 $voucher_entry_1 = new App_voucher_Entry();
+                $voucher_entry_1->item_id = $i;
                 $voucher_entry_1->ac_title = $product;
                 $voucher_entry_1->ac_type = 'asset';
                 $voucher_entry_1->related_business = $this->admin_model->business_name();
@@ -476,6 +495,7 @@ class Purchases_Model extends Parent_Model {
 
                 /*---------Second ENTRY--------*/
                 $voucher_entry_2 = new App_voucher_Entry();
+                $voucher_entry_2->item_id = $i;
                 $voucher_entry_2->ac_title = $product;
                 $voucher_entry_2->ac_type = 'payable';
                 $voucher_entry_2->related_supplier = $this->input->post('supplier');
@@ -517,6 +537,190 @@ class Purchases_Model extends Parent_Model {
         {
             $this->db->trans_commit();
             return $voucher_inserted;
+        }
+        return false;
+    }
+
+
+    public function update_purchase_invoice($invoice_id){
+
+        include_once(APPPATH."models/helperClasses/App_Voucher.php");
+        include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
+
+        /**
+         * Fetching previous item ids of this invoice
+         **/
+        $previous_items_ids = $this->accounts_model->item_ids($invoice_id);
+        /*--------------------------------------------*/
+
+        $pannel_count = $this->input->post('pannel_count');
+
+        $voucher_data = array();
+        $voucher_data['voucher_date'] = $this->input->post('invoice_date');
+        $voucher_data['summary'] = $this->input->post('extra_info');
+        $voucher_data['tanker'] = $this->input->post('tanker');
+        $voucher_data['voucher_type'] = 'purchase';
+        /*--------------Lets the game begin---------------*/
+        $this->db->trans_begin();
+
+        /*----------- Updating voucher Data ---------*/
+        $this->editing_model->update_voucher(array(
+            'vouchers.id'=>$invoice_id,
+        ), $voucher_data);
+        /*---------------------------------------------------------------------*/
+
+        $current_item_ids = array();
+
+        $insertable_voucher_entries = array();
+        $stock_increase_entries = array();
+        $stock_decrease_entries = array();
+        for($i = 1; $i<$pannel_count; $i++)
+        {
+            $product = $this->input->post('product_'.$i);
+            $quantity = $this->input->post('quantity_'.$i);
+            $cost_per_item = $this->input->post('costPerItem_'.$i);
+
+            /* if product is empty than entry will not be added */
+            if($product != '')
+            {
+                /**
+                 * fetching current item ids
+                 **/
+                array_push($current_item_ids,$this->input->post('item_id_'.$i));
+                /*-------------------------*/
+
+                /**
+                 * First check if entry needs to be updated or inserted
+                 **/
+                if(in_array($this->input->post('item_id_'.$i), $previous_items_ids))
+                {
+                    // Item needs to be updated
+
+                    $voucher_entry_data = array();
+                    $voucher_entry_data['voucher_id'] = $invoice_id;
+                    $voucher_entry_data['ac_title'] = $product;
+                    $voucher_entry_data['cost_per_item'] = $cost_per_item;
+                    $voucher_entry_data['quantity'] = $quantity;
+                    $voucher_entry_data['amount'] = $cost_per_item * $quantity;
+
+                    /*----------- Updating voucher Entries ---------*/
+                    $this->editing_model->update_voucher_entries(array(
+                        'voucher_entries.voucher_id'=>$invoice_id,
+                        'voucher_entries.item_id'=>$this->input->post('item_id_'.$i),
+                    ),$voucher_entry_data);
+                    /*---------------------------------------------------------------------*/
+
+                    /*----------Managing Stack-------------*/
+                    $stock_decreasing_entry['product_name']=$this->input->post('old_product_'.$i);
+                    $stock_decreasing_entry['quantity']=$this->input->post('old_quantity_'.$i);
+                    $stock_decreasing_entry['tanker'] = $this->input->post('old_tanker');
+                    array_push($stock_decrease_entries, $stock_decreasing_entry);
+
+                    $stock_increasing_entry['product_name']=$product;
+                    $stock_increasing_entry['quantity']=$quantity;
+                    $stock_increasing_entry['tanker'] = $this->input->post('tanker');
+                    $stock_increasing_entry['cost_per_item'] = $cost_per_item;
+                    array_push($stock_increase_entries, $stock_increasing_entry);
+                    /*------------------------------------*/
+                }
+                else
+                {
+                    //item needs to be inserted
+                    /*---------First ENTRY--------*/
+                    $voucher_entry_1 = new App_voucher_Entry();
+                    $voucher_entry_1->voucher_id = $invoice_id;
+                    $voucher_entry_1->item_id = $this->input->post('item_id_'.$i);
+                    $voucher_entry_1->ac_title = $product;
+                    $voucher_entry_1->ac_type = 'asset';
+                    $voucher_entry_1->related_business = $this->admin_model->business_name();
+                    $voucher_entry_1->cost_per_item = $cost_per_item;
+                    $voucher_entry_1->quantity = $quantity;
+                    $voucher_entry_1->amount = $cost_per_item * $quantity;
+                    $voucher_entry_1->dr_cr = 1;
+
+                    array_push($insertable_voucher_entries, $voucher_entry_1);
+                    /*----------------------------------*/
+
+                    /*---------Second ENTRY--------*/
+                    $voucher_entry_2 = new App_voucher_Entry();
+                    $voucher_entry_2->voucher_id = $invoice_id;
+                    $voucher_entry_2->item_id = $this->input->post('item_id_'.$i);
+                    $voucher_entry_2->ac_title = $product;
+                    $voucher_entry_2->ac_type = 'payable';
+                    $voucher_entry_2->related_supplier = $this->input->post('supplier');
+                    $voucher_entry_2->cost_per_item = $cost_per_item;
+                    $voucher_entry_2->quantity = $quantity;
+                    $voucher_entry_2->amount = $cost_per_item * $quantity;
+                    $voucher_entry_2->dr_cr = 0;
+
+                    array_push($insertable_voucher_entries, $voucher_entry_2);
+                    /*----------------------------------*/
+
+                    /*----------Managing Stack-------------*/
+                    $stock_increasing_entry['product_name']=$product;
+                    $stock_increasing_entry['quantity']=$quantity;
+                    $stock_increasing_entry['tanker'] = $this->input->post('tanker');
+                    $stock_increasing_entry['cost_per_item'] = $cost_per_item;
+                    array_push($stock_increase_entries, $stock_increasing_entry);
+                    /*------------------------------------*/
+                }
+
+            }
+        }
+
+        /*----------- Updating related supplier in voucher entries ---------*/
+        $this->editing_model->update_voucher_entries(array(
+            'voucher_entries.voucher_id'=>$invoice_id,
+            'voucher_entries.related_supplier !='=>'',
+        ), array('related_supplier'=>$this->input->post('supplier')));
+        /*---------------------------------------------------------------------*/
+
+        /**
+         * inserting voucher entries which needs to be inserted
+         **/
+        if(sizeof($insertable_voucher_entries) > 0)
+        {
+            $this->accounts_model->insert_voucher_entries($insertable_voucher_entries);
+        }
+        /*-----------------------------------------------------*/
+
+        /**
+         * Updating stocks in the db
+         **/
+        $stock_decreased = $this->stock_model->decrease($stock_decrease_entries);
+        //var_dump($stock_decrease_entries);var_dump($stock_increase_entries); die();
+        $stock_increased = $this->stock_model->increase($stock_increase_entries, $invoice_id);
+        /*------------------------------------------------*/
+
+        /**
+         * deleting entries which should be deleted
+         **/
+        $deletable_ids = array();
+        foreach($previous_items_ids as $p_id)
+        {
+            if(!in_array($p_id, $current_item_ids))
+            {
+                array_push($deletable_ids, $p_id);
+            }
+        }
+        if(sizeof($deletable_ids) > 0)
+        {
+            $where = "voucher_entries.voucher_id = ".$invoice_id." ";
+            $where .=" AND voucher_entries.item_id in ('".join('\', \'',$deletable_ids)."')";
+
+            $this->deleting_model->safely_delete_purchase_invoice_items_where($where);
+        }
+        /*-------------------------------------------------------------------------*/
+
+        if($this->db->trans_status() == false || $invoice_id == false || $stock_decreased == false || $stock_increased == false)
+        {
+            $this->db->trans_rollback();
+            return false;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return $invoice_id;
         }
         return false;
     }

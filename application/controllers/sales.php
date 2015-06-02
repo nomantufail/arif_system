@@ -67,6 +67,35 @@ class Sales extends ParentController {
         $this->load->view('components/footer');
     }
 
+    public function edit_product_sale($id='')
+    {
+        if($id == '')
+        {
+            redirect(base_url()."sales/add_product_sale");
+        }
+        if($this->accounts_model->voucher_active($id) == false)
+        {
+            redirect(base_url()."sales/add_product_sale");
+        }
+        $headerData['title']='sale';
+        $this->bodyData['section'] = 'edit';
+        $this->bodyData['products'] = $this->products_model->get();
+        $this->bodyData['customers'] = $this->customers_model->get();
+
+        $this->bodyData['customers_balance'] = $this->accounts_model->customers_balance();
+        $this->bodyData['available_stock'] = $this->stock_model->get();
+        $this->bodyData['tankers'] = $this->tankers_model->get_busy();
+        $this->bodyData['invoice'] = $this->sales_model->find_product_sale($id);
+        $this->bodyData['invoice_number'] = $id;
+        $sales = $this->sales_model->few_product_sale_invoices();
+        $this->bodyData['sales']= $sales;
+        $this->bodyData['next_item_id'] = $this->accounts_model->next_item_id($id);
+
+        $this->load->view('components/header',$headerData);
+        $this->load->view('sales/product_sale/edit', $this->bodyData);
+        $this->load->view('components/footer');
+    }
+
     public function product_sale_history()
     {
         $headerData['title']= 'Sale Invoices';
@@ -267,6 +296,18 @@ class Sales extends ParentController {
                 }
             }else{
                 $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+        /**
+         * Update Product sale
+         **/
+        if(isset($_POST['update_product_sale']))
+        {
+            $saved_invoice = $this->sales_model->update_product_sale($_POST['invoice_id']);
+            if($saved_invoice != 0){
+                $this->helper_model->redirect_with_success('Invoice Saved Successfully!');
+            }else{
+                $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
             }
         }
 

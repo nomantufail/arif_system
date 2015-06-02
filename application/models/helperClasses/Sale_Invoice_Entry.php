@@ -9,6 +9,7 @@
 class Sale_Invoice_Entry {
 
     public $id;
+    public $item_id;
     public $product;
     public $quantity;
     public $salePricePerItem;

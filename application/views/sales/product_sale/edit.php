@@ -19,18 +19,43 @@ $default_row_counter = 1;
 </style>
 <script>
 
-    /*----------------------------------------------------------*/
+/* making array of available stock at this point */
 
-    /* making array of supplier balances at this point */
-    var SupplierBalance = {};
-    <?php foreach($suppliers as $supplier): ?>
-    <?php
-        $key = $supplier->name;
-        $value = (isset($suppliers_balance[$key]))?$suppliers_balance[$key]:0;
-    ?>
-    SupplierBalance["<?= $key ?>"] = "<?= $value ?>";
-    <?php endforeach; ?>
-    /*----------------------------------------------------------*/
+var Stock = {};
+<?php foreach($available_stock as $group): ?>
+<?php foreach($group as $stock): ?>
+<?php
+    $key = $stock->product_name.'_'.$stock->tanker;
+    $value = $stock->quantity;
+?>
+Stock["<?= $key ?>"] = "<?= $value ?>";
+<?php endforeach; ?>
+<?php endforeach; ?>
+/*----------------------------------------------------------*/
+
+/* making array of available stock at this point */
+var Purchase_Price = {};
+<?php foreach($available_stock as $group): ?>
+<?php foreach($group as $stock): ?>
+<?php
+    $key = $stock->product_name.'_'.$stock->tanker;
+    $value = $stock->price_per_unit;
+?>
+Purchase_Price["<?= $key ?>"] = "<?= $value ?>";
+<?php endforeach; ?>
+<?php endforeach; ?>
+/*----------------------------------------------------------*/
+
+/* making array of Customer balances at this point */
+var CustomerBalance = {};
+<?php foreach($customers as $customer): ?>
+<?php
+    $key = $customer->name;
+    $value = (isset($customers_balance[$key]))?$customers_balance[$key]:0;
+?>
+CustomerBalance["<?= $key ?>"] = "<?= $value ?>";
+<?php endforeach; ?>
+/*----------------------------------------------------------*/
 
 
     /**
@@ -62,16 +87,20 @@ $default_row_counter = 1;
             newRowContent+='</select>';
             newRowContent+='<input type="hidden" value="'+next_item_id+'" name="item_id_'+row_num+'" id="item_id_'+row_num+'">';
             next_item_id++;
+
+            newRowContent+='<br><span style="color: #808080;">Available: </span><span style="color: gray;" id="available_'+row_num+'"></span>';
             newRowContent+='</td>';
             newRowContent+='<td><input type="number" step="any" name="quantity_'+row_num+'" id="quantity_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')"></td>';
-            newRowContent+='<td><input type="number" step="any" name="costPerItem_'+row_num+'" id="costPerItem_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')"></td>';
+            newRowContent+='<td>' +
+                            '<input type="number" step="any" name="salePricePerItem_'+row_num+'" id="salePricePerItem_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')">' +
+                            '<br><span style="color: #808080;">Purchase Price: </span><span style="color: gray;" id="purchase_price_per_unit_'+row_num+'"></span>' +
+                           '</td>';
             newRowContent+='<td><span id="total_cost_label_'+row_num+'"></span></td>';
             newRowContent+= '<td>' +
                             '<span onclick="hide_row('+row_num+')" style="color: red; cursor: pointer; font-weight: bold;" id="cross_'+row_num+'"></span>' +
                             '<span onclick="display_row('+(parseInt(row_num)+1)+')" style="margin-left: 20px; color: green; cursor: pointer; font-weight: bold;" id="add_row_'+row_num+'"><i class="fa fa-plus-circle"></i></span>' +
                             '</td>';
             newRowContent+='</tr>';
-
             $(".products_table_body").append(newRowContent);
             $(".select_box").select2();
             var $productSelect = $(".product_select_box");
@@ -105,123 +134,170 @@ $default_row_counter = 1;
         }
     }
 
-    function grand_total_or_paid_changed()
-    {
-        var grand_total_temp = grand_total_cost();
-        document.getElementById("grand_total_cost_label").innerHTML = to_rupees(grand_total_temp);
-    }
+function grand_total_or_received_changed()
+{
+    var grand_total_temp = grand_total_cost();
+    document.getElementById("grand_total_cost_label").innerHTML = to_rupees(grand_total_temp);
+}
 
-    function total_cost(row_num)
+function check_for_stock_availability(row_number)
+{
+    var tanker_selected_index = document.getElementById("tanker").selectedIndex;
+    var tanker = document.getElementById("tanker").options[tanker_selected_index].value;
+
+    var product_selected_index = document.getElementById("product_"+row_number).selectedIndex;
+    var product = document.getElementById("product_"+row_number).options[product_selected_index].value;
+    var key = product+"_"+tanker;
+    var quantity = Stock[key];
+
+   /**
+    * this section was added in editing area only
+    **/
+    var old_quantity = document.getElementById("old_quantity_"+row_number).value;
+    quantity= parseFloat(quantity) + parseFloat(old_quantity);
+   /*------------------------------------------*/
+
+    document.getElementById("quantity_"+row_number).max = quantity;
+    document.getElementById("available_"+row_number).innerHTML = quantity;
+}
+
+function check_for_purchase_price(row_number)
+{
+    var tanker_selected_index = document.getElementById("tanker").selectedIndex;
+    var tanker = document.getElementById("tanker").options[tanker_selected_index].value;
+
+    var product_selected_index = document.getElementById("product_"+row_number).selectedIndex;
+    var product = document.getElementById("product_"+row_number).options[product_selected_index].value;
+    var key = product+"_"+tanker;
+    var purchase_price = Purchase_Price[key];
+    document.getElementById("purchase_price_per_unit_"+row_number).innerHTML = to_rupees(purchase_price);
+}
+
+function total_cost(row_num)
+{
+    var qty = document.getElementById("quantity_"+row_num).value;
+    var salePricePerItem = document.getElementById("salePricePerItem_"+row_num).value;
+    var total_cost = limit_number(parseFloat(qty)*parseFloat(salePricePerItem));
+    if(isNaN(total_cost))
     {
-        var qty = document.getElementById("quantity_"+row_num).value;
-        var costPerItem = document.getElementById("costPerItem_"+row_num).value;
-        var total_cost = parseFloat(qty)*parseFloat(costPerItem);
-        total_cost = limit_number(total_cost);
-        if(isNaN(total_cost))
+        total_cost = 0;
+    }
+    return total_cost;
+}
+function grand_total_cost()
+{
+    var pannel_count = document.getElementById("pannel_count").value;
+    var grand_total_cost = 0;
+    for(i = 1; i < pannel_count; i++)
+    {
+        var product_selected_index = document.getElementById("product_"+i).selectedIndex;
+        var selected_product = document.getElementById("product_"+i).options[product_selected_index].value;
+        if(selected_product != '' && document.getElementById('row_'+i).style.display == '')
         {
-            total_cost = 0;
+            grand_total_cost += total_cost(i);
         }
-        return total_cost;
     }
-    function grand_total_cost()
-    {
-        var pannel_count = document.getElementById("pannel_count").value;
-        var grand_total_cost = 0;
-        for(i = 1; i < pannel_count; i++)
-        {
-            var product_selected_index = document.getElementById("product_"+i).selectedIndex;
-            var selected_product = document.getElementById("product_"+i).options[product_selected_index].value;
-            if(selected_product != '' && document.getElementById('row_'+i).style.display == '')
-            {
-                grand_total_cost += total_cost(i);
-            }
-        }
-        return grand_total_cost;
-    }
+    return grand_total_cost;
+}
 
-    function numbers_changed(row_num)
-    {
-        var total_cost_temp = total_cost(row_num);
-        document.getElementById("total_cost_label_"+row_num).innerHTML = to_rupees(total_cost_temp);
-        grand_total_or_paid_changed();
-    }
+function numbers_changed(row_num)
+{
 
-    function supplier_changed(e)
+    var total_cost_temp = total_cost(row_num);
+    document.getElementById("total_cost_label_"+row_num).innerHTML = to_rupees(total_cost_temp);
+    grand_total_or_received_changed();
+}
+function tanker_changed(e)
+{
+    var pannel_count = document.getElementById("pannel_count");
+    for(var i = 1; i < pannel_count.value; i++)
     {
-        var id = (e == undefined)?'supplier':e.params.data.element.parentElement.id;
-        var supplier_selected_index = document.getElementById("supplier").selectedIndex;
-        var supplier = document.getElementById("supplier").options[supplier_selected_index].value;
-        document.getElementById("supplier_balance").innerHTML = to_rupees(SupplierBalance[supplier]);
+        check_for_stock_availability(i);
+        check_for_purchase_price(i);
     }
+}
+function customer_changed(e)
+{
+    var id = (e == undefined)?'customer':e.params.data.element.parentElement.id;
+    var customer_selected_index = document.getElementById("customer").selectedIndex;
+    var customer = document.getElementById("customer").options[customer_selected_index].value;
+    document.getElementById("customer_balance").innerHTML = to_rupees(CustomerBalance[customer]);
+}
 
-    function product_changed(e)
+function product_changed(e, id)
+{
+    if(id == undefined)
     {
         var id = e.params.data.element.parentElement.id;
         id = id.split("_");
         id = id[1];
-        //display_row(parseInt(id)+1);
-        grand_total_or_paid_changed();
     }
 
-    function place_cross(row_num)
-    {
-        document.getElementById('cross_'+row_num).innerHTML='X';
-    }
-    function remove_cross(row_num)
-    {
-        document.getElementById('cross_'+row_num).innerHTML='';
-    }
+    check_for_stock_availability(id);
+    check_for_purchase_price(id);
+    //display_row(parseInt(id)+1);
+    grand_total_or_received_changed();
+}
 
-    function validate_purchase_invoice_form()
-    {
-        pannel_count_value = parseInt(pannel_count.value);
-        num_rows = pannel_count_value-1;
+function place_cross(row_num)
+{
+    document.getElementById('cross_'+row_num).innerHTML='X';
+}
+function remove_cross(row_num)
+{
+    document.getElementById('cross_'+row_num).innerHTML='';
+}
 
-        /* Checking if same product is used twice or not */
-        for(var i =0; i<num_rows; i++)
+function validate_product_sale_invoice_form()
+{
+    pannel_count_value = parseInt(pannel_count.value);
+    num_rows = pannel_count_value-1;
+
+    /* Checking if same product is used twice or not */
+    for(var i =0; i<num_rows; i++)
+    {
+        var product_selected_index = document.getElementsByClassName("product_select_box")[i].selectedIndex;
+        var product = document.getElementsByClassName("product_select_box")[i].options[product_selected_index].value;
+
+        for(var c =0; c<num_rows; c++)
         {
-            var product_selected_index = document.getElementsByClassName("product_select_box")[i].selectedIndex;
-            var product = document.getElementsByClassName("product_select_box")[i].options[product_selected_index].value;
+            var product_selected_index2 = document.getElementsByClassName("product_select_box")[c].selectedIndex;
+            var product2 = document.getElementsByClassName("product_select_box")[c].options[product_selected_index2].value;
 
-            for(var c =0; c<num_rows; c++)
+            if(product == product2 && i != c)
             {
-                var product_selected_index2 = document.getElementsByClassName("product_select_box")[c].selectedIndex;
-                var product2 = document.getElementsByClassName("product_select_box")[c].options[product_selected_index2].value;
-
-                if(product == product2 && i != c)
-                {
-                    alert("Error! Same product cannot be used twice.");
-                    return false;
-                }
+                alert("Error! Same product cannot be used twice.");
+                return false;
             }
         }
-        /*----------------------------------------------------*/
-
-        /* Checking if any product is selected or not */
-        var is_any_product_selected = false;
-        for(var i =0; i<num_rows; i++)
-        {
-            var product_selected_index = document.getElementsByClassName("product_select_box")[i].selectedIndex;
-            var product = document.getElementsByClassName("product_select_box")[i].options[product_selected_index].value;
-            if(product != '')
-            {
-                is_any_product_selected = true;
-            }
-        }
-        if(is_any_product_selected == false)
-        {
-            alert("Error! Please Select atleast one product to make this invoice");
-            return false;
-        }
-        /*----------------------------------------------------*/
-
-
-
-        return true;
     }
+    /*----------------------------------------------------*/
+
+    /* Checking if any product is selected or not */
+    var is_any_product_selected = false;
+    for(var i =0; i<num_rows; i++)
+    {
+        var product_selected_index = document.getElementsByClassName("product_select_box")[i].selectedIndex;
+        var product = document.getElementsByClassName("product_select_box")[i].options[product_selected_index].value;
+        if(product != '')
+        {
+            is_any_product_selected = true;
+        }
+    }
+    if(is_any_product_selected == false)
+    {
+        alert("Error! Please Select atleast one product to make this invoice");
+        return false;
+    }
+    /*----------------------------------------------------*/
+
+
+
+    return true;
+}
 
     $( document ).ready(function() {
-        supplier_changed();
+        customer_changed();
 
        /**
         * calculating amounts
@@ -229,6 +305,7 @@ $default_row_counter = 1;
         for(var i = 1; i < <?= sizeof($invoice->entries)+1 ?>; i++)
         {
             numbers_changed(i);
+            product_changed(null, i);
         }
         /*----------------------*/
     });
@@ -239,7 +316,7 @@ $default_row_counter = 1;
     <div class="container-fluid">
         <div class="row">
             <?php
-            include_once(APPPATH."views/purchases/components/nav_bar.php");
+            include_once(APPPATH."views/sales/product_sale/components/nav_bar.php");
             ?>
         </div>
 
@@ -256,9 +333,8 @@ $default_row_counter = 1;
             <?php } ?>
         </div>
         <!--notifications area ends-->
-
         <div class="row actual_body_contents" style="margin-top: 20px;">
-            <form method="post" onsubmit="return validate_purchase_invoice_form()">
+            <form method="post" onsubmit="return validate_product_sale_invoice_form()">
                 <input type="hidden" name="invoice_id" value="<?= $invoice_number ?>">
                 <div class="row">
                     <div class="col-sm-12">
@@ -270,17 +346,17 @@ $default_row_counter = 1;
                         <table style="width: 100%;" class="">
                             <tr>
                                 <td>
-                                    <span><b>Supplier:</b></span><br>
-                                    <select class="select_box suppliers_select_box" style="width: 200px;" name="supplier" id="supplier">
-                                        <?php foreach($suppliers as $supplier):?>
-                                            <option value="<?= $supplier->name ?>" <?= ($invoice->supplier->name == $supplier->name)?'selected':'' ?>><?= $supplier->name ?></option>
+                                    <span><b>Customer:</b></span><br>
+                                    <select class="select_box customers_select_box" style="width: 200px;" name="customer" id="customer">
+                                        <?php foreach($customers as $customer):?>
+                                            <option value="<?= $customer->name ?>"  <?= ($invoice->customer->name == $customer->name)?'selected':'' ?>><?= $customer->name ?></option>
                                         <?php endforeach; ?>
                                     </select><br>
-                                    <span style="color: #808080;">Balance: </span><span style="color: gray;" id="supplier_balance"></span>
+                                    <span style="color: #808080;">Balance: </span><span style="color: gray;" id="customer_balance"></span>
                                 </td>
                                 <td>
                                     <span><b>Tanker:</b></span><br>
-                                    <select class="select_box" name="tanker" style="min-width: 70px;">
+                                    <select class="select_box tanker_select_box" name="tanker" id="tanker" style="min-width: 70px;">
                                         <?php
                                         if(!in_objects('number',$invoice->tanker,$tankers)){
                                             echo '<option value="'.$invoice->tanker.'" selected>'.$invoice->tanker.'</option>';
@@ -295,14 +371,14 @@ $default_row_counter = 1;
 
                                 <td>
                                     <span><b>Invoice Date:</b></span><br>
-                                    <input class="form-control" value="<?= $invoice->date; ?>" style="width: 200px;" type="date" name="invoice_date">
+                                    <input class="form-control" value="<?= $invoice->date ?>" style="width: 200px; " type="date" name="invoice_date">
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
 
-                <div class="row" style="margin-top: 20px;">
+                <div class="row" style="margin-top: 10px;">
 
                     <div class="row">
 
@@ -313,8 +389,8 @@ $default_row_counter = 1;
                                 <tr style="background-color: lightblue;">
                                     <th style="width: 25%;">Product</th>
                                     <th style="width: 12%;">Qty</th>
-                                    <th style="width: 12%;">Cst/item</th>
-                                    <th style="width: 12%;">Total/Cst</th>
+                                    <th style="width: 12%;">Sale Price / Item</th>
+                                    <th style="width: 12%;">Total Price</th>
                                     <th style="width: 10%;"></th>
                                 </tr>
                                 </thead>
@@ -323,6 +399,7 @@ $default_row_counter = 1;
                                 $row_counter = 1;
                                 ?>
                                 <?php foreach($invoice->entries as $entry):?>
+
                                     <tr id="row_<?= $row_counter ?>">
                                         <td>
                                             <select class="select_box product_select_box" style="width: 200px;" name="product_<?= $row_counter ?>" id="product_<?= $row_counter ?>">
@@ -330,26 +407,31 @@ $default_row_counter = 1;
                                                 <?php foreach($products as $product):?>
                                                     <option value="<?= $product->name ?>" <?= ($entry->product->name == $product->name)?'selected':'' ?>><?= $product->name ?></option>
                                                 <?php endforeach; ?>
-                                            </select>
+                                            </select><br>
                                             <input value="<?= $entry->item_id ?>" type="hidden" step="any" name="item_id_<?= $row_counter ?>" id="item_id_<?= $row_counter ?>">
                                             <input type="hidden" name="old_product_<?= $row_counter ?>" value="<?= $entry->product->name ?>">
+                                            <span style="color: #808080;">Available: </span><span style="color: gray;" id="available_<?= $row_counter ?>"></span>
                                         </td>
                                         <td>
                                             <input value="<?= $entry->quantity ?>" type="number" step="any" name="quantity_<?= $row_counter ?>" id="quantity_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
-                                            <input type="hidden" name="old_quantity_<?= $row_counter ?>" value="<?= $entry->quantity ?>">
+                                            <input type="hidden" id="old_quantity_<?= $row_counter ?>" name="old_quantity_<?= $row_counter ?>" value="<?= $entry->quantity ?>">
                                         </td>
                                         <td>
-                                            <input value="<?= $entry->costPerItem ?>" type="number" step="any" name="costPerItem_<?= $row_counter ?>" id="costPerItem_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
-                                            <input type="hidden" name="old_costPerItem_<?= $row_counter ?>" value="<?= $entry->costPerItem ?>">
+                                            <input value="<?= $entry->salePricePerItem ?>" type="number" step="any" name="salePricePerItem_<?= $row_counter ?>" id="salePricePerItem_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
+                                            <br>
+                                            <input type="hidden" name="old_salePricePerItem_<?= $row_counter ?>" value="<?= $entry->salePricePerItem ?>">
+                                            <span style="color: #808080;">Purchase Price: </span><span style="color: gray;" id="purchase_price_per_unit_<?= $row_counter ?>"></span>
                                         </td>
                                         <td><span id="total_cost_label_<?= $row_counter ?>"></span></td>
                                         <td>
-                                            <span onclick="hide_row(<?= $row_counter ?>)" style="margin-left: 10px; color: red; cursor: pointer; font-weight: bold;" id="cross_<?= $row_counter ?>"><?= (($row_counter == $default_row_counter)?'':'X') ?></span>
+                                            <span onclick="hide_row(<?= $row_counter ?>)" style="color: red; cursor: pointer; font-weight: bold;" id="cross_<?= $row_counter ?>"><?= (($row_counter == $default_row_counter)?'':'') ?></span>
                                             <span onclick="display_row(<?= $row_counter+1 ?>)" style="margin-left: 10px; color: green; cursor: pointer; font-weight: bold;" id="add_row_<?= $row_counter ?>"><i class="fa fa-plus-circle"></i></span>
                                         </td>
                                     </tr>
+
                                     <?php $row_counter++; ?>
                                 <?php endforeach; ?>
+
                                 </tbody>
                                 <tfoot>
                                 <tr>
@@ -358,7 +440,6 @@ $default_row_counter = 1;
                                     </td>
                                 </tr>
                                 </tfoot>
-
                             </table>
 
                         </div>
@@ -366,7 +447,7 @@ $default_row_counter = 1;
                     <div class="row">
                         <div class="col-lg-12" style="margin:0px;">
                             <label class="" style="font-size: 18px;">Other Information:</label>
-                            <textarea class="form-control" name="extra_info"><?= $invoice->summary ?></textarea>
+                            <textarea class="form-control" name="extra_info"></textarea>
                         </div>
                     </div>
                     <div class="row" style="padding-top: 10px;">
@@ -374,20 +455,18 @@ $default_row_counter = 1;
                             <section style="font-size: 20px; font-weight: normal; color: red;">Total Cost: <span id="grand_total_cost_label">0</span> Rs.</section>
                         </div>
                         <div class="col-md-4" style="margin: 0px; float: right;">
-                            <button name="update_credit_purchase" class="btn btn-success" style="font-size: 20px;"><i class="fa fa-save" style="color: white;"></i> Save Invoice</button>
+                            <button name="update_product_sale" class="btn btn-success" style="font-size: 20px;"><i class="fa fa-save" style="color: white;"></i> Save Invoice</button>
                         </div>
                     </div>
-
                 </div>
             </form>
 
             <div class="row" style="margin-top: 20px;">
                 <?php
-                include_once(APPPATH."views/purchases/components/few_purchases.php");
+                include_once(APPPATH."views/sales/product_sale/components/few_sales.php");
                 ?>
             </div>
         </div>
-
 
 
     </div>

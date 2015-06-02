@@ -230,6 +230,18 @@ class Editing_Model extends Parent_Model {
         );
         $this->db->update('voucher_entries', $data);
     }
+
+    public function update_voucher($where, $data)
+    {
+        $this->db->where($where);
+        $this->db->update('vouchers',$data);
+    }
+
+    public function update_voucher_entries($where, $data)
+    {
+        $this->db->where($where);
+        $this->db->update('voucher_entries',$data);
+    }
 }
 
 ?>

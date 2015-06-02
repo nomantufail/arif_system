@@ -64,7 +64,43 @@ class Deleting_Model extends Parent_Model {
         return true;
     }
 
-    public function delete_purchase_invoice_item($invoice_number, $product)
+
+    public function safely_delete_purchase_invoice_items_where($where)
+    {
+        $this->db->select('voucher_entries.ac_title as product_name, voucher_entries.quantity,
+            vouchers.tanker,
+        ');
+        $this->join_vouchers();
+        $this->active_vouchers();
+        $this->db->where($where);
+        $this->purchase_vouchers();
+        $this->with_debit_entries_only();
+        $result = $this->db->get('vouchers')->result();
+
+        if(sizeof($result) > 0)
+        {
+            $stock_entries = array();
+
+            foreach($result as $entry)
+            {
+                /*----------Managing Stack-------------*/
+                $stock_entry['product_name']=$entry->product_name;
+                $stock_entry['quantity']=$entry->quantity;
+                $stock_entry['tanker'] = $entry->tanker;
+                array_push($stock_entries, $stock_entry);
+                /*------------------------------------*/
+            }
+
+            $this->db->trans_start();
+            $this->stock_model->decrease($stock_entries);
+            $this->deleting_model->safely_delete_voucher_items_where($where);
+            return $this->db->trans_complete();
+
+        }
+        return true;
+    }
+
+    public function delete_purchase_invoice_item($invoice_number, $item_id)
     {
         $this->db->select('voucher_entries.ac_title as product_name, voucher_entries.quantity,
             vouchers.tanker,
@@ -72,7 +108,7 @@ class Deleting_Model extends Parent_Model {
         $this->join_vouchers();
         $this->active_vouchers();
         $this->db->where('vouchers.id',$invoice_number);
-        $this->db->where('voucher_entries.ac_title',$product);
+        $this->db->where('voucher_entries.item_id',$item_id);
         $this->with_debit_entries_only();
         $result = $this->db->get('vouchers')->result();
 
@@ -91,7 +127,7 @@ class Deleting_Model extends Parent_Model {
             $this->db->trans_start();
             $this->stock_model->decrease($stock_entries);
             $this->deleting_model->safely_delete_voucher_items_where(array(
-                'voucher_entries.ac_title'=>$entry->product_name,
+                'voucher_entries.item_id'=>$item_id,
                 'voucher_entries.voucher_id'=>$invoice_number,
             ));
             return $this->db->trans_complete();
@@ -201,6 +237,62 @@ class Deleting_Model extends Parent_Model {
                 'voucher_entries.ac_title'=>$entry->product_name,
                 'voucher_entries.voucher_id'=>$invoice_number,
             ));
+            return $this->db->trans_complete();
+
+        }
+        return true;
+    }
+
+    public function safely_delete_sale_invoice_items_where($where)
+    {
+        $this->db->select('voucher_entries.ac_title as product_name, voucher_entries.quantity,
+            vouchers.tanker,
+        ');
+        $this->join_vouchers();
+        $this->active_vouchers();
+        $this->db->where($where);
+        $this->with_debit_entries_only();
+        $result = $this->db->get('vouchers')->result();
+
+        if(sizeof($result) > 0)
+        {
+
+            $stock_entries = array();
+            $purchase_id = 0;
+
+            foreach($result as $entry)
+            {
+                /*----------Managing Stack-------------*/
+
+                //getting the price per unit
+                $previous_stock = $this->stock_model->get_where(array('price_per_unit','purchase_id'), array(
+                    'products.name'=>$entry->product_name,
+                    'stock.tanker'=>$entry->tanker,
+                ));
+                $cost_per_item = 0;
+                if(sizeof($previous_stock) > 0)
+                {
+                    $cost_per_item = $previous_stock[0]->price_per_unit;
+                    $purchase_id = $previous_stock[0]->purchase_id;
+                    if($purchase_id == 0)
+                    {
+                        redirect(page_url());die();
+                    }
+                }
+
+                /*----------------------------------------*/
+                $stock_entry['product_name']=$entry->product_name;
+                $stock_entry['quantity']=$entry->quantity;
+                $stock_entry['tanker'] = $entry->tanker;
+                $stock_entry['cost_per_item'] = $cost_per_item;
+                array_push($stock_entries, $stock_entry);
+                /*------------------------------------*/
+            }
+
+
+            $this->db->trans_start();
+            $this->stock_model->increase($stock_entries, $purchase_id);
+            $this->deleting_model->safely_delete_voucher_items_where($where);
             return $this->db->trans_complete();
 
         }

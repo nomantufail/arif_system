@@ -308,6 +308,7 @@ class Accounts_Model extends Parent_Model {
         {
             $voucher_entry = array(
                 'voucher_id'=>$voucher_id,
+                'item_id'=>$entry->item_id,
                 'ac_title'=>$entry->ac_title,
                 'ac_sub_title'=>$entry->ac_sub_title,
                 'ac_type'=>$entry->ac_type,
@@ -328,8 +329,8 @@ class Accounts_Model extends Parent_Model {
         }
 
         /**
-        * Checking voucher entries are validated or not!
-        **/
+         * Checking voucher entries are validated or not!
+         **/
         if($this->db->trans_status() == false
             || sizeof($voucher_entries)%2 != 0
             || sizeof($voucher_entries) == 0
@@ -342,6 +343,104 @@ class Accounts_Model extends Parent_Model {
 
         /*--------Inserting The Voucher Entries-----------*/
         $this->db->insert_batch('voucher_entries',$voucher_entries);
+        /*------------------------------------------------*/
+
+        if($this->db->trans_status() == false)
+        {
+            return false;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            return $voucher_id;
+        }
+
+        return false;
+    }
+
+    public function insert_voucher_entries($voucher_entries)
+    {
+        $insertable_entries = array();
+        foreach($voucher_entries as $entry)
+        {
+            $voucher_entry = array(
+                'voucher_id'=>$entry->voucher_id,
+                'item_id'=>$entry->item_id,
+                'ac_title'=>$entry->ac_title,
+                'ac_sub_title'=>$entry->ac_sub_title,
+                'ac_type'=>$entry->ac_type,
+                'related_customer'=>$entry->related_customer,
+                'related_business'=>$entry->related_business,
+                'related_other_agent'=>$entry->related_other_agent,
+                'related_supplier'=>$entry->related_supplier,
+                'related_tanker'=>$entry->related_tanker,
+                'quantity'=>$entry->quantity,
+                'cost_per_item'=>$entry->cost_per_item,
+                'purchase_price_per_item_for_sale'=>$entry->purchase_price_per_item_for_sale,
+                'amount'=>$entry->amount,
+                'freight'=>$entry->freight,
+                'dr_cr'=>$entry->dr_cr,
+                'description'=>$entry->description,
+            );
+            array_push($insertable_entries, $voucher_entry);
+        }
+        $this->db->insert_batch('voucher_entries',$insertable_entries);
+    }
+    public function update_voucher($voucher)
+    {
+        $this->db->trans_begin();
+
+        $voucher_data = array(
+            'voucher_date'=>$voucher->voucher_date,
+            'summary'=>$voucher->summary,
+            'tanker'=>$voucher->tanker,
+            'product_sale_id'=>$voucher->product_sale_id,
+            'product_for_freight_voucher'=>$voucher->product_for_freight_voucher,
+            'voucher_type'=>$voucher->voucher_type,
+        );
+        $this->db->where('vouchers.id',$voucher->id);
+        $this->db->update('vouchers',$voucher_data);
+        $voucher_id = $voucher->id;
+
+        $voucher_entries = array();
+        foreach($voucher->entries as $entry)
+        {
+            $voucher_entry = array(
+                'voucher_id'=>$voucher_id,
+                'ac_title'=>$entry->ac_title,
+                'ac_sub_title'=>$entry->ac_sub_title,
+                'ac_type'=>$entry->ac_type,
+                'related_customer'=>$entry->related_customer,
+                'related_business'=>$entry->related_business,
+                'related_other_agent'=>$entry->related_other_agent,
+                'related_supplier'=>$entry->related_supplier,
+                'related_tanker'=>$entry->related_tanker,
+                'quantity'=>$entry->quantity,
+                'cost_per_item'=>$entry->cost_per_item,
+                'purchase_price_per_item_for_sale'=>$entry->purchase_price_per_item_for_sale,
+                'amount'=>$entry->amount,
+                'freight'=>$entry->freight,
+                'dr_cr'=>$entry->dr_cr,
+                'description'=>$entry->description,
+            );
+            array_push($voucher_entries, $voucher_entry);
+        }
+
+        /**
+         * Checking voucher entries are validated or not!
+         **/
+        if($this->db->trans_status() == false
+            || sizeof($voucher_entries)%2 != 0
+            || sizeof($voucher_entries) == 0
+            || $voucher->balance() != 0)
+        {
+            $this->db->trans_rollback();
+            return false;
+        }
+        /*----------Check Complete--------------*/
+
+        /*--------Updating The Voucher Entries-----------*/
+        $this->db->update_batch('voucher_entries',$voucher_entries,'id');
         /*------------------------------------------------*/
 
         if($this->db->trans_status() == false)
@@ -497,6 +596,42 @@ class Accounts_Model extends Parent_Model {
 
         return $profit_loss_data;
     }
+
+    public function next_item_id($voucher_id)
+    {
+        $this->db->select('(MAX(voucher_entries.item_id)+1)as next_item_id');
+        $this->db->where('voucher_entries.voucher_id',$voucher_id);
+        $result = $this->db->get('voucher_entries')->result();
+        $next_item_id = 1;
+        if(sizeof($result) > 0)
+        {
+            $next_item_id = $result[0]->next_item_id;
+        }
+        return $next_item_id;
+    }
+
+    public function item_ids($id)
+    {
+        $this->db->select('voucher_entries.item_id');
+        $this->db->distinct();
+        $this->db->where('voucher_entries.voucher_id',$id);
+        $result = $this->db->get('voucher_entries')->result();
+        return property_to_array('item_id',$result);
+    }
+
+    public function voucher_active($id)
+    {
+        $this->db->select('COUNT(vouchers.id) as num_of_vouchers');
+        $this->active_parent_vouchers();
+        $this->db->where('vouchers.id',$id);
+        $result = $this->db->get('vouchers')->result();
+        if($result[0]->num_of_vouchers > 0)
+        {
+            return true;
+        }
+        return false;
+    }
 }
+
 
 ?>

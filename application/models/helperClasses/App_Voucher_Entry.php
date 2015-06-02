@@ -9,6 +9,7 @@
 class App_voucher_Entry {
     //properties
     public $id;
+    public $item_id;    // a unique id for each selling and purchasing item for current invoice
     public $voucher_id;
     public $ac_title;
     public $ac_sub_title;
@@ -36,6 +37,7 @@ class App_voucher_Entry {
     {
         $this->container = $container;
         $this->freight = 0;
+        $this->item_id = 0;
     }
 
 } 

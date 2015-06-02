@@ -27,7 +27,7 @@ class Purchases extends ParentController {
             {
                 $this->bodyData['section'] = 'credit_purchase';
             }
-            redirect(base_url()."purchase/credit_purchase");
+            redirect(base_url()."purchases/credit_purchase");
         }
     }
 
@@ -47,19 +47,27 @@ class Purchases extends ParentController {
         $this->load->view('purchases/credit/make', $this->bodyData);
         $this->load->view('components/footer');
     }
-    public function edit()
+    public function edit($id='')
     {
+        if($id == '')
+        {
+            redirect(base_url()."purchases/credit_purchase");
+        }
+        if($this->accounts_model->voucher_active($id) == false)
+        {
+            redirect(base_url()."purchases/credit_purchase");
+        }
         $headerData['title']='Purchase';
         $this->bodyData['products'] = $this->products_model->get();
         $this->bodyData['suppliers'] = $this->suppliers_model->get();
 
-
-
         $this->bodyData['suppliers_balance'] = $this->accounts_model->suppliers_balance();
         $this->bodyData['tankers'] = $this->tankers_model->get_free();
-        $this->bodyData['invoice_number'] = $this->purchases_model->next_invoice();
+        $this->bodyData['invoice_number'] = $id;
+        $this->bodyData['invoice'] = $this->purchases_model->find($id);
         $purchases = $this->purchases_model->few_invoices();
         $this->bodyData['purchases']= $purchases;
+        $this->bodyData['next_item_id'] = $this->accounts_model->next_item_id($id);
 
         $this->load->view('components/header',$headerData);
         $this->load->view('purchases/credit/edit', $this->bodyData);
@@ -134,7 +142,7 @@ class Purchases extends ParentController {
          **/
         if(isset($_POST['delete_invoice'])){
             if($this->form_validation->run('delete_purchase_invoice') == true){
-                if( $this->deleting_model->delete_purchase_invoice_item($_POST['invoice_number'], $_POST['product']) == true){
+                if( $this->deleting_model->delete_purchase_invoice_item($_POST['invoice_number'], $_POST['item_id']) == true){
                     $this->helper_model->redirect_with_success('Invoice Removed Successfully!');
                 }else{
                     $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
@@ -161,6 +169,19 @@ class Purchases extends ParentController {
                 }
             }else{
                 $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+
+        /**
+         * Update purchase invoice on request
+         **/
+        if(isset($_POST['update_credit_purchase']))
+        {
+            $saved_invoice = $this->purchases_model->update_purchase_invoice($_POST['invoice_id']);
+            if($saved_invoice != 0){
+                $this->helper_model->redirect_with_success('Invoice Saved Successfully!');
+            }else{
+                $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
             }
         }
     }

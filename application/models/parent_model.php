@@ -200,7 +200,7 @@ class Parent_Model extends CI_Model {
             vouchers.tanker,
             voucher_entries.related_customer, voucher_entries.ac_title as product_name, voucher_entries.quantity,
             voucher_entries.cost_per_item, voucher_entries.amount,
-            voucher_entries.id as entry_id,
+            voucher_entries.id as entry_id, voucher_entries.item_id,
 
         ");
     }
@@ -240,7 +240,7 @@ class Parent_Model extends CI_Model {
             vouchers.tanker,
             voucher_entries.related_supplier, voucher_entries.ac_title as product_name, voucher_entries.quantity,
             voucher_entries.cost_per_item, voucher_entries.amount,
-            voucher_entries.id as entry_id,
+            voucher_entries.id as entry_id, voucher_entries.item_id,
 
         ");
     }

@@ -5,6 +5,28 @@
  * Date: 9/16/14
  * Time: 3:38 AM
  */
+
+function property_to_array($property, $objects)
+{
+    $temp_array = array();
+    foreach($objects as $obj)
+    {
+        array_push($temp_array,$obj->$property);
+    }
+    return $temp_array;
+}
+
+function in_objects($key,$value,$objects)
+{
+    foreach($objects as $object)
+    {
+        if($object->$key == $value){
+            return true;
+        }
+    }
+    return false;
+}
+
 function sortable_header($sortable_column_value, $type, $column_text)
 {
     return '<th class="column_heading">'.sortable_link($sortable_column_value, $type, $column_text).'</th>';
