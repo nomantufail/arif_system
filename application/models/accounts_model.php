@@ -384,6 +384,7 @@ class Accounts_Model extends Parent_Model {
             );
             array_push($insertable_entries, $voucher_entry);
         }
+
         $this->db->insert_batch('voucher_entries',$insertable_entries);
     }
     public function update_voucher($voucher)
@@ -625,6 +626,7 @@ class Accounts_Model extends Parent_Model {
         $this->active_parent_vouchers();
         $this->db->where('vouchers.id',$id);
         $result = $this->db->get('vouchers')->result();
+
         if($result[0]->num_of_vouchers > 0)
         {
             return true;

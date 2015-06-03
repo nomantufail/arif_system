@@ -621,7 +621,7 @@ class Sales_Model extends Parent_Model {
     }
 
 
-    public function update_product_sale($invoice_id){
+    public function update_product_sale($invoice_id, $voucher_type = 'product_sale'){
 
         include_once(APPPATH."models/helperClasses/App_Voucher.php");
         include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
@@ -658,7 +658,7 @@ class Sales_Model extends Parent_Model {
         $voucher_data['voucher_date'] = $this->input->post('invoice_date');
         $voucher_data['summary'] = $this->input->post('extra_info');
         $voucher_data['tanker'] = $this->input->post('tanker');
-        $voucher_data['voucher_type'] = 'purchase';
+        $voucher_data['voucher_type'] = $voucher_type;
         /*--------------Lets the game begin---------------*/
         $this->db->trans_begin();
 
@@ -730,6 +730,7 @@ class Sales_Model extends Parent_Model {
                     //item needs to be inserted
                     /*---------First ENTRY--------*/
                     $voucher_entry_1 = new App_voucher_Entry();
+                    $voucher_entry_1->voucher_id = $invoice_id;
                     $voucher_entry_1->item_id = $this->input->post('item_id_'.$i);
                     $voucher_entry_1->ac_title = $product;
                     $voucher_entry_1->ac_type = 'receivable';
@@ -746,6 +747,7 @@ class Sales_Model extends Parent_Model {
 
                     /*---------Second ENTRY--------*/
                     $voucher_entry_2 = new App_voucher_Entry();
+                    $voucher_entry_2->voucher_id = $invoice_id;
                     $voucher_entry_2->item_id = $this->input->post('item_id_'.$i);
                     $voucher_entry_2->ac_title = $product;
                     $voucher_entry_2->ac_type = 'revenue';
@@ -776,7 +778,7 @@ class Sales_Model extends Parent_Model {
         $this->editing_model->update_voucher_entries(array(
             'voucher_entries.voucher_id'=>$invoice_id,
             'voucher_entries.related_customer !='=>'',
-        ), array('related_supplier'=>$this->input->post('supplier')));
+        ), array('related_customer'=>$this->input->post('customer')));
         /*---------------------------------------------------------------------*/
 
         /**
@@ -791,7 +793,6 @@ class Sales_Model extends Parent_Model {
         /**
          * Updating stocks in the db
          **/
-        var_dump($stock_increase_entries);  die();
         $stock_decreased = $this->stock_model->decrease($stock_decrease_entries);
         $stock_increased = $this->stock_model->increase($stock_increase_entries, $invoice_id);
         /*------------------------------------------------*/

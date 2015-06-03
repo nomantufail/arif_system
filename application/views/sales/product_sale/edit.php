@@ -90,9 +90,12 @@ CustomerBalance["<?= $key ?>"] = "<?= $value ?>";
 
             newRowContent+='<br><span style="color: #808080;">Available: </span><span style="color: gray;" id="available_'+row_num+'"></span>';
             newRowContent+='</td>';
-            newRowContent+='<td><input type="number" step="any" name="quantity_'+row_num+'" id="quantity_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')"></td>';
             newRowContent+='<td>' +
-                            '<input type="number" step="any" name="salePricePerItem_'+row_num+'" id="salePricePerItem_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')">' +
+                '<input min="0" type="number" step="any" name="quantity_'+row_num+'" id="quantity_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')">' +
+                '<input type="hidden" id="old_quantity_'+row_num+'" name="old_quantity_'+row_num+'" value="'+0+'">' +
+                '</td>';
+            newRowContent+='<td>' +
+                            '<input min="0" type="number" step="any" name="salePricePerItem_'+row_num+'" id="salePricePerItem_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')">' +
                             '<br><span style="color: #808080;">Purchase Price: </span><span style="color: gray;" id="purchase_price_per_unit_'+row_num+'"></span>' +
                            '</td>';
             newRowContent+='<td><span id="total_cost_label_'+row_num+'"></span></td>';
@@ -413,18 +416,18 @@ function validate_product_sale_invoice_form()
                                             <span style="color: #808080;">Available: </span><span style="color: gray;" id="available_<?= $row_counter ?>"></span>
                                         </td>
                                         <td>
-                                            <input value="<?= $entry->quantity ?>" type="number" step="any" name="quantity_<?= $row_counter ?>" id="quantity_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
+                                            <input min="0" value="<?= $entry->quantity ?>" type="number" step="any" name="quantity_<?= $row_counter ?>" id="quantity_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
                                             <input type="hidden" id="old_quantity_<?= $row_counter ?>" name="old_quantity_<?= $row_counter ?>" value="<?= $entry->quantity ?>">
                                         </td>
                                         <td>
-                                            <input value="<?= $entry->salePricePerItem ?>" type="number" step="any" name="salePricePerItem_<?= $row_counter ?>" id="salePricePerItem_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
+                                            <input min="0" value="<?= $entry->salePricePerItem ?>" type="number" step="any" name="salePricePerItem_<?= $row_counter ?>" id="salePricePerItem_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
                                             <br>
                                             <input type="hidden" name="old_salePricePerItem_<?= $row_counter ?>" value="<?= $entry->salePricePerItem ?>">
                                             <span style="color: #808080;">Purchase Price: </span><span style="color: gray;" id="purchase_price_per_unit_<?= $row_counter ?>"></span>
                                         </td>
                                         <td><span id="total_cost_label_<?= $row_counter ?>"></span></td>
                                         <td>
-                                            <span onclick="hide_row(<?= $row_counter ?>)" style="color: red; cursor: pointer; font-weight: bold;" id="cross_<?= $row_counter ?>"><?= (($row_counter == $default_row_counter)?'':'') ?></span>
+                                            <span onclick="hide_row(<?= $row_counter ?>)" style="color: red; cursor: pointer; font-weight: bold;" id="cross_<?= $row_counter ?>"><?= (($row_counter == sizeof($invoice->entries))?'X':'') ?></span>
                                             <span onclick="display_row(<?= $row_counter+1 ?>)" style="margin-left: 10px; color: green; cursor: pointer; font-weight: bold;" id="add_row_<?= $row_counter ?>"><i class="fa fa-plus-circle"></i></span>
                                         </td>
                                     </tr>

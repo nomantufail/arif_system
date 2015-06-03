@@ -63,8 +63,8 @@ $default_row_counter = 1;
             newRowContent+='<input type="hidden" value="'+next_item_id+'" name="item_id_'+row_num+'" id="item_id_'+row_num+'">';
             next_item_id++;
             newRowContent+='</td>';
-            newRowContent+='<td><input type="number" step="any" name="quantity_'+row_num+'" id="quantity_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')"></td>';
-            newRowContent+='<td><input type="number" step="any" name="costPerItem_'+row_num+'" id="costPerItem_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')"></td>';
+            newRowContent+='<td><input min="0" type="number" step="any" name="quantity_'+row_num+'" id="quantity_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')"></td>';
+            newRowContent+='<td><input min="0" type="number" step="any" name="costPerItem_'+row_num+'" id="costPerItem_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')"></td>';
             newRowContent+='<td><span id="total_cost_label_'+row_num+'"></span></td>';
             newRowContent+= '<td>' +
                             '<span onclick="hide_row('+row_num+')" style="color: red; cursor: pointer; font-weight: bold;" id="cross_'+row_num+'"></span>' +
@@ -335,11 +335,11 @@ $default_row_counter = 1;
                                             <input type="hidden" name="old_product_<?= $row_counter ?>" value="<?= $entry->product->name ?>">
                                         </td>
                                         <td>
-                                            <input value="<?= $entry->quantity ?>" type="number" step="any" name="quantity_<?= $row_counter ?>" id="quantity_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
+                                            <input min="0" value="<?= $entry->quantity ?>" type="number" step="any" name="quantity_<?= $row_counter ?>" id="quantity_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
                                             <input type="hidden" name="old_quantity_<?= $row_counter ?>" value="<?= $entry->quantity ?>">
                                         </td>
                                         <td>
-                                            <input value="<?= $entry->costPerItem ?>" type="number" step="any" name="costPerItem_<?= $row_counter ?>" id="costPerItem_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
+                                            <input min="0" value="<?= $entry->costPerItem ?>" type="number" step="any" name="costPerItem_<?= $row_counter ?>" id="costPerItem_<?= $row_counter ?>" onchange="numbers_changed(<?= $row_counter ?>)" onkeyup="numbers_changed(<?= $row_counter ?>)">
                                             <input type="hidden" name="old_costPerItem_<?= $row_counter ?>" value="<?= $entry->costPerItem ?>">
                                         </td>
                                         <td><span id="total_cost_label_<?= $row_counter ?>"></span></td>
