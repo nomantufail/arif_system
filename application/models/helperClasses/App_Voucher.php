@@ -14,6 +14,8 @@ class App_Voucher {
     public $tanker;
     public $product_sale_id;
     public $product_for_freight_voucher;
+    public $product_number_for_freight_voucher;
+    public $bank_ac;
     public $voucher_type;
     public $inserted_at;
     public $updated_at;
@@ -27,7 +29,9 @@ class App_Voucher {
         $this->entries = array();
         $this->tanker = '';
         $this->product_for_freight_voucher = '';
+        $this->product_number_for_freight_voucher = 0;
         $this->product_sale_id = 0;
+        $this->bank_ac = '';
     }
 
     public function balance()

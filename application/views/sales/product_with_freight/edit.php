@@ -100,6 +100,7 @@ CustomerBalance["<?= $key ?>"] = "<?= $value ?>";
                             '<br><span style="color: #808080;">Purchase Price: </span><span style="color: gray;" id="purchase_price_per_unit_'+row_num+'"></span>' +
                            '</td>';
             newRowContent+='<td><span id="total_cost_label_'+row_num+'"></span></td>';
+            newRowContent+='<td><input type="number" step="any" name="freight_amount_'+row_num+'" style="width: ;"></td>';
 
             newRowContent+='</tr>';
             $(".products_table_body").append(newRowContent);
@@ -113,6 +114,8 @@ CustomerBalance["<?= $key ?>"] = "<?= $value ?>";
             pannel_count.value = pannel_count_value+1;
 
             $("#product_"+row_num).select2('val','');
+            place_cross(row_num);
+            remove_cross(row_num-1);
         }
     }
 
@@ -126,7 +129,6 @@ CustomerBalance["<?= $key ?>"] = "<?= $value ?>";
 
             pannel_count.value = parseInt(pannel_count.value)-1;
             next_item_id--;
-
             grand_total_or_received_changed();
         }
     }
@@ -388,6 +390,7 @@ function validate_product_sale_invoice_form()
                                     <th style="width: 12%;">Qty</th>
                                     <th style="width: 12%;">Sale Price / Item</th>
                                     <th style="width: 12%;">Total Price</th>
+                                    <th style="width: 12%;">Freight</th>
                                 </tr>
                                 </thead>
                                 <tbody class="products_table_body">
@@ -419,7 +422,9 @@ function validate_product_sale_invoice_form()
                                             <span style="color: #808080;">Purchase Price: </span><span style="color: gray;" id="purchase_price_per_unit_<?= $row_counter ?>"></span>
                                         </td>
                                         <td><span id="total_cost_label_<?= $row_counter ?>"></span></td>
-
+                                        <td>
+                                            <input value="<?= $entry->freight ?>" type="number" step="any" name="freight_amount_<?= $row_counter ?>" style="width: ;">
+                                        </td>
                                     </tr>
 
                                     <?php $row_counter++; ?>
@@ -454,7 +459,7 @@ function validate_product_sale_invoice_form()
                             <section style="font-size: 20px; font-weight: normal; color: red;">Total Cost: <span id="grand_total_cost_label">0</span> Rs.</section>
                         </div>
                         <div class="col-md-4" style="margin: 0px; float: right;">
-                            <button name="update_product_sale" class="btn btn-success" style="font-size: 20px;"><i class="fa fa-save" style="color: white;"></i> Save Invoice</button>
+                            <button name="update_product_with_freight_sale" class="btn btn-success" style="font-size: 20px;"><i class="fa fa-save" style="color: white;"></i> Save Invoice</button>
                         </div>
                     </div>
                 </div>
@@ -462,7 +467,7 @@ function validate_product_sale_invoice_form()
 
             <div class="row" style="margin-top: 20px;">
                 <?php
-                include_once(APPPATH."views/sales/product_sale/components/few_sales.php");
+                include_once(APPPATH."views/sales/product_with_freight/components/few_sales.php");
                 ?>
             </div>
         </div>

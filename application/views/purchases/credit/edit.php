@@ -39,9 +39,10 @@ $default_row_counter = 1;
     var next_item_id = <?= $next_item_id ?>;
     /*-----------------*/
 
-    function display_row(row_num){
+    function display_row(){
         var pannel_count = document.getElementById("pannel_count");
         pannel_count_value = parseInt(pannel_count.value);
+        var row_num = pannel_count_value;
         if(pannel_count_value == row_num)
         {
 
@@ -66,10 +67,7 @@ $default_row_counter = 1;
             newRowContent+='<td><input min="0" type="number" step="any" name="quantity_'+row_num+'" id="quantity_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')"></td>';
             newRowContent+='<td><input min="0" type="number" step="any" name="costPerItem_'+row_num+'" id="costPerItem_'+row_num+'" onchange="numbers_changed('+row_num+')" onkeyup="numbers_changed('+row_num+')"></td>';
             newRowContent+='<td><span id="total_cost_label_'+row_num+'"></span></td>';
-            newRowContent+= '<td>' +
-                            '<span onclick="hide_row('+row_num+')" style="color: red; cursor: pointer; font-weight: bold;" id="cross_'+row_num+'"></span>' +
-                            '<span onclick="display_row('+(parseInt(row_num)+1)+')" style="margin-left: 20px; color: green; cursor: pointer; font-weight: bold;" id="add_row_'+row_num+'"><i class="fa fa-plus-circle"></i></span>' +
-                            '</td>';
+
             newRowContent+='</tr>';
 
             $(".products_table_body").append(newRowContent);
@@ -88,7 +86,7 @@ $default_row_counter = 1;
         }
     }
 
-    function hide_row(row_num){
+    function hide_row(){
         var pannel_count = document.getElementById("pannel_count");
         var decrease_count = parseInt(pannel_count.value)-1;
         var row_id = "row_"+decrease_count;
@@ -98,8 +96,6 @@ $default_row_counter = 1;
 
             pannel_count.value = parseInt(pannel_count.value)-1;
             next_item_id--;
-            //remove_cross(row_num);
-            place_cross(row_num-1);
 
             grand_total_or_paid_changed();
         }
@@ -315,7 +311,6 @@ $default_row_counter = 1;
                                     <th style="width: 12%;">Qty</th>
                                     <th style="width: 12%;">Cst/item</th>
                                     <th style="width: 12%;">Total/Cst</th>
-                                    <th style="width: 10%;"></th>
                                 </tr>
                                 </thead>
                                 <tbody class="products_table_body">
@@ -343,10 +338,7 @@ $default_row_counter = 1;
                                             <input type="hidden" name="old_costPerItem_<?= $row_counter ?>" value="<?= $entry->costPerItem ?>">
                                         </td>
                                         <td><span id="total_cost_label_<?= $row_counter ?>"></span></td>
-                                        <td>
-                                            <span onclick="hide_row(<?= $row_counter ?>)" style="margin-left: 10px; color: red; cursor: pointer; font-weight: bold;" id="cross_<?= $row_counter ?>"><?= (($row_counter == $default_row_counter)?'':'X') ?></span>
-                                            <span onclick="display_row(<?= $row_counter+1 ?>)" style="margin-left: 10px; color: green; cursor: pointer; font-weight: bold;" id="add_row_<?= $row_counter ?>"><i class="fa fa-plus-circle"></i></span>
-                                        </td>
+
                                     </tr>
                                     <?php $row_counter++; ?>
                                 <?php endforeach; ?>
@@ -355,6 +347,12 @@ $default_row_counter = 1;
                                 <tr>
                                     <td colspan="5">
                                         <input value="<?= sizeof($invoice->entries)+1 ?>" type="hidden" id="pannel_count" name="pannel_count">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <a href="#" onclick="display_row()" class="btn btn-xs btn-primary"><i class="fa fa-plus-circle"> </i> Add Row</a>
+                                        <a href="#" onclick="hide_row()" class="btn btn-xs btn-danger"><i class="fa fa-minus-circle"> </i> Delete Row</a>
                                     </td>
                                 </tr>
                                 </tfoot>

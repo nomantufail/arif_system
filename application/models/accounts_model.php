@@ -298,6 +298,8 @@ class Accounts_Model extends Parent_Model {
             'tanker'=>$voucher->tanker,
             'product_sale_id'=>$voucher->product_sale_id,
             'product_for_freight_voucher'=>$voucher->product_for_freight_voucher,
+            'product_number_for_freight_voucher'=>$voucher->product_number_for_freight_voucher,
+            'bank_ac' => $voucher->bank_ac,
             'voucher_type'=>$voucher->voucher_type,
         );
         $this->db->insert('vouchers',$voucher_data);
@@ -632,6 +634,21 @@ class Accounts_Model extends Parent_Model {
             return true;
         }
         return false;
+    }
+
+    public function voucher_id($where)
+    {
+        $this->db->select('vouchers.id');
+        $this->db->distinct();
+        $this->join_vouchers();
+        $this->db->where($where);
+        $result = $this->db->get('vouchers')->result();
+        if(sizeof($result)> 0)
+        {
+            $record = $result[0];
+            return $record->id;
+        }
+        return 0;
     }
 }
 

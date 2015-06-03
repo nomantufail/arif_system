@@ -27,6 +27,25 @@ function in_objects($key,$value,$objects)
     return false;
 }
 
+function in_objects_m($key_value,$objects)
+{
+    if(sizeof($objects) == 0)
+        return false;
+    foreach($objects as $object)
+    {
+        $matched = true;
+        foreach($key_value as $key => $value){
+             if($object->$key != $value){
+                 $matched = false;
+             }
+        }
+        if($matched == true){
+            return true;
+        }
+    }
+    return false;
+}
+
 function sortable_header($sortable_column_value, $type, $column_text)
 {
     return '<th class="column_heading">'.sortable_link($sortable_column_value, $type, $column_text).'</th>';
@@ -108,6 +127,12 @@ function last_day_of_month($date = ''){
 
 function bn_masking($number) {
     return substr($number, 0, 2) . str_repeat("*", strlen($number) -5) . substr($number, -3);
+}
+
+function formatted_bank_account($account)
+{
+    $formatted = $account->title." (".$account->bank." ".bn_masking($account->account_number).")";
+    return $formatted;
 }
 
 function exporting_file_name($file_name)

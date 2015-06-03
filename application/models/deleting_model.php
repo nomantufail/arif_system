@@ -329,6 +329,58 @@ class Deleting_Model extends Parent_Model {
         return $this->db->trans_complete();
     }
 
+    public function safely_delete_sale_with_freight_invoice_items_where($where)
+    {
+        $this->db->select('voucher_entries.voucher_id, voucher_entries.item_id');
+        $this->db->where($where);
+        $result = $this->db->get('voucher_entries')->result();
+        if(sizeof($result) > 0)
+        {
+            /**
+             * fetching removeable entries from db
+             **/
+            $removable_entires = array();
+            foreach($result as $record)
+            {
+                if(!in_objects_m(array(
+                    'voucher_id'=>$record->voucher_id,
+                    'item_id'=>$record->item_id,
+                ),$removable_entires)){
+                    array_push($removable_entires, $record);
+                }
+            }
+            /*----------------------------------------*/
+
+            $this->db->trans_start();
+
+            $this->safely_delete_sale_invoice_items_where($where);
+
+            /**
+             * Making where
+             **/
+            $where = "(";
+            $count = 1;
+            foreach($removable_entires as $entry)
+            {
+                $where.="(";
+                    $where.="vouchers.product_sale_id = ".$entry->voucher_id."";
+                    $where.=" AND product_number_for_freight_voucher = $entry->item_id";
+                $where.=")";
+                if($count < sizeof($removable_entires))
+                {
+                    $where.=" OR ";
+                }
+                $count++;
+            }
+            $where.=")";
+            /*-----------------------*/
+
+            $this->safely_delete_vouchers_where($where);
+
+            return $this->db->trans_complete();
+
+        }
+    }
     public function delete_payment_invoice($invoice_number)
     {
         $this->db->trans_start();

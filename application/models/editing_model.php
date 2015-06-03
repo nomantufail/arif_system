@@ -130,6 +130,7 @@ class Editing_Model extends Parent_Model {
          * ---------------------------------
          * user_bank_accounts ==> complete table
          * voucher_entries ==> ac_title & ac_sub_title
+         * vouchers ==> bank_ac
          */
         $this->db->trans_start();
 
@@ -139,6 +140,7 @@ class Editing_Model extends Parent_Model {
                 $formatted_value = $bank_ac->title." (".$bank_ac->bank." ".bn_masking($value).")";
 
                 $this->update_table_column('voucher_entries','ac_title', $formatted_value, $previous_formatted_title);
+                $this->update_table_column('vouchers','bank_ac', $formatted_value, $previous_formatted_title);
                 $this->edit_global_record('user_bank_accounts', $pk, 'account_number', $value);
                 break;
 
@@ -147,6 +149,7 @@ class Editing_Model extends Parent_Model {
                 $formatted_value = $value." (".$bank_ac->bank." ".bn_masking($bank_ac->account_number).")";
 
                 $this->update_table_column('voucher_entries','ac_title', $formatted_value, $previous_formatted_title);
+                $this->update_table_column('vouchers','bank_ac', $formatted_value, $previous_formatted_title);
                 $this->edit_global_record('user_bank_accounts', $pk, 'title', $value);
                 break;
 
@@ -154,6 +157,7 @@ class Editing_Model extends Parent_Model {
                 $formatted_value = $value." (".$value." ".bn_masking($bank_ac->account_number).")";
 
                 $this->update_table_column('voucher_entries','ac_title', $formatted_value, $previous_formatted_title);
+                $this->update_table_column('vouchers','bank_ac', $formatted_value, $previous_formatted_title);
                 $this->edit_global_record('user_bank_accounts', $pk, 'bank', $value);
                 break;
 

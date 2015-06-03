@@ -215,7 +215,7 @@ class Parent_Model extends CI_Model {
             vouchers.tanker,
             voucher_entries.related_customer, voucher_entries.ac_title as product_name, voucher_entries.quantity,
             voucher_entries.cost_per_item, voucher_entries.amount,
-            voucher_entries.id as entry_id,
+            voucher_entries.id as entry_id, voucher_entries.item_id,
             voucher_entries.freight as freight_amount,
         ");
     }
@@ -251,13 +251,10 @@ class Parent_Model extends CI_Model {
     public function select_payment_content()
     {
         $this->db->select("
-            vouchers.id as voucher_id, vouchers.summary, voucher_entries.ac_title,
-            vouchers.tanker,
-            voucher_entries.ac_sub_title, voucher_entries.amount, vouchers.voucher_date,
-            voucher_entries.id as entry_id,
-            voucher_entries.dr_cr,
-            voucher_entries.related_supplier, voucher_entries.related_customer,
-            voucher_entries.related_business, voucher_entries.related_other_agent,
+            vouchers.id as voucher_id, vouchers.summary,
+            vouchers.tanker, vouchers.bank_ac,
+            voucher_entries.amount, vouchers.voucher_date,
+            voucher_entries.id as entry_id, voucher_entries.related_supplier
         ");
     }
 
@@ -267,13 +264,12 @@ class Parent_Model extends CI_Model {
     public function select_receipt_content()
     {
         $this->db->select("
-            vouchers.id as voucher_id, vouchers.summary, voucher_entries.ac_title,
-            vouchers.tanker,
-            voucher_entries.ac_sub_title, voucher_entries.amount, vouchers.voucher_date,
-            voucher_entries.id as entry_id,
-            voucher_entries.dr_cr,
-            voucher_entries.related_supplier, voucher_entries.related_customer,
-            voucher_entries.related_business, voucher_entries.related_other_agent,
+            vouchers.id as voucher_id, vouchers.summary,
+            vouchers.tanker,vouchers.bank_ac,
+            voucher_entries.ac_sub_title, voucher_entries.amount,
+            vouchers.voucher_date, voucher_entries.id as entry_id,
+            voucher_entries.related_customer,
+
         ");
     }
 

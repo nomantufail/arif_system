@@ -40,12 +40,47 @@ class Payments extends ParentController {
         $this->load->view('components/footer');
     }
 
+    public function edit($id)
+    {
+        if($id == '')
+        {
+            redirect(base_url()."payments/make");
+        }
+        if($this->accounts_model->voucher_active($id) == false)
+        {
+            redirect(base_url()."payments/make");
+        }
+        $payment_voucher = $this->payments_model->find($id);
+        if($payment_voucher == null)
+        {
+            $this->helper_model->redirect_with_errors('Voucher not found.');
+        }
+
+        $headerData['title']='Edit Payment';
+        $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
+        $this->bodyData['suppliers'] = $this->suppliers_model->get();
+
+        $this->bodyData['suppliers_balance'] = $this->accounts_model->suppliers_balance();
+        $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
+        $this->bodyData['payment_history'] = $this->payments_model->few_payments();
+        $this->bodyData['payment'] = $payment_voucher;
+
+        $this->bodyData['voucher_id'] = $id;
+
+        $this->load->view('components/header',$headerData);
+        $this->load->view('payments/edit', $this->bodyData);
+        $this->load->view('components/footer');
+    }
+
     public function history()
     {
-        $headerData['title']='Payment New*';
+        $headerData['title']='Payment History';
         $this->bodyData['section'] = 'history';
 
-        $this->bodyData['payment_history'] = $this->payments_model->payment_history();
+        $this->bodyData['suppliers'] = $this->suppliers_model->get();
+        $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
+
+        $this->bodyData['payment_history'] = $this->payments_model->search_payment_history($this->search_keys, $this->sorting_info);
 
         $this->load->view('components/header',$headerData);
         $this->load->view('payments/history', $this->bodyData);
@@ -89,6 +124,19 @@ class Payments extends ParentController {
                 $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
             }
         }
+
+        /**
+         * update a payment voucher
+         **/
+        if(isset($_POST['updatePayment']))
+        {
+            $saved_payment = $this->payments_model->update_payment($_POST['voucher_id']);
+            if($saved_payment != 0){
+                $this->helper_model->redirect_with_success('Payment Saved Successfully!');
+            }else{
+                $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+            }
+        }
     }
 
     public function set_search_keys_for_required_section()
@@ -96,7 +144,72 @@ class Payments extends ParentController {
         $area = $this->uri->segment(2);
         switch($area)
         {
+            case "history":
+                $from = '';
+                $to ='';
+                $suppliers = array();
+                $bank_acs = array();
+                if(isset($_GET['from']))
+                {
+                    $from = $_GET['from'];
+                }
+                else
+                {
+                    $date = Carbon::now()->toDateString();
+                    $from = first_day_of_month($date);
+                }
 
+                if(isset($_GET['to']))
+                {
+                    $to = $_GET['to'];
+                }
+                else
+                {
+                    $date = Carbon::now()->toDateString();
+                    $to = $date;
+                }
+
+                if(isset($_GET['bank_ac']))
+                {
+                    $bank_acs = $_GET['bank_ac'];
+                }
+                if(isset($_GET['supplier']))
+                {
+                    $suppliers = $_GET['supplier'];
+                }
+
+                $this->search_keys['from'] = $from;
+                $this->search_keys['to'] = $to;
+                $this->search_keys['bank_acs'] = $bank_acs;
+                $this->search_keys['suppliers'] = $suppliers;
+
+                break;
+        }
+    }
+
+    public function set_sort_info_for_required_section()
+    {
+        $area = $this->uri->segment(2);
+        switch($area)
+        {
+            case "history":
+                $sortable_columns = $this->payments_model->sortable_columns();
+                $sort_by = 'vouchers.id';
+                $order_by = 'desc';
+
+                if(isset($_GET['sort_by']) && array_key_exists($_GET['sort_by'], $sortable_columns))
+                {
+                    $sort_by = $sortable_columns[$_GET['sort_by']];
+                }
+                if(isset($_GET['order']) && $_GET['order'] == 'asc')
+                {
+                    $order_by = 'asc';
+                }
+
+                $this->sorting_info['sort_by'] = $sort_by;
+                $this->sorting_info['order_by'] = $order_by;
+
+                break;
         }
     }
 }

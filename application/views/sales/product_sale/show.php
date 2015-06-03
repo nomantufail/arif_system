@@ -141,7 +141,7 @@
                                         <td rowspan="<?=($num_invoice_items)?>" style="vertical-align: middle;">
                                             <?php deleting_btn_test(array(
                                                 'invoice_number'=>$record->id,
-                                                'product'=>$entry->product->name,
+                                                'item_id'=>$entry->item_id,
                                             ), 'delete_product_sale_invoice') ?>
                                         </td>
                                     <?php endif; ?>

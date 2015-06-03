@@ -56,11 +56,12 @@ $default_row_counter = 1;
     <?php endforeach; ?>
     /*----------------------------------------------------------*/
 
-    function display_row(row_num){
+    function display_row(){
         var pannel_count = document.getElementById("pannel_count");
+        pannel_count_value = parseInt(pannel_count.value);
+        var row_num = pannel_count_value;
         var row_id = "row_"+row_num;
         document.getElementById(row_id).style.display='';
-        pannel_count_value = parseInt(pannel_count.value);
         if(pannel_count_value == row_num)
         {
             pannel_count.value = pannel_count_value+1;
@@ -71,16 +72,13 @@ $default_row_counter = 1;
         }
 
     }
-    function hide_row(row_num){
+    function hide_row(){
         var pannel_count = document.getElementById("pannel_count");
         var decrease_count = parseInt(pannel_count.value)-1;
         var row_id = "row_"+decrease_count;
         if(pannel_count.value > <?= $default_row_counter+1 ?>){
             document.getElementById(row_id).style.display='none';
             pannel_count.value = parseInt(pannel_count.value)-1;
-            remove_cross(row_num);
-            place_cross(row_num-1);
-
             grand_total_or_received_changed();
         }
     }
@@ -309,7 +307,6 @@ $default_row_counter = 1;
                                     <th style="width: 10%;">Sale Price / Item</th>
                                     <th style="width: 12%;">Total Price</th>
                                     <th>Freight</th>
-                                    <th style="width: 10%;"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -335,10 +332,6 @@ $default_row_counter = 1;
                                         <td>
                                             <input type="number" step="any" name="freight_amount_<?= $row_counter ?>" style="width: ;">
                                         </td>
-                                        <td>
-                                            <span onclick="hide_row(<?= $row_counter ?>)" style="color: red; cursor: pointer; font-weight: bold;" id="cross_<?= $row_counter ?>"><?= (($row_counter == $default_row_counter)?'':'') ?></span>
-                                            <span onclick="display_row(<?= $row_counter+1 ?>)" style="margin-left: 10px; color: green; cursor: pointer; font-weight: bold;" id="add_row_<?= $row_counter ?>"><i class="fa fa-plus-circle"></i></span>
-                                        </td>
                                     </tr>
                                 <?php endfor; ?>
 
@@ -347,6 +340,12 @@ $default_row_counter = 1;
                                 <tr>
                                     <td colspan="8">
                                         <input value="<?= $default_row_counter+1 ?>" type="hidden" id="pannel_count" name="pannel_count">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <a href="#" onclick="display_row()" class="btn btn-xs btn-primary"><i class="fa fa-plus-circle"> </i> Add Row</a>
+                                        <a href="#" onclick="hide_row()" class="btn btn-xs btn-danger"><i class="fa fa-minus-circle"> </i> Delete Row</a>
                                     </td>
                                 </tr>
                                 </tfoot>

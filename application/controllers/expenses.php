@@ -45,6 +45,35 @@ class Expenses extends ParentController {
 
     }
 
+    public function edit($id)
+    {
+        if($id == '')
+        {
+            redirect(base_url()."expenses/add");
+        }
+        if($this->accounts_model->voucher_active($id) == false)
+        {
+            redirect(base_url()."expenses/add");
+        }
+        $expense = $this->expenses_model->find($id);
+        if($expense == null)
+        {
+            $this->helper_model->redirect_with_errors('Voucher not found.', base_url()."expenses/add");
+        }
+
+        $headerData['title']='Edit Expense';
+        $this->bodyData['someMessage'] = '';
+        $this->bodyData['tankers'] = $this->tankers_model->get();
+        $this->bodyData['titles'] = $this->expense_titles_model->get();
+        $this->bodyData['few_expenses'] = $this->expenses_model->few_expenses();
+        $this->bodyData['expense'] = $expense;
+        $this->bodyData['voucher_id'] = $id;
+
+        $this->load->view('components/header',$headerData);
+        $this->load->view('expenses/edit_expense', $this->bodyData);
+        $this->load->view('components/footer');
+    }
+
     public function add_payment()
     {
         $headerData = array(
@@ -195,6 +224,19 @@ class Expenses extends ParentController {
             }
         }
 
+
+        /**
+         * update an expense
+         **/
+        if(isset($_POST['udpateExpense']))
+        {
+            $saved_receipt = $this->expenses_model->udpate_expense($_POST['voucher_id']);
+            if($saved_receipt != 0){
+                $this->helper_model->redirect_with_success('Expense Saved Successfully!');
+            }else{
+                $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+            }
+        }
     }
 
     public function set_search_keys_for_required_section()

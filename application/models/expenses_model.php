@@ -19,6 +19,57 @@ class Expenses_Model extends Parent_Model {
 
         return $result;
     }
+    public function search_expense_history($keys, $sorting_info){
+        $this->select_expense_content();
+        $this->db->from($this->table);
+        $this->join_vouchers();
+        $this->active_vouchers();
+        $this->expense_payable_vouchers();
+        $this->with_debit_entries_only();
+
+
+        /**
+         * applying search keys
+         **/
+        if(isset($keys['voucher_id']) && sizeof($keys['voucher_id']) > 0)
+        {
+            $this->db->where('vouchers.id',$keys['voucher_id']);
+        }
+
+        if(isset($keys['titles']) && sizeof($keys['titles']) > 0)
+        {
+            $this->where_ac_titles($keys['titles']);
+        }
+
+        if(isset($keys['tankers']) &&sizeof($keys['tankers']) > 0)
+        {
+            $this->db->where_in('vouchers.related_tanker', $keys['tankers']);
+        }
+
+        if(isset($keys['to']) &&$keys['to'] != '')
+        {
+            $this->db->where('vouchers.voucher_date <=',$keys['to']);
+        }
+        if(isset($keys['from']) &&$keys['from'] != '')
+        {
+            $this->db->where('vouchers.voucher_date >=',$keys['from']);
+        }
+        /*------- End Of Search Keys-----*/
+
+        /**
+         * Sorting Section
+         **/
+        if($sorting_info != null)
+        {
+            $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        }
+        /*------ Sorting Section Ends ------*/
+
+
+        $result = $this->db->get()->result();
+
+        return $result;
+    }
     public function get_limited($limit, $start, $keys, $sort) {
 
         $this->db->order_by($sort['sort_by'], $sort['order']);
@@ -37,13 +88,58 @@ class Expenses_Model extends Parent_Model {
     }
 
     public function find($id){
-        $result = $this->db->get_where($this->table, array('id'=>$id))->result();
-        if($result){
-            $record = $result[0];
+        $invoices = $this->search_expense_history(array('voucher_id'=>$id), null);
+        if(sizeof($invoices) > 0){
+            $record = $invoices[0];
             return $record;
         }else{
             return null;
         }
+    }
+
+    public function update_expense($voucher_id)
+    {
+        include_once(APPPATH."models/helperClasses/App_Voucher.php");
+        include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
+
+        // making voucher
+        $voucher = array();
+        $voucher['voucher_date'] = $this->input->post('voucher_date');
+        $voucher['summary'] = $this->input->post('summary');
+
+        $this->db->trans_start();
+
+        /**
+         * Updating the voucher data
+         **/
+        $this->editing_model->update_voucher(array('vouchers.id'=>$voucher_id),$voucher);
+        /*------------------------------------------*/
+
+
+
+        /*---------Updating voucher Entries--------*/
+        $voucher_entries_1 = array();
+        $voucher_entries_1['related_tanker'] = $this->input->post('tanker');
+        $voucher_entries_1['amount'] = $this->input->post('amount');
+
+
+        $this->editing_model->update_voucher_entries(array(
+            'voucher_entries.voucher_id'=>$voucher_id,
+            'voucher_entries.related_tanker !='=>'',
+        ),$voucher_entries_1);
+
+        $voucher_entry_2 = array();
+        $voucher_entry_2['ac_title'] = $this->input->post('expense_title');
+
+        $this->editing_model->update_voucher_entries(array(
+            'voucher_entries.voucher_id'=>$voucher_id,
+            'voucher_entries.dr_cr'=>1,
+        ),$voucher_entry_2);
+
+        /*----------------------------------*/
+
+        return $this->db->trans_complete();
+
     }
 
     public function insert(){

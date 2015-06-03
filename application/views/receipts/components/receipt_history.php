@@ -1,13 +1,43 @@
+
 <h4 style="color: #006dcc">Receipt History</h4>
+<form action="" method="get">
+    <table class="search-table" style="width:100%;">
+        <tr>
+            <td style="width: 15%;"><b>From: </b><input class="form-control" type="date" value="<?= $search_keys['from'] ?>" name="from"></td>
+            <td style="width: 15%;"><b>To: </b><input class="form-control" type="date" value="<?= $search_keys['to'] ?>" name="to"></td>
+            <td style="width: 20%;"><b>Customer: </b><br>
+                <select name="customer[]" class="select_box bank_ac_select_box" multiple style="width: 100%;">
+                    <?php foreach($customers as $customer):?>
+                        <?php
+                        $selected = (in_array($customer->name, $search_keys['customers']))?'selected':''
+                        ?>
+                        <option value="<?= $customer->name ?>" <?= $selected ?>><?= $customer->name ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+            <td style="width: 20%;"><b>Bank a/c: </b><br>
+                <select class="select_box bank_ac_select_box" style="width: 100%;" name="bank_ac[]" id="bank_ac" multiple>
+                    <?php foreach($bank_accounts as $account):?>
+                        <?php
+                        $selected = (in_array(formatted_bank_account($account), $search_keys['bank_acs']))?'selected':''
+                        ?>
+                        <option value="<?= formatted_bank_account($account) ?>" <?= $selected ?>><?= formatted_bank_account($account) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+            <td style="width: 25%;"><br><button style="width: 100%; height: 30px;"><i class="fa fa-search"></i> Search</button></td>
+        </tr>
+    </table>
+</form>
 <table class="my_table list_table table table-bordered">
     <thead class="table_header">
     <tr class="table_row table_header_row">
-        <th class="column_heading">Vcouher#</th>
-        <th class="column_heading">Date</th>
-        <th class="column_heading">Customer</th>
-        <th class="column_heading">Bank</th>
-        <th class="column_heading">Amount</th>
-        <th class="column_heading">Summary</th>
+        <?= sortable_header('invoice_number','numeric','Invoice#') ?>
+        <?= sortable_header('invoice_date','date','Date') ?>
+        <?= sortable_header('customer', 'string', 'Customer') ?>
+        <?= sortable_header('bank', 'string', 'Bank') ?>
+        <?= sortable_header('amount', 'numeric', 'Amount') ?>
+        <?= sortable_header('summary', 'string', 'Summary') ?>
         <th class="column_heading"></th>
     </tr>
     </thead>
@@ -18,15 +48,12 @@
     ?>
     <?php $parent_count = 0; ?>
     <?php  foreach($receipt_history as $record): ?>
-        <?php
-        $debit_entries = $record->debit_entries();
-        $credit_entries = $record->credit_entries();
-        ?>
+
         <tr style="">
 
             <td>
                 <?php
-                echo $record->id;
+                echo $record->voucher_id;
                 ?>
             </td>
 
@@ -37,21 +64,21 @@
             </td>
             <td>
                 <?php
-                $customer = $credit_entries[0]->related_customer;
+                $customer = $record->related_customer;
                 echo $customer;
                 ?>
             </td>
             <td>
                 <?php
-                $bank = $debit_entries[0]->ac_title." [ ".$debit_entries[0]->ac_sub_title." ]";
+                $bank = $record->bank_ac;
                 echo $bank;
                 ?>
             </td>
             <td>
                 <?php
-                $amount =$credit_entries[0]->amount;
-                $grand_total_amount += $amount;
-                echo rupee_format($amount);
+                $grand_total_amount += $record->amount;
+                $amount = rupee_format($record->amount);
+                echo $amount;
                 ?>
             </td>
             <td>
@@ -61,7 +88,7 @@
             </td>
 
             <td style="vertical-align: middle;">
-                <?php deleting_btn('invoice_number', $record->id, 'delete_invoice') ?>
+                <?php deleting_btn('invoice_number', $record->voucher_id, 'delete_invoice') ?>
             </td>
 
         </tr>

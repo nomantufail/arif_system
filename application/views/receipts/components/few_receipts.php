@@ -18,15 +18,12 @@
     ?>
     <?php $parent_count = 0; ?>
     <?php  foreach($receipt_history as $record): ?>
-        <?php
-        $debit_entries = $record->debit_entries();
-        $credit_entries = $record->credit_entries();
-        ?>
+
         <tr style="">
 
             <td>
                 <?php
-                echo $record->id;
+                echo $record->voucher_id;
                 ?>
             </td>
 
@@ -37,19 +34,19 @@
             </td>
             <td>
                 <?php
-                $customer = $credit_entries[0]->related_customer;
+                $customer = $record->related_customer;
                 echo $customer;
                 ?>
             </td>
             <td>
                 <?php
-                $bank = $debit_entries[0]->ac_title." [ ".$debit_entries[0]->ac_sub_title." ]";
+                $bank = $record->bank_ac;
                 echo $bank;
                 ?>
             </td>
             <td>
                 <?php
-                $amount = rupee_format($credit_entries[0]->amount);
+                $amount = rupee_format($record->amount);
                 echo $amount;
                 ?>
             </td>
@@ -60,7 +57,7 @@
             </td>
 
             <td style="vertical-align: middle;">
-                <?php deleting_btn('invoice_number', $record->id, 'delete_invoice') ?>
+                <?php deleting_btn('invoice_number', $record->voucher_id, 'delete_invoice') ?>
             </td>
 
 

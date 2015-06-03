@@ -129,6 +129,34 @@ class Sales extends ParentController {
         $this->load->view('sales/product_with_freight/make', $this->bodyData);
         $this->load->view('components/footer');
     }
+    public function edit_product_with_freight_sale($id='')
+    {
+        if($id == '')
+        {
+            redirect(base_url()."sales/add_product_sale");
+        }
+        if($this->accounts_model->voucher_active($id) == false)
+        {
+            redirect(base_url()."sales/add_product_sale");
+        }
+        $headerData['title']='sale';
+        $this->bodyData['section'] = 'edit';
+        $this->bodyData['products'] = $this->products_model->get();
+        $this->bodyData['customers'] = $this->customers_model->get();
+
+        $this->bodyData['customers_balance'] = $this->accounts_model->customers_balance();
+        $this->bodyData['available_stock'] = $this->stock_model->get();
+        $this->bodyData['invoice'] = $this->sales_model->find_product_with_freight_sale($id);
+        $this->bodyData['tankers'] = $this->tankers_model->get_busy();
+        $this->bodyData['invoice_number'] = $id;
+        $sales = $this->sales_model->few_product_with_freight_invoices();
+        $this->bodyData['sales']= $sales;
+        $this->bodyData['next_item_id'] = $this->accounts_model->next_item_id($id);
+
+        $this->load->view('components/header',$headerData);
+        $this->load->view('sales/product_with_freight/edit', $this->bodyData);
+        $this->load->view('components/footer');
+    }
 
     public function product_with_freight_history()
     {
@@ -253,7 +281,10 @@ class Sales extends ParentController {
          **/
         if(isset($_POST['delete_product_sale_invoice'])){
             if($this->form_validation->run('delete_sale_invoice') == true){
-                if( $this->deleting_model->delete_sale_invoice_item($_POST['invoice_number'], $_POST['product']) == true){
+                if( $this->deleting_model->safely_delete_sale_invoice_items_where(array(
+                        'voucher_entries.voucher_id'=>$_POST['invoice_number'],
+                        'voucher_entries.item_id'=>$_POST['item_id'],
+                    )) == true){
                     $this->helper_model->redirect_with_success('Invoice Removed Successfully!');
                 }else{
                     $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
@@ -268,7 +299,10 @@ class Sales extends ParentController {
          **/
         if(isset($_POST['delete_freight_sale_invoice'])){
             if($this->form_validation->run('delete_sale_invoice') == true){
-                if( $this->deleting_model->delete_product_and_freight_sale_invoice($_POST['invoice_number']) == true){
+                if( $this->deleting_model->safely_delete_sale_with_freight_invoice_items_where(array(
+                        'voucher_entries.voucher_id'=>$_POST['invoice_number'],
+                        'voucher_entries.item_id'=>$_POST['item_id'],
+                    )) == true){
                     $this->helper_model->redirect_with_success('Invoice Removed Successfully!');
                 }else{
                     $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
@@ -325,6 +359,19 @@ class Sales extends ParentController {
                 }
             }else{
                 $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+
+        /**
+         * Update Product with freight sale
+         **/
+        if(isset($_POST['update_product_with_freight_sale']))
+        {
+            $saved_invoice = $this->sales_model->update_product_with_freight_sale($_POST['invoice_id']);
+            if($saved_invoice != 0){
+                $this->helper_model->redirect_with_success('Invoice Saved Successfully!');
+            }else{
+                $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
             }
         }
     }
