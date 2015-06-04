@@ -61,7 +61,7 @@
         bank_ac_changed();
     });
 </script>
-<h3 style="color: #006dcc; text-align: center;">Receipt Vocuher</h3>
+<h3 style="color: #006dcc; text-align: center;">Edit Receipt Voucher# <?= $voucher_id ?> </h3>
 
 <?php echo $this->helper_model->display_flash_errors(); ?>
 <?php echo $this->helper_model->display_flash_success(); ?>

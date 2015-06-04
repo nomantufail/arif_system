@@ -20,7 +20,7 @@
         document.getElementById("new_title").type = 'text';
     }
 </script>
-<h3 style="color: #006dcc; text-align: center;">Expense Voucher</h3>
+<h3 style="color: #006dcc; text-align: center;">Edit Expense Voucher# <?= $voucher_id ?></h3>
 
 <?php if(isset($_POST['addExpense'])): ?>
 
@@ -32,7 +32,7 @@
     <!--notifications area ends-->
 <?php endif; ?>
 
-<form method="post" action="<?= $this->helper_model->controller_path()."add" ?>">
+<form method="post">
     <input name="voucher_id" value="<?= $voucher_id ?>" required="required" type="hidden">
     <table class="payment_form_table table table-bordered">
 

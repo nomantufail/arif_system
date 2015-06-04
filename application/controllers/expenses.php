@@ -74,6 +74,36 @@ class Expenses extends ParentController {
         $this->load->view('components/footer');
     }
 
+    public function edit_payment($id)
+    {
+        if($id == '')
+        {
+            redirect(base_url()."expenses/add_payment");
+        }
+        if($this->accounts_model->voucher_active($id) == false)
+        {
+            redirect(base_url()."expenses/add_payment");
+        }
+        $payment_voucher = $this->expenses_model->find_payment($id);
+        if($payment_voucher == null)
+        {
+            $this->helper_model->redirect_with_errors('Voucher not found.', base_url()."expenses/add_payment");
+        }
+
+        $headerData['title']='Edit Expense Payment';
+        $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
+
+        $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
+        $this->bodyData['few_payments'] = $this->expenses_model->few_payments();
+        $this->bodyData['payment'] = $payment_voucher;
+
+        $this->bodyData['voucher_id'] = $id;
+
+        $this->load->view('components/header',$headerData);
+        $this->load->view('expenses/edit_payment', $this->bodyData);
+        $this->load->view('components/footer');
+    }
+
     public function add_payment()
     {
         $headerData = array(
@@ -95,7 +125,9 @@ class Expenses extends ParentController {
         $headerData['title']='Expense Payment History';
 
         $this->bodyData['section'] = 'history';
-        $this->bodyData['payment_history'] = $this->expenses_model->payment_history();
+        $this->bodyData['payment_history'] = $this->expenses_model->search_expense_payment_history($this->search_keys, $this->sorting_info);
+
+        $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
 
         $this->load->view('components/header',$headerData);
         $this->load->view('expenses/payment_history', $this->bodyData);
@@ -108,7 +140,10 @@ class Expenses extends ParentController {
             'title' => 'Expense History',
         );
 
-        $this->bodyData['expense_history'] = $this->expenses_model->get();
+        $this->bodyData['expense_history'] = $this->expenses_model->search_expense_history($this->search_keys, $this->sorting_info);
+
+        $this->bodyData['titles'] = $this->expense_titles_model->get();
+        $this->bodyData['tankers'] = $this->tankers_model->get();
 
         $this->load->view('components/header', $headerData);
         $this->load->view('expenses/expense_history', $this->bodyData);
@@ -127,6 +162,16 @@ class Expenses extends ParentController {
         $this->load->view('components/footer');
     }
 
+    public function _check_expense_title_deletable($title)
+    {
+
+        if($this->expense_titles_model->have_usages($title) == true)
+        {
+            $this->form_validation->set_message('_check_expense_title_deletable','Title Cannot be deleted! Its being used in vouchers.');
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Below functions are used t save or deleted
@@ -165,6 +210,21 @@ class Expenses extends ParentController {
             }
             else
             {
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+
+        /**
+         * delete an expense title
+         **/
+        if(isset($_POST['delete_expense_title'])){
+            if($this->form_validation->run('delete_expense_title') == true){
+                if( $this->deleting_model->delete_expense_title($_POST['title']) == true){
+                    $this->helper_model->redirect_with_success('Expense title Removed Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }else{
                 $this->helper_model->redirect_with_errors(validation_errors());
             }
         }
@@ -228,23 +288,153 @@ class Expenses extends ParentController {
         /**
          * update an expense
          **/
-        if(isset($_POST['udpateExpense']))
+        if(isset($_POST['updateExpense']))
         {
-            $saved_receipt = $this->expenses_model->udpate_expense($_POST['voucher_id']);
+            $saved_receipt = $this->expenses_model->update_expense($_POST['voucher_id']);
             if($saved_receipt != 0){
                 $this->helper_model->redirect_with_success('Expense Saved Successfully!');
             }else{
                 $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
             }
         }
-    }
 
+        /**
+         * update an expense payment
+         **/
+        if(isset($_POST['updatePayment']))
+        {
+            $saved_receipt = $this->expenses_model->update_expense_payment($_POST['voucher_id']);
+            if($saved_receipt != 0){
+                $this->helper_model->redirect_with_success('Payment Saved Successfully!');
+            }else{
+                $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+            }
+        }
+    }
+    public function set_sort_info_for_required_section()
+    {
+        $area = $this->uri->segment(2);
+        switch($area)
+        {
+            case "show":
+                $sortable_columns = $this->expenses_model->sortable_columns('expenses');
+                $sort_by = 'vouchers.id';
+                $order_by = 'desc';
+
+                if(isset($_GET['sort_by']) && array_key_exists($_GET['sort_by'], $sortable_columns))
+                {
+                    $sort_by = $sortable_columns[$_GET['sort_by']];
+                }
+                if(isset($_GET['order']) && $_GET['order'] == 'asc')
+                {
+                    $order_by = 'asc';
+                }
+
+                $this->sorting_info['sort_by'] = $sort_by;
+                $this->sorting_info['order_by'] = $order_by;
+
+                break;
+
+            case "payment_history":
+                $sortable_columns = $this->expenses_model->sortable_columns('expense_payments');
+                $sort_by = 'vouchers.id';
+                $order_by = 'desc';
+
+                if(isset($_GET['sort_by']) && array_key_exists($_GET['sort_by'], $sortable_columns))
+                {
+                    $sort_by = $sortable_columns[$_GET['sort_by']];
+                }
+                if(isset($_GET['order']) && $_GET['order'] == 'asc')
+                {
+                    $order_by = 'asc';
+                }
+
+                $this->sorting_info['sort_by'] = $sort_by;
+                $this->sorting_info['order_by'] = $order_by;
+
+                break;
+        }
+    }
     public function set_search_keys_for_required_section()
     {
         $area = $this->uri->segment(2);
         switch($area)
         {
+            case "show":
+                $from = '';
+                $to ='';
+                $tankers = array();
+                $titles = array();
+                if(isset($_GET['from']))
+                {
+                    $from = $_GET['from'];
+                }
+                else
+                {
+                    $date = Carbon::now()->toDateString();
+                    $from = first_day_of_month($date);
+                }
 
+                if(isset($_GET['to']))
+                {
+                    $to = $_GET['to'];
+                }
+                else
+                {
+                    $date = Carbon::now()->toDateString();
+                    $to = $date;
+                }
+
+                if(isset($_GET['tanker']))
+                {
+                    $tankers = $_GET['tanker'];
+                }
+                if(isset($_GET['title']))
+                {
+                    $titles = $_GET['title'];
+                }
+
+                $this->search_keys['from'] = $from;
+                $this->search_keys['to'] = $to;
+                $this->search_keys['titles'] = $titles;
+                $this->search_keys['tankers'] = $tankers;
+
+                break;
+
+            case "payment_history":
+                $from = '';
+                $to ='';
+                $bank_acs = array();
+                if(isset($_GET['from']))
+                {
+                    $from = $_GET['from'];
+                }
+                else
+                {
+                    $date = Carbon::now()->toDateString();
+                    $from = first_day_of_month($date);
+                }
+
+                if(isset($_GET['to']))
+                {
+                    $to = $_GET['to'];
+                }
+                else
+                {
+                    $date = Carbon::now()->toDateString();
+                    $to = $date;
+                }
+
+                if(isset($_GET['bank_ac']))
+                {
+                    $bank_acs = $_GET['bank_ac'];
+                }
+
+                $this->search_keys['from'] = $from;
+                $this->search_keys['to'] = $to;
+                $this->search_keys['bank_acs'] = $bank_acs;
+
+                break;
         }
     }
 }

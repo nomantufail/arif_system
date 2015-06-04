@@ -22,11 +22,8 @@
         <tr style="">
 
             <td>
-                <?php
-                echo $record->voucher_id;
-                ?>
+                <a href="<?= base_url()."payments/edit/".$record->voucher_id ?>"><?= $record->voucher_id ?></a>
             </td>
-
             <td>
                 <?php
                 echo Carbon::createFromFormat('Y-m-d',$record->voucher_date)->toFormattedDateString();

@@ -17,17 +17,6 @@
 <script>
 
     /* making array of supplier balances at this point */
-    var SupplierBalance = {};
-    <?php foreach($suppliers as $supplier): ?>
-    <?php
-        $key = $supplier->name;
-        $value = (isset($suppliers_balance[$key]))?$suppliers_balance[$key]:0;
-    ?>
-    SupplierBalance["<?= $key ?>"] = "<?= $value ?>";
-    <?php endforeach; ?>
-    /*----------------------------------------------------------*/
-
-    /* making array of supplier balances at this point */
     var BankBalance = {};
     <?php foreach($bank_accounts as $account): ?>
     <?php
@@ -37,15 +26,6 @@
     BankBalance["<?= $key ?>"] = "<?= $value ?>";
     <?php endforeach; ?>
     /*----------------------------------------------------------*/
-
-    function supplier_changed(e)
-    {
-        var id = (e == undefined)?'supplier':e.params.data.element.parentElement.id;
-        var supplier_selected_index = document.getElementById("supplier").selectedIndex;
-        var supplier = document.getElementById("supplier").options[supplier_selected_index].value;
-        document.getElementById("supplier_balance").innerHTML = to_rupees(SupplierBalance[supplier]);
-    }
-
     function bank_ac_changed(e)
     {
         var id = (e == undefined)?'bank_ac':e.params.data.element.parentElement.id;
@@ -57,11 +37,10 @@
     }
 
     $( document ).ready(function() {
-        supplier_changed();
         bank_ac_changed();
     });
 </script>
-<h3 style="color: #006dcc; text-align: center;">Edit Payment Voucher# <?= $voucher_id ?></h3>
+<h3 style="color: #006dcc; text-align: center;">Edit Expense Payment Voucher# <?= $voucher_id ?></h3>
 
 <!--Notifications Area-->
 <div class="row">
@@ -71,29 +50,13 @@
 <!--notifications area ends-->
 
 <form method="post">
-    <input type="hidden" name="voucher_id" value="<?= $voucher_id ?>">
+    <input type="hidden" value="<?= $voucher_id ?>" name="voucher_id">
     <table class="payment_form_table table table-bordered">
 
         <tr>
             <th style="width: ">Date</th>
             <td><input class="form-control" value="<?= $payment->voucher_date ?>" style="width: 100%;" type="date" name="voucher_date"></td>
 
-            <th>Supplier</th>
-            <td>
-                <select class="select_box suppliers_select_box" style="width: 100%;" name="supplier" id="supplier">
-                    <?php foreach($suppliers as $supplier):?>
-                        <?php
-                        $selected = ($supplier->name == $payment->related_supplier)?'selected':'';
-                        ?>
-                        <option value="<?= $supplier->name ?>" <?= $selected ?>><?= $supplier->name ?></option>
-                    <?php endforeach; ?>
-                </select><br>
-                <span style="color: #808080;">Balance: </span><span style="color: gray;" id="supplier_balance"></span>
-            </td>
-        </tr>
-        <tr>
-            <th>Amount</th>
-            <td><input value="<?= $payment->amount ?>" type="number" step="any" name="amount" class="form-control"></td>
             <th>Bank A/C</th>
             <td>
                 <select class="select_box bank_ac_select_box" style="width: 100%;" name="bank_ac" id="bank_ac">
@@ -107,9 +70,12 @@
                 <span style="color: #808080;">Balance: </span><span style="color: gray;" id="bank_balance"></span>
             </td>
         </tr>
+
         <tr>
+            <th>Amount</th>
+            <td><input value="<?= $payment->amount ?>" type="number" step="any" name="amount" class="form-control"></td>
             <th>Summary</th>
-            <td colspan="3">
+            <td>
                 <textarea class="form-control" name="summary"><?= $payment->summary ?></textarea>
             </td>
         </tr>
@@ -122,11 +88,7 @@
 </form>
 
 <script>
-    var $supplierSelect = $(".suppliers_select_box");
     var $bank_ac_select = $(".bank_ac_select_box");
-    $supplierSelect.on("select2:select", function (e) {
-        supplier_changed(e);
-    });
     $bank_ac_select.on("select2:select", function (e) {
         bank_ac_changed(e);
     });

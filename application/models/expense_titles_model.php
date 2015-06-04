@@ -50,4 +50,28 @@ class Expense_Titles_Model extends Parent_Model {
         return $this->db->trans_complete();
     }
 
+    public function get_where($where)
+    {
+        $this->db->select('expense_titles.id, expense_titles.title');
+        $result = $this->db->get_where($this->table,$where)->result();
+        $title = ($result != null)?$result[0]:null;
+        return $title;
+    }
+
+    public function have_usages($title)
+    {
+        $this->db->select("vouchers.id as voucher_id");
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active_vouchers();
+        $this->db->where('voucher_entries.ac_title',$title);
+        $vouchers = $this->db->get()->num_rows();
+
+        if($vouchers != 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

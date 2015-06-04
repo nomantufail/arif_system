@@ -286,7 +286,22 @@ class Parent_Model extends CI_Model {
     }
 
     /**
+     * Used to select all the withdraw vouchers contents which are needed
+     */
+    public function select_withdraw_voucher_content()
+    {
+        $this->db->select('
+            vouchers.id as voucher_id, vouchers.voucher_date,
+            vouchers.summary,
+            voucher_entries.ac_title as withdraw_account,
+            vouchers.bank_ac,
+            voucher_entries.amount,
+        ');
+    }
+
+    /**
      * Used to select all the withdraw accounts contents which are needed
+     *  NOT SURE ABOUT THIS ONE. Y THIS WAS CREATED
      */
     public function select_withdraw_accounts_content()
     {
@@ -299,7 +314,7 @@ class Parent_Model extends CI_Model {
     public function select_expense_payment_content()
     {
         $this->db->select("
-            vouchers.id as voucher_id, vouchers.voucher_date as voucher_date, vouchers.summary as summary,
+            vouchers.id as voucher_id, vouchers.voucher_date, vouchers.summary as summary,
             voucher_entries.ac_title as bank_ac, voucher_entries.amount,
         ");
     }

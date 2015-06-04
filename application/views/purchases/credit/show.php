@@ -100,7 +100,7 @@
                                 ?>
 
                                 <tr style="border-top: <?= ($count == 1)?'3':'0'; ?>px solid lightblue;">
-                                    <?php if($count == 1){echo "<td rowspan=".($num_invoice_items)." style=''><a target=_blank href='#".$record->id."'>".$record->id."</a></td>";} ?>
+                                    <?php if($count == 1){echo "<td rowspan=".($num_invoice_items)." style=''><a target=_blank href='".base_url()."purchases/edit/".$record->id."'>".$record->id."</a></td>";} ?>
                                     <?php if($count == 1){echo "<td rowspan=".($num_invoice_items).">".Carbon::createFromFormat('Y-m-d',$record->date)->toFormattedDateString()."</td>";} ?>
 
                                     <?php if($count == 1){echo "<td rowspan=".($num_invoice_items).">".$record->supplier->name."</td>";} ?>

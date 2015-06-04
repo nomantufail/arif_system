@@ -228,15 +228,12 @@
                    ?>
                    <?php $parent_count = 0; ?>
                    <?php  foreach($receipts as $record): ?>
-                       <?php
-                       $debit_entries = $record->debit_entries();
-                       $credit_entries = $record->credit_entries();
-                       ?>
+
                        <tr style="">
 
                            <td>
                                <?php
-                               echo $record->id;
+                               echo $record->voucher_id;
                                ?>
                            </td>
 
@@ -247,13 +244,13 @@
                            </td>
                            <td>
                                <?php
-                               $customer = $credit_entries[0]->related_customer;
+                               $customer = $record->related_customer;
                                echo $customer;
                                ?>
                            </td>
                            <td colspan="4">
                                <?php
-                               $bank = $debit_entries[0]->ac_title." [ ".$debit_entries[0]->ac_sub_title." ]";
+                               $bank = $record->bank_ac;
                                echo $bank;
                                ?>
                            </td>
@@ -262,7 +259,7 @@
                            </td>
                            <td>
                                <?php
-                               $amount = $credit_entries[0]->amount;
+                               $amount = $record->amount;
                                $total_credit += $amount;
                                echo rupee_format($amount);
                                ?>
@@ -302,15 +299,12 @@
                        ?>
                        <?php $parent_count = 0; ?>
                        <?php  foreach($payments as $record): ?>
-                       <?php
-                       $debit_entries = $record->debit_entries();
-                       $credit_entries = $record->credit_entries();
-                       ?>
+
                    <tr style="">
 
                        <td>
                            <?php
-                           echo $record->id;
+                           echo $record->voucher_id;
                            ?>
                        </td>
 
@@ -321,19 +315,19 @@
                        </td>
                        <td>
                            <?php
-                           $supplier = $debit_entries[0]->related_supplier;
+                           $supplier = $record->related_supplier;
                            echo $supplier;
                            ?>
                        </td>
                        <td colspan="4">
                            <?php
-                           $bank = $credit_entries[0]->ac_title." [ ".$credit_entries[0]->ac_sub_title." ]";
+                           $bank = $record->bank_ac;
                            echo $bank;
                            ?>
                        </td>
                        <td>
                            <?php
-                           $amount = $credit_entries[0]->amount;
+                           $amount = $record->amount;
                            $total_debit += $amount;
                            echo rupee_format($amount);
                            ?>

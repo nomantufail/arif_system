@@ -336,12 +336,9 @@ function validate_product_sale_invoice_form()
             <form method="post" onsubmit="return validate_product_sale_invoice_form()">
                 <input type="hidden" name="invoice_id" value="<?= $invoice_number ?>">
                 <div class="row">
+                    <h3 style="text-align: center; color: #2a6496;">Edit Sale Invoice# <?= $invoice_number ?></h3>
+                    <hr>
                     <div class="col-sm-12">
-                        <table class="">
-                            <tr>
-                                <th><h4>Invoice# <?= $invoice_number ?></h4></th>
-                            </tr>
-                        </table>
                         <table style="width: 100%;" class="">
                             <tr>
                                 <td>

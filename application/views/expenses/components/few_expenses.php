@@ -21,11 +21,8 @@
         <tr style="">
 
             <td>
-                <?php
-                echo $record->invoice_id;
-                ?>
+                <a href="<?= base_url()."expenses/edit/".$record->invoice_id ?>"><?= $record->invoice_id ?></a>
             </td>
-
             <td>
                 <?php
                 echo Carbon::createFromFormat('Y-m-d',$record->expense_date)->toFormattedDateString();

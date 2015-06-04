@@ -19,13 +19,9 @@
     <?php  foreach($few_withdrawls as $record): ?>
 
         <tr style="">
-
             <td>
-                <?php
-                echo $record->voucher_id;
-                ?>
+                <a href="<?= base_url()."withdrawls/edit_withdrawl/".$record->voucher_id ?>"><?= $record->voucher_id ?></a>
             </td>
-
             <td>
                 <?php
                 echo Carbon::createFromFormat('Y-m-d',$record->voucher_date)->toFormattedDateString();
@@ -52,7 +48,9 @@
                 echo $record->summary;
                 ?>
             </td>
-            <td></td>
+            <td>
+                <?php deleting_btn('voucher_id', $record->voucher_id, 'delete_voucher') ?>
+            </td>
 
         </tr>
     <?php endforeach; ?>

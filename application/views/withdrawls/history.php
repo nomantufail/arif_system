@@ -39,15 +39,44 @@
             <div class="row">
 
                 <div class="col-lg-12">
+                    <form action="" method="get">
+                        <table class="search-table" style="width:100%;">
+                            <tr>
+                                <td style="width: 15%;"><b>From: </b><input class="form-control" type="date" value="<?= $search_keys['from'] ?>" name="from"></td>
+                                <td style="width: 15%;"><b>To: </b><input class="form-control" type="date" value="<?= $search_keys['to'] ?>" name="to"></td>
+                                <td style="width: 20%;"><b>Bank a/c: </b><br>
+                                    <select class="select_box bank_ac_select_box" style="width: 100%;" name="bank_ac[]" id="bank_ac" multiple>
+                                        <?php foreach($bank_accounts as $account):?>
+                                            <?php
+                                            $selected = (in_array(formatted_bank_account($account), $search_keys['bank_acs']))?'selected':''
+                                            ?>
+                                            <option value="<?= formatted_bank_account($account) ?>" <?= $selected ?>><?= formatted_bank_account($account) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td style="width: 20%;"><b>Wtithdraw a/c: </b><br>
+                                    <select class="select_box bank_ac_select_box" style="width: 100%;" name="withdraw_account[]" id="bank_ac" multiple>
+                                        <?php foreach($withdraw_accounts as $account):?>
+                                            <?php
+                                            $selected = (in_array($account->title, $search_keys['withdraw_accounts']))?'selected':''
+                                            ?>
+                                            <option value="<?= $account->title ?>" <?= $selected ?>><?= $account->title ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td style="width: 25%;"><br><button style="width: 100%; height: 30px;"><i class="fa fa-search"></i> Search</button></td>
+                            </tr>
+                        </table>
+                    </form>
                     <table class="my_table list_table table table-bordered">
                         <thead class="table_header">
                         <tr class="table_row table_header_row">
-                            <th class="column_heading">Invoice#</th>
-                            <th class="column_heading">Date</th>
-                            <th class="column_heading">Bank A/C</th>
-                            <th class="column_heading">Withdraw A/C</th>
-                            <th class="column_heading">Amount</th>
-                            <th class="column_heading">Summary</th>
+                            <?= sortable_header('voucher_id','numeric','Invoice#') ?>
+                            <?= sortable_header('voucher_date','date','Date') ?>
+                            <?= sortable_header('bank', 'string', 'Bank A/c') ?>
+                            <?= sortable_header('withdraw_account', 'string', 'Withdraw A/c') ?>
+                            <?= sortable_header('amount', 'numeric', 'Amount') ?>
+                            <?= sortable_header('summary', 'string', 'Summary') ?>
                             <th class="column_heading"></th>
                         </tr>
                         </thead>
@@ -61,11 +90,8 @@
                             <tr style="">
 
                                 <td>
-                                    <?php
-                                    echo $record->voucher_id;
-                                    ?>
+                                    <a href="<?= base_url()."withdrawls/edit_withdrawl/".$record->voucher_id ?>"><?= $record->voucher_id ?></a>
                                 </td>
-
                                 <td>
                                     <?php
                                     echo Carbon::createFromFormat('Y-m-d',$record->voucher_date)->toFormattedDateString();
@@ -92,7 +118,9 @@
                                     echo $record->summary;
                                     ?>
                                 </td>
-                                <td></td>
+                                <td>
+                                    <?php deleting_btn('voucher_id', $record->voucher_id, 'delete_voucher') ?>
+                                </td>
 
                             </tr>
                         <?php endforeach; ?>

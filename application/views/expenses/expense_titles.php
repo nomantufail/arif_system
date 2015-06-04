@@ -59,15 +59,14 @@
                     <table class="my_table list_table table table-bordered">
                         <thead class="table_header">
                         <tr class="table_row table_header_row">
-                            <th class="column_heading" style="width: 10%;">ID</th>
                             <th class="column_heading">Title</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody class="table_body">
                         <?php foreach($titles as $title):?>
                             <tr class="table_row table_body_row">
-                                <td class="table_td"><?= ucwords($title->id)?></td>
-                                <td class="table_td">
+                                <td class="table_td" style="font-size: 18px; width: 90%;">
                                     <?php
                                     $properties = array(
                                         'class'=>'x-editable',
@@ -79,6 +78,10 @@
                                     );
                                     echo anchor('#',$title->title, $properties);
                                     ?>
+                                </td>
+
+                                <td>
+                                    <?php deleting_btn('title', $title->title, 'delete_expense_title') ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

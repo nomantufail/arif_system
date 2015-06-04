@@ -23,6 +23,16 @@ class Deleting_Model extends Parent_Model {
         return $this->db->trans_complete();
 
     }
+    public function delete_expense_title($title)
+    {
+        $result = $this->expense_titles_model->get_where(array('title'=>$title));
+        $this->db->trans_start();
+        if($result != null)
+        {
+            $this->deleting_model->force_delete_where('expense_titles', array('title'=>$title));
+        }
+        return $this->db->trans_complete();
+    }
     public function delete_tanker($number)
     {
         $this->db->trans_start();
@@ -406,6 +416,13 @@ class Deleting_Model extends Parent_Model {
     {
         $this->db->trans_start();
         $this->delete_voucher($invoice_number);
+        return $this->db->trans_complete();
+    }
+
+    public function delete_withdraw_voucher($voucher_id)
+    {
+        $this->db->trans_start();
+        $this->delete_voucher($voucher_id);
         return $this->db->trans_complete();
     }
 
