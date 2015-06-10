@@ -80,12 +80,22 @@ class Receipts extends ParentController {
 
         $this->bodyData['customers'] = $this->customers_model->get();
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
-
         $this->bodyData['receipt_history'] = $this->receipts_model->search_receipt_history($this->search_keys, $this->sorting_info);
 
-        $this->load->view('components/header',$headerData);
-        $this->load->view('Receipts/history', $this->bodyData);
-        $this->load->view('components/footer');
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/receipts', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/receipts', $this->bodyData);
+        }
+        else
+        {
+            $this->load->view('components/header',$headerData);
+            $this->load->view('Receipts/history', $this->bodyData);
+            $this->load->view('components/footer');
+        }
     }
 
 

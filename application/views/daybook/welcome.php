@@ -17,6 +17,11 @@
         margin: 0px !important;
     }
 </style>
+
+<!--      Print Form          -->
+<?= print_form(); ?>
+<!-- print form ends    -->
+
 <div id="page-wrapper" class="whole_page_container">
 
     <div class="container-fluid">

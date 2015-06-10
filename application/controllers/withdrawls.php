@@ -91,13 +91,23 @@ class Withdrawls extends ParentController {
         $headerData['title']='Withdrawls History';
         $this->bodyData['section'] = 'history';
         $this->bodyData['withdraw_history'] = $this->withdrawls_model->search_withdrawls_history($this->search_keys, $this->sorting_info);
-
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
         $this->bodyData['withdraw_accounts'] = $this->withdrawls_model->accounts();
 
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/withdrawls', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/withdrawls', $this->bodyData);
+        }
+        else
+        {
         $this->load->view('components/header',$headerData);
         $this->load->view('withdrawls/history', $this->bodyData);
         $this->load->view('components/footer');
+        }
     }
 
     public function accounts()

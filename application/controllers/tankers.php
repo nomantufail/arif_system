@@ -31,11 +31,22 @@ class Tankers extends ParentController {
     {
         $headerData['title'] = 'tankers';
         $this->bodyData['someMessage'] = '';
-
         $this->bodyData['tankers'] = $this->tankers_model->get();
+
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/tankers', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/tankers', $this->bodyData);
+        }
+        else
+        {
         $this->load->view('components/header', $headerData);
         $this->load->view('tankers/welcome', $this->bodyData);
         $this->load->view('components/footer');
+        }
     }
 
     public function _check_unique_tanker()

@@ -36,15 +36,22 @@ class Products extends ParentController {
         );
         $this->bodyData['someMessage'] = '';
         $this->bodyData['columns'] = array();
-
-
-
         $this->bodyData['products'] = $this->products_model->get();
 
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/products', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/products', $this->bodyData);
+        }
+        else
+        {
         $this->load->view('components/header', $headerData);
         $this->load->view('products/welcome', $this->bodyData);
         $this->load->view('components/footer');
-
+        }
     }
 
     public function _check_product_deletable($product)

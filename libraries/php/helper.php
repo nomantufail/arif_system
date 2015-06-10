@@ -6,6 +6,16 @@
  * Time: 3:38 AM
  */
 
+function print_form()
+{
+    echo '<form name="selection_form" id="selection_form" method="post"';
+    echo ' action="';
+            if(strpos(page_url(),'?') == false){
+                echo page_url()."?";
+            }else{echo page_url()."&";}
+            echo 'print"></form>';
+}
+
 function property_to_array($property, $objects)
 {
     $temp_array = array();

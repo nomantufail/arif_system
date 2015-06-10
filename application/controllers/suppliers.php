@@ -31,11 +31,22 @@ class Suppliers extends ParentController {
     {
         $headerData['title'] = 'suppliers';
         $this->bodyData['someMessage'] = '';
-
         $this->bodyData['suppliers'] = $this->suppliers_model->get();
+
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/suppliers', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/suppliers', $this->bodyData);
+        }
+        else
+        {
         $this->load->view('components/header', $headerData);
         $this->load->view('suppliers/welcome', $this->bodyData);
         $this->load->view('components/footer');
+        }
     }
 
     public function _check_unique_supplier()

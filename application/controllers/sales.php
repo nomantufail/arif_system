@@ -57,7 +57,8 @@ class Sales extends ParentController {
 
         $this->bodyData['customers_balance'] = $this->accounts_model->customers_balance();
         $this->bodyData['available_stock'] = $this->stock_model->get();
-        $this->bodyData['tankers'] = $this->tankers_model->get_busy();
+        $this->bodyData['busy_tankers'] = $this->tankers_model->get_busy();
+        $this->bodyData['free_tankers'] = $this->tankers_model->get_free();
         $this->bodyData['invoice_number'] = $this->sales_model->next_invoice();
         $sales = $this->sales_model->few_product_sale_invoices();
         $this->bodyData['sales']= $sales;
@@ -106,9 +107,20 @@ class Sales extends ParentController {
         $this->bodyData['products'] = $this->products_model->get();
         $this->bodyData['section'] = 'invoices';
 
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/product_sales', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/product_sales', $this->bodyData);
+        }
+        else
+        {
         $this->load->view('components/header', $headerData);
         $this->load->view('sales/product_sale/show', $this->bodyData);
         $this->load->view('components/footer');
+        }
     }
     public function add_product_with_freight()
     {
@@ -120,7 +132,8 @@ class Sales extends ParentController {
 
         $this->bodyData['customers_balance'] = $this->accounts_model->customers_balance();
         $this->bodyData['available_stock'] = $this->stock_model->get();
-        $this->bodyData['tankers'] = $this->tankers_model->get_busy();
+        $this->bodyData['busy_tankers'] = $this->tankers_model->get_busy();
+        $this->bodyData['free_tankers'] = $this->tankers_model->get_free();
         $this->bodyData['invoice_number'] = $this->sales_model->next_invoice();
         $sales = $this->sales_model->few_product_with_freight_invoices();
         $this->bodyData['sales']= $sales;
@@ -168,9 +181,20 @@ class Sales extends ParentController {
         $this->bodyData['products'] = $this->products_model->get();
         $this->bodyData['customers'] = $this->customers_model->get();
 
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/sale_with_freight', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/sale_with_freight', $this->bodyData);
+        }
+        else
+        {
         $this->load->view('components/header', $headerData);
         $this->load->view('sales/product_with_freight/show', $this->bodyData);
         $this->load->view('components/footer');
+        }
     }
 
     public function cash()

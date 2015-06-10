@@ -196,12 +196,12 @@ $default_row_counter = 1;
             <?php echo $this->helper_model->display_flash_errors(); ?>
             <?php echo $this->helper_model->display_flash_success(); ?>
 
-            <?php if(sizeof($tankers) == 0){ ?>
-                <div class="alert alert-warning alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    Warning: No tankers available for now. <br>
-                </div>
-            <?php } ?>
+<!--            --><?php //if(sizeof($tankers) == 0){ ?>
+<!--                <div class="alert alert-warning alert-dismissible" role="alert">-->
+<!--                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>-->
+<!--                    Warning: No tankers available for now. <br>-->
+<!--                </div>-->
+<!--            --><?php //} ?>
         </div>
         <!--notifications area ends-->
 
@@ -228,8 +228,11 @@ $default_row_counter = 1;
                                 <td>
                                     <span><b>Tanker:</b></span><br>
                                     <select class="select_box" name="tanker" style="min-width: 70px;">
-                                        <?php foreach($tankers as $tanker):?>
+                                        <?php foreach($free_tankers as $tanker):?>
                                             <option value="<?= $tanker->number ?>"><?= $tanker->number ?></option>
+                                        <?php endforeach; ?>
+                                        <?php foreach($busy_tankers as $tanker):?>
+                                            <option disabled value="<?= $tanker->number ?>"><?= $tanker->number ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </td>

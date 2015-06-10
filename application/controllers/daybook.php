@@ -36,9 +36,21 @@ class DayBook extends ParentController {
         $this->bodyData['receipts'] = $this->receipts_model->today_receipts();
         $this->bodyData['expenses'] = $this->expenses_model->today_expenses();
         $this->bodyData['withdrawls'] = $this->withdrawls_model->today_withdrawls();
+
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/daybook', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/daybook', $this->bodyData);
+        }
+        else
+        {
         $this->load->view('components/header',$headerData);
         $this->load->view('daybook/welcome', $this->bodyData);
         $this->load->view('components/footer');
+        }
     }
 
 }

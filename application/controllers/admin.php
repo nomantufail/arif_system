@@ -59,6 +59,8 @@ class Admin extends ParentController {
 
         $this->bodyData['profit_loss'] = $this->accounts_model->profit_loss($from, $to);
 
+        $this->bodyData['business_performance'] = $this->business_performance_model->month_by_month_expense_sales_purchase_sheet();
+
         $this->load->view('components/header',$headerData);
         $this->load->view('admin/home', $this->bodyData);
         $this->load->view('components/footer');

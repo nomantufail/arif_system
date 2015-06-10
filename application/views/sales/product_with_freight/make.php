@@ -278,8 +278,11 @@ $default_row_counter = 1;
                                 <td>
                                     <span><b>Tanker:</b></span><br>
                                     <select class="select_box tanker_select_box" name="tanker" id="tanker" style="min-width: 70px;">
-                                        <?php foreach($tankers as $tanker):?>
+                                        <?php foreach($busy_tankers as $tanker):?>
                                             <option value="<?= $tanker->number ?>"><?= $tanker->number ?></option>
+                                        <?php endforeach; ?>
+                                        <?php foreach($free_tankers as $tanker):?>
+                                            <option disabled value="<?= $tanker->number ?>"><?= $tanker->number ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </td>

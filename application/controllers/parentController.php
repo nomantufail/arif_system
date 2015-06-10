@@ -55,6 +55,7 @@ class ParentController extends CI_Controller {
             'intelligent_router_model',
             'editing_model',
             'deleting_model',
+            'business_performance_model',
         ));
 
         //saving the latest route
@@ -78,7 +79,6 @@ class ParentController extends CI_Controller {
 
         //setting sorting info.
         $this->set_sorting_info();
-
 
     }
 
@@ -183,6 +183,7 @@ class ParentController extends CI_Controller {
         $this->bodyData['sorting_info'] = $this->sorting_info;
     }
 
+
     private function _loggedIn(){
         /*if($this->admin_model->loggedIn() == 1){
             return true;
@@ -211,27 +212,6 @@ class ParentController extends CI_Controller {
         $cap = create_captcha($vals);
         return $cap;*/
     }
-
-    function _check_credentials($str, $data){
-        /*list($table, $userField, $passField)=explode('.', $data);
-        //You have to change this line below
-        if($this->input->post('username') != "" && $this->input->post('password') != "" && $this->input->post('confirmCaptcha') != "" && $this->form_validation->captcha_check($this->input->post('confirmCaptcha'), 'captcha') == true){
-            //////////////////////////////////////////////////////////////////////////////////////////////////
-            $userName = $userField.".".$this->input->post('username');
-            $password = $passField.".".$this->input->post('password');
-            $credentials = $this->admin_model->check_credentials($table, $userName, $password);
-            if($credentials == false){
-                $this->form_validation->set_message('_check_credentials','Invalid Username/Password. Please try again');
-                return false;
-            }else{
-                return true;
-            }
-        }else{
-            return true;
-        }*/
-    }
-
-
 
     private function _call_with_args($method, $args=""){
         if($args == ""){

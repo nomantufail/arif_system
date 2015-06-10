@@ -303,19 +303,19 @@ class Sales_Model extends Parent_Model {
         /**
          * applying search keys
          **/
-        if(sizeof($keys['customers']) > 0)
+        if(isset($keys['customers']) && sizeof($keys['customers']) > 0)
         {
             $this->where_related_customers($keys['customers']);
         }
-        if(sizeof($keys['products']) > 0)
+        if(isset($keys['products']) && sizeof($keys['products']) > 0)
         {
             $this->where_ac_titles($keys['products']);
         }
-        if($keys['to'] != '')
+        if(isset($keys['to']) && $keys['to'] != '')
         {
             $this->db->where('vouchers.voucher_date <=',$keys['to']);
         }
-        if($keys['from'] != '')
+        if(isset($keys['from']) && $keys['from'] != '')
         {
             $this->db->where('vouchers.voucher_date >=',$keys['from']);
         }
@@ -324,7 +324,10 @@ class Sales_Model extends Parent_Model {
         /**
          * Sorting Section
          **/
-        $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        if($sorting_info != null)
+        {
+            $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        }
         /*------ Sorting Section Ends ------*/
 
         $raw_invoices = $this->db->get()->result();
@@ -357,28 +360,31 @@ class Sales_Model extends Parent_Model {
         /**
          * applying search keys
          **/
-        if(sizeof($keys['customers']) > 0)
+        if(isset($keys['customers']) && sizeof($keys['customers']) > 0)
         {
             $this->where_related_customers($keys['customers']);
         }
-        if(sizeof($keys['products']) > 0)
+        if(isset($keys['products']) && sizeof($keys['products']) > 0)
         {
             $this->where_ac_titles($keys['products']);
         }
-        if($keys['to'] != '')
+        if(isset($keys['to']) && $keys['to'] != '')
         {
             $this->db->where('vouchers.voucher_date <=',$keys['to']);
         }
-        if($keys['from'] != '')
+        if(isset($keys['from']) && $keys['from'] != '')
         {
             $this->db->where('vouchers.voucher_date >=',$keys['from']);
         }
         /*------- End Of Search Keys-----*/
 
-        /**
+         /**
          * Sorting Section
          **/
-        $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        if($sorting_info != null)
+        {
+            $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        }
         /*------ Sorting Section Ends ------*/
 
         $raw_invoices = $this->db->get()->result();

@@ -129,9 +129,20 @@ class Expenses extends ParentController {
 
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
 
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/expense_payments', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/expense_payments', $this->bodyData);
+        }
+        else
+        {
         $this->load->view('components/header',$headerData);
         $this->load->view('expenses/payment_history', $this->bodyData);
         $this->load->view('components/footer');
+        }
     }
 
     public function show()
@@ -145,9 +156,20 @@ class Expenses extends ParentController {
         $this->bodyData['titles'] = $this->expense_titles_model->get();
         $this->bodyData['tankers'] = $this->tankers_model->get();
 
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/expenses', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/expenses', $this->bodyData);
+        }
+        else
+        {
         $this->load->view('components/header', $headerData);
         $this->load->view('expenses/expense_history', $this->bodyData);
         $this->load->view('components/footer');
+        }
     }
     public function titles()
     {

@@ -82,9 +82,20 @@ class Payments extends ParentController {
 
         $this->bodyData['payment_history'] = $this->payments_model->search_payment_history($this->search_keys, $this->sorting_info);
 
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/payments', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/payments', $this->bodyData);
+        }
+        else
+        {
         $this->load->view('components/header',$headerData);
         $this->load->view('payments/history', $this->bodyData);
         $this->load->view('components/footer');
+        }
     }
 
 

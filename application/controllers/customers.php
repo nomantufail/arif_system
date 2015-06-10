@@ -33,9 +33,21 @@ class Customers extends ParentController {
         $this->bodyData['someMessage'] = '';
 
         $this->bodyData['customers'] = $this->customers_model->get();
-        $this->load->view('components/header', $headerData);
-        $this->load->view('customers/welcome', $this->bodyData);
-        $this->load->view('components/footer');
+
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/customers', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/customers', $this->bodyData);
+        }
+        else
+        {
+            $this->load->view('components/header', $headerData);
+            $this->load->view('customers/welcome', $this->bodyData);
+            $this->load->view('components/footer');
+        }
     }
 
     public function _check_unique_customer()

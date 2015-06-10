@@ -38,7 +38,8 @@ class Purchases extends ParentController {
         $this->bodyData['suppliers'] = $this->suppliers_model->get();
 
         $this->bodyData['suppliers_balance'] = $this->accounts_model->suppliers_balance();
-        $this->bodyData['tankers'] = $this->tankers_model->get_free();
+        $this->bodyData['free_tankers'] = $this->tankers_model->get_free();
+        $this->bodyData['busy_tankers'] = $this->tankers_model->get_busy();
         $this->bodyData['invoice_number'] = $this->purchases_model->next_invoice();
         $purchases = $this->purchases_model->few_invoices();
         $this->bodyData['purchases']= $purchases;
@@ -84,9 +85,20 @@ class Purchases extends ParentController {
         $this->bodyData['suppliers'] = $this->suppliers_model->get();
         $this->bodyData['products'] = $this->products_model->get();
 
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/purchases', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/purchases', $this->bodyData);
+        }
+        else
+        {
         $this->load->view('components/header', $headerData);
         $this->load->view('purchases/credit/show', $this->bodyData);
         $this->load->view('components/footer');
+        }
     }
 
     public function _check_for_same_product_selection()

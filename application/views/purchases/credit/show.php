@@ -66,6 +66,10 @@
                         </table>
                     </form>
 
+                    <!--      Print Form          -->
+                    <?= print_form(); ?>
+                    <!-- print form ends    -->
+
                     <table class="my_table list_table table table-bordered">
                         <thead class="table_header">
                         <tr class="table_row table_header_row">

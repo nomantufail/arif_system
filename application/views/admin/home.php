@@ -128,7 +128,48 @@
                             </table>
                         </div>
                     </div>
+
                 </div>
+            </div>
+            <div class="row">
+                <script type="text/javascript"
+                        src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1',
+              'packages':['corechart']
+            }]
+          }"></script>
+
+                <script type="text/javascript">
+                    google.setOnLoadCallback(drawChart);
+
+                    function drawChart() {
+                        var data = google.visualization.arrayToDataTable([
+                            ['Month', 'Sales', 'Purchases', 'Expenses'],
+                            <?php
+                            $counter = 1;
+                            foreach($business_performance as $status)
+                            {
+                                echo "['".$status->getMonthNameFormatted()."', ".$status->getSales().", ".$status->getPurchases().", ".$status->getExpenses()."]".(($counter == sizeof($business_performance))?'':',')."";
+                                $counter++;
+                            }
+                            ?>
+                        ]);
+
+                        var options = {
+                            title: 'Company Performance',
+                            curveType: 'function',
+                            legend: { position: 'bottom' }
+                        };
+
+                        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+                        chart.draw(data, options);
+                    }
+                </script>
+
+                <div id="curve_chart" class="col-lg-12" style="height: 500px;"></div>
             </div>
         </div>
     </div>

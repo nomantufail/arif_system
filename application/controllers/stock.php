@@ -31,13 +31,22 @@ class Stock extends ParentController {
         $headerData = array(
             'title' => 'Stock',
         );
-
         $bodyData['stock'] = $this->stock_model->get();
 
-        $this->load->view('components/header', $headerData);
-        $this->load->view('stock/show', $bodyData);
-        $this->load->view('components/footer');
-
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/stock', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/stock', $this->bodyData);
+        }
+        else
+        {
+            $this->load->view('components/header', $headerData);
+            $this->load->view('stock/show', $bodyData);
+            $this->load->view('components/footer');
+        }
     }
 
 
