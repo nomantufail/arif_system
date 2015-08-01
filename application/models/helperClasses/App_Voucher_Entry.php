@@ -25,6 +25,8 @@ class App_voucher_Entry {
     public $dr_cr;
     public $amount;
     public $freight;
+    public $source;
+    public $destination;
     public $description;
     public $inserted_at;
     public $updated_at;

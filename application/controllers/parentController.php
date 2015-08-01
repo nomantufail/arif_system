@@ -64,6 +64,38 @@ class ParentController extends CI_Controller {
         //checking the login state below...
         $this->login = $this->helper_model->is_login();
 
+
+    }
+
+    function _remap($method){
+        if($this->login == false){
+            //$this->_AutoLogin();
+            $this->login();
+        }
+        else if($this->privilege_model->is_authenticated() == false)
+        {
+            $this->privilege_model->check_privileges();
+        }
+        else
+        {
+            /**
+             * below method will call all
+             * those services which are required
+             * to complete some tasks before
+             * processing actual user request
+             **/
+            $this->call_pre_services();
+
+            $this->_call_with_args($method);
+        }
+    }
+
+    public function call_pre_services()
+    {
+        //checking for pre_requisites for the current area
+        $this->pre_requisites();
+
+        //setting body data
         $this->set_bodyData();
 
         //check if user wants to delete some record
@@ -79,23 +111,7 @@ class ParentController extends CI_Controller {
 
         //setting sorting info.
         $this->set_sorting_info();
-
     }
-
-    function _remap($method){
-        if($this->login == false){
-            $this->login();
-        }
-        else if($this->privilege_model->is_authenticated() == false)
-        {
-            $this->privilege_model->check_privileges();
-        }
-        else
-        {
-            $this->_call_with_args($method);
-        }
-    }
-
 
     public function login($msg = "")
     {
@@ -110,7 +126,6 @@ class ParentController extends CI_Controller {
             $bodyData = array(
                 'captcha' =>$captcha["image"],
                 'captcha_word' =>$captcha['word'],
-
             );
 
             if ($this->form_validation->run('login') == true)
@@ -135,6 +150,15 @@ class ParentController extends CI_Controller {
         $this->helper_model->login($this->input->post('username'));
         $this->login = $this->helper_model->is_login();
     }
+
+    function _AutoLogin()
+    {
+        $this->helper_model->login('test');
+        $this->login = $this->helper_model->is_login();
+        if($this->login == true)
+            redirect(base_url()."admin/home");
+    }
+
     function logout(){
         $this->helper_model->logout();
         $this->login = $this->helper_model->is_login();
@@ -183,6 +207,16 @@ class ParentController extends CI_Controller {
         $this->bodyData['sorting_info'] = $this->sorting_info;
     }
 
+    /**
+     * Below function checks if there
+     * are any pre_requisites for the
+     * current requested page.
+     **/
+    public function pre_requisites()
+    {
+        /*if(method_exists($this,'check_for_request_prerequisites'))
+            $this->check_for_request_prerequisites();*/
+    }
 
     private function _loggedIn(){
         /*if($this->admin_model->loggedIn() == 1){

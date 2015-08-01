@@ -39,6 +39,13 @@
 
         <div class="row actual_body_contents">
 
+                <!--Notifications Area-->
+                <div class="row">
+                    <?php echo $this->helper_model->display_flash_errors(); ?>
+                    <?php echo $this->helper_model->display_flash_success(); ?>
+                </div>
+                <!--notifications area ends-->
+
             <div class="row" style="background-color: ;">
                 <div class="col-lg-8">
                     <?php

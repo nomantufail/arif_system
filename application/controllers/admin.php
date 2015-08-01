@@ -94,4 +94,15 @@ class Admin extends ParentController {
         $this->db->update('voucher_entries',$data);
     }
 
+
+
+
+
+    ////// Rough Work
+
+
+    public function route_sale_view()
+    {
+        $this->admin_model->route_sale_view();
+    }
 }

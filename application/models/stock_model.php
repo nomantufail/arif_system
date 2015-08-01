@@ -77,7 +77,7 @@ class Stock_Model extends Parent_Model {
         {
             /**
              * -----------------------
-             *Making Where Statement
+             * Making Where Statement
              * to update stock entries
              *------------------------
              * */

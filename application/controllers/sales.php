@@ -197,6 +197,53 @@ class Sales extends ParentController {
         }
     }
 
+
+    public function add_freight_sale()
+    {
+        $headerData['title']='Freight Sale';
+        $this->bodyData['section'] = 'add';
+        $this->bodyData['cities'] = $this->source_destination_model->get();
+        $this->bodyData['customers'] = $this->customers_model->get();
+        /*$this->bodyData['cities'] = $this->source_destination_model->get();*/
+
+        $this->bodyData['customers_balance'] = $this->accounts_model->customers_balance();
+        $this->bodyData['busy_tankers'] = $this->tankers_model->get_busy();
+        $this->bodyData['free_tankers'] = $this->tankers_model->get_free();
+        $this->bodyData['invoice_number'] = $this->sales_model->next_invoice();
+        $sales = $this->sales_model->few_route_sales_invoices();
+        $this->bodyData['sales']= $sales;
+
+        $this->load->view('components/header',$headerData);
+        $this->load->view('sales/freight_sale/make', $this->bodyData);
+        $this->load->view('components/footer');
+    }
+
+    public function freight_sale_history()
+    {
+        $headerData['title']= 'Freight Invoices';
+
+        $sales = $this->sales_model->route_sales_invoices($this->search_keys, $this->sorting_info);
+
+        $this->bodyData['sales']= $sales;
+        $this->bodyData['customers'] = $this->customers_model->get();
+        $this->bodyData['cities'] = $this->source_destination_model->get();
+        $this->bodyData['section'] = 'invoices';
+
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/product_sales', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/product_sales', $this->bodyData);
+        }
+        else
+        {
+            $this->load->view('components/header', $headerData);
+            $this->load->view('sales/freight_sale/show', $this->bodyData);
+            $this->load->view('components/footer');
+        }
+    }
     public function cash()
     {
         $headerData['title']= 'Cash Invoices';
@@ -335,6 +382,20 @@ class Sales extends ParentController {
                 $this->helper_model->redirect_with_errors(validation_errors());
             }
         }
+        /**
+         * delete route sale invoice on request
+         **/
+        if(isset($_POST['delete_route_sale_invoice'])){
+            if($this->form_validation->run('delete_sale_invoice') == true){
+                if( $this->deleting_model->safely_delete_vouchers_where("vouchers.id = ".$_POST['invoice_number']) == true){
+                    $this->helper_model->redirect_with_success('Invoice Removed Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }else{
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
 
     }
     public function is_any_thing_needs_to_be_saved()
@@ -396,6 +457,24 @@ class Sales extends ParentController {
                 $this->helper_model->redirect_with_success('Invoice Saved Successfully!');
             }else{
                 $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+            }
+        }
+
+
+        /**
+         * insert new Sale with freight invoice on request
+         **/
+        if(isset($_POST['add_freight_sale']))
+        {
+            if($this->form_validation->run('add_freight_sale') == true){
+                $saved_invoice = $this->sales_model->insert_freight_sale_with_route();
+                if($saved_invoice != 0){
+                    $this->helper_model->redirect_with_success('Invoice Saved Successfully!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }else{
+                $this->helper_model->redirect_with_errors(validation_errors());
             }
         }
     }
@@ -480,6 +559,44 @@ class Sales extends ParentController {
                 $this->search_keys['products'] = $products;
 
                 break;
+
+            case "freight_sale_history":
+                $from = '';
+                $to ='';
+                $sources = array();
+                $destinations = array();
+                if(isset($_GET['from']))
+                {
+                    $from = $_GET['from'];
+                }
+                else
+                {
+                    $date = Carbon::now()->toDateString();
+                    $from = first_day_of_month($date);
+                }
+                if(isset($_GET['to']))
+                {
+                    $to = $_GET['to'];
+                }
+                else
+                {
+                    $date = Carbon::now()->toDateString();
+                    $to = $date;
+                }
+                if(isset($_GET['sources']))
+                {
+                    $sources = $_GET['sources'];
+                }
+                if(isset($_GET['destinations']))
+                {
+                    $destinations = $_GET['destinations'];
+                }
+                $this->search_keys['from'] = $from;
+                $this->search_keys['to'] = $to;
+                $this->search_keys['sources'] = $sources;
+                $this->search_keys['destinations'] = $destinations;
+
+                break;
         }
     }
 
@@ -510,6 +627,25 @@ class Sales extends ParentController {
             case "product_with_freight_history":
                 $sortable_columns = $this->sales_model->product_sale_with_freight_sortable_columns();
                 $sort_by = 'vouchers.id';
+                $order_by = 'desc';
+
+                if(isset($_GET['sort_by']) && array_key_exists($_GET['sort_by'], $sortable_columns))
+                {
+                    $sort_by = $sortable_columns[$_GET['sort_by']];
+                }
+                if(isset($_GET['order']) && $_GET['order'] == 'asc')
+                {
+                    $order_by = 'asc';
+                }
+
+                $this->sorting_info['sort_by'] = $sort_by;
+                $this->sorting_info['order_by'] = $order_by;
+
+                break;
+
+            case "freight_sale_history":
+                $sortable_columns = $this->sales_model->freight_sale_sortable_columns();
+                $sort_by = 'invoice_id';
                 $order_by = 'desc';
 
                 if(isset($_GET['sort_by']) && array_key_exists($_GET['sort_by'], $sortable_columns))

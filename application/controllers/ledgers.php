@@ -192,7 +192,12 @@ class ledgers extends ParentController {
 
     public function tankers()
     {
-        $this->bodyData['tankers'] = $this->tankers_model->get();
+        $tankers = $this->tankers_model->get();
+
+        $this->check_for_prerequisites(array('tankers'=>$tankers,),'tankers');
+
+        $this->bodyData['tankers'] = $tankers;
+
         $from = '';
         $to ='';
         $tanker = '';
@@ -270,7 +275,9 @@ class ledgers extends ParentController {
     }
     public function bank_accounts()
     {
-        $this->bodyData['bank_accounts'] = $this->bank_ac_model->get_formatted();
+        $bank_accounts = $this->bank_ac_model->get_formatted();
+        $this->check_for_prerequisites(array('bank_accounts'=>$bank_accounts,),'bank_accounts');
+        $this->bodyData['bank_accounts'] = $bank_accounts;
         $from = '';
         $to ='';
         $tanker = '';
@@ -341,7 +348,9 @@ class ledgers extends ParentController {
 
     public function withdrawls()
     {
-        $this->bodyData['withdrawl_accounts'] = $this->withdrawls_model->accounts();
+        $withdraw_accounts = $this->withdrawls_model->accounts();
+        $this->check_for_prerequisites(array('withdraw_accounts'=>$withdraw_accounts), 'withdrawls');
+        $this->bodyData['withdrawl_accounts'] = $withdraw_accounts;
         $from = '';
         $to ='';
         $tanker = '';
@@ -395,5 +404,67 @@ class ledgers extends ParentController {
         $this->load->view('components/header', $headerData);
         $this->load->view('ledgers/withdrawls', $this->bodyData);
         $this->load->view('components/footer');
+    }
+
+    public function check_for_prerequisites($data, $section = null)
+    {
+        $message = array();
+
+        if($section == 'tankers')
+        {
+
+            $tankers = $data['tankers'];
+
+            if(sizeof($tankers) == 0)
+            {
+                array_push($message, 'Atleast 1 Tanker needed. Click <a href="'.base_url()."tankers".'">Here</a> to add.');
+            }
+
+            $message = join('<br>',$message);
+
+            if($message != '')
+            {
+                $this->helper_model->redirect_with_errors(
+                    $message,
+                    base_url()."error_reporting/missing_prerequisites/ledgers");
+            }
+        }
+
+        if($section == "withdrawls")
+        {
+            $withdrawls_accounts = $data['withdraw_accounts'];
+            if(sizeof($withdrawls_accounts) == 0)
+            {
+                array_push($message, 'Atleast 1 withdrawl account needed. Click <a href="'.base_url()."withdrawls/accounts".'">Here</a> to add.');
+            }
+
+            $message = join('<br>',$message);
+
+            if($message != '')
+            {
+                $this->helper_model->redirect_with_errors(
+                    $message,
+                    base_url()."error_reporting/missing_prerequisites/ledgers");
+            }
+        }
+
+        if($section == "bank_accounts")
+        {
+            $bank_accounts = $data['bank_accounts'];
+            if(sizeof($bank_accounts) == 0)
+            {
+                array_push($message, 'Atleast 1 Bank account needed. Click <a href="'.base_url()."settings/accounts".'">Here</a> to add.');
+            }
+
+            $message = join('<br>',$message);
+
+            if($message != '')
+            {
+                $this->helper_model->redirect_with_errors(
+                    $message,
+                    base_url()."error_reporting/missing_prerequisites/ledgers");
+            }
+        }
+
     }
 }

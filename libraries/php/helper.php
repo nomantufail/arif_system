@@ -60,6 +60,10 @@ function sortable_header($sortable_column_value, $type, $column_text)
 {
     return '<th class="column_heading">'.sortable_link($sortable_column_value, $type, $column_text).'</th>';
 }
+function th($text)
+{
+    return '<th class="column_heading">'.$text.'</th>';
+}
 function sortable_link($sortable_column_value, $type, $column_text)
 {
     return '<a class="sortable_link" href="'.sorting_info($sortable_column_value).'"> <i class="'.sorting_icon($sortable_column_value,$type).'"> </i> '.$column_text.'</a>';

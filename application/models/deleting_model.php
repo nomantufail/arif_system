@@ -531,7 +531,7 @@ class Deleting_Model extends Parent_Model {
             'deleted_at'=>current_time(),
             'deleted'=>1,
         );
-        $this->db->update('vouchers',$data);
+        return $this->db->update('vouchers',$data);
     }
 }
 

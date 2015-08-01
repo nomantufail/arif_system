@@ -1284,8 +1284,9 @@ class Sales_Model extends Parent_Model {
                 $voucher_entry_1 = new App_voucher_Entry();
                 $voucher_entry_1->ac_title = 'freight_cash';
                 $voucher_entry_1->ac_type = 'receivable';
-                $voucher_entry_1->related_business = $this->admin_model->business_name();
+                $voucher_entry_1->related_tanker = $tanker;
                 $voucher_entry_1->amount = $freight_amount;
+                $voucher_entry_1->description = "customer: ".$this->input->post('customer');
                 $voucher_entry_1->dr_cr = 1;
 
                 array_push($voucher_entries, $voucher_entry_1);
@@ -1295,8 +1296,9 @@ class Sales_Model extends Parent_Model {
                 $voucher_entry_2 = new App_voucher_Entry();
                 $voucher_entry_2->ac_title = 'freight a/c';
                 $voucher_entry_2->ac_type = 'revenue';
-                $voucher_entry_2->related_tanker = $this->input->post('tanker');
+                $voucher_entry_2->related_business = $this->admin_model->business_name();
                 $voucher_entry_2->amount = $freight_amount;
+                $voucher_entry_2->description = "customer: ".$this->input->post('customer');
                 $voucher_entry_2->dr_cr = 0;
 
                 array_push($voucher_entries, $voucher_entry_2);
@@ -1350,6 +1352,108 @@ class Sales_Model extends Parent_Model {
         return false;
     }
 
+    public function insert_freight_sale_with_route()
+    {
+        include_once(APPPATH."models/helperClasses/App_Voucher.php");
+        include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
+
+        $tanker = $this->input->post('tanker');
+
+        $voucher_inserted = false;
+
+        $this->db->trans_begin();
+        $voucher = new App_Voucher();
+        $voucher->voucher_date = $this->input->post('invoice_date');
+        $voucher->summary = $this->input->post('extra_info');
+        $voucher->tanker = $tanker;
+        $voucher->voucher_type = 'route_sale';
+
+        $voucher_entries = array();
+
+        $freight_amount = $this->input->post('freight_amount');
+
+        /*---------First ENTRY--------*/
+        $voucher_entry_1 = new App_voucher_Entry();
+        $voucher_entry_1->ac_title = 'freight_cash';
+        $voucher_entry_1->ac_type = 'receivable';
+        $voucher_entry_1->related_tanker = $tanker;
+        $voucher_entry_1->amount = $freight_amount;
+        $voucher_entry_1->source = $this->input->post('source');
+        $voucher_entry_1->destination = $this->input->post('destination');
+        $voucher_entry_1->description = "customer: ".$this->input->post('customer');
+        $voucher_entry_1->dr_cr = 1;
+
+        array_push($voucher_entries, $voucher_entry_1);
+        /*----------------------------------*/
+
+        /*---------Second ENTRY--------*/
+        $voucher_entry_2 = new App_voucher_Entry();
+        $voucher_entry_2->ac_title = 'freight a/c';
+        $voucher_entry_2->ac_type = 'revenue';
+        $voucher_entry_2->related_business = $this->admin_model->business_name();
+        $voucher_entry_2->amount = $freight_amount;
+        $voucher_entry_2->source = $this->input->post('source');
+        $voucher_entry_2->destination = $this->input->post('destination');
+        $voucher_entry_2->description = "customer: ".$this->input->post('customer');
+        $voucher_entry_2->dr_cr = 0;
+
+        array_push($voucher_entries, $voucher_entry_2);
+        /*----------------------------------*/
+
+        /*------------inserting voucher entries in the voucher container---------*/
+        $voucher->entries = $voucher_entries;
+        /*---------------------------------------------------------------------*/
+
+        /*--------------Inserting Voucher in The Database---------------*/
+
+        $voucher_inserted = $this->accounts_model->insert_voucher($voucher);
+
+        return $voucher_inserted;
+    }
+
+    public function route_sales_invoices($keys, $sorting_info)
+    {
+
+        /**
+         * applying search keys
+         **/
+        if(isset($keys['sources']) && sizeof($keys['sources']) > 0)
+        {
+            $this->db->where_in('source',$keys['sources']);
+        }
+        if(isset($keys['destination']) && sizeof($keys['destination']) > 0)
+        {
+            $this->db->where_in('destination',$keys['destination']);
+        }
+        if(isset($keys['to']) && $keys['to'] != '')
+        {
+            $this->db->where('date <=',$keys['to']);
+        }
+        if(isset($keys['from']) && $keys['from'] != '')
+        {
+            $this->db->where('date >=',$keys['from']);
+        }
+        /*------- End Of Search Keys-----*/
+
+        /**
+         * Sorting Section
+         **/
+        if($sorting_info != null)
+        {
+            $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        }
+        /*------ Sorting Section Ends ------*/
+
+        return $this->db->get('route_sales_view')->result();
+    }
+    public function few_route_sales_invoices()
+    {
+        $this->db->select('*');
+        $this->db->limit(5,0);
+        $this->db->order_by('invoice_id','desc');
+        return $this->db->get('route_sales_view')->result();
+    }
+
     public function next_invoice()
     {
         return $this->helper_model->next_id($this->table);
@@ -1383,6 +1487,19 @@ class Sales_Model extends Parent_Model {
             'total_cost'=>'voucher_entries.amount',
             'freight'=>'voucher_entries.freight',
             'extra_info'=>'vouchers.summary',
+        );
+    }
+
+    public function freight_sale_sortable_columns()
+    {
+        return array(
+            'invoice_id'=>'invoice_id',
+            'date'=>'date',
+            'tanker'=>'tanker',
+            'source'=>'source',
+            'destination'=>'destination',
+            'freight'=>'freight',
+            'summary'=>'summary',
         );
     }
 }

@@ -324,6 +324,8 @@ class Accounts_Model extends Parent_Model {
                 'purchase_price_per_item_for_sale'=>$entry->purchase_price_per_item_for_sale,
                 'amount'=>$entry->amount,
                 'freight'=>$entry->freight,
+                'source'=>$entry->source,
+                'destination'=>$entry->destination,
                 'dr_cr'=>$entry->dr_cr,
                 'description'=>$entry->description,
             );

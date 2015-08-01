@@ -180,7 +180,7 @@ class Parent_Model extends CI_Model {
      */
     public function join_vouchers()
     {
-        $this->db->join('voucher_entries','voucher_entries.voucher_id = vouchers.id','left');
+        $this->db->join('voucher_entries','voucher_entries.voucher_id = vouchers.id','inner');
     }
     /**
      * Used to join stock table with products table
