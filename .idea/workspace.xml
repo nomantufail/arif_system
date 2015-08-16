@@ -33,7 +33,7 @@
       <file leaf-file-name="payment_history.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application/views/expenses/components/payment_history.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3383199" vertical-offset="882" max-vertical-offset="1953">
+            <state vertical-scroll-proportion="0.46835443" vertical-offset="769" max-vertical-offset="1953">
               <caret line="56" column="40" selection-start-line="56" selection-start-column="40" selection-end-line="56" selection-end-column="40" />
               <folding />
             </state>
@@ -407,7 +407,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
+    <frame x="-8" y="-8" width="1296" height="1000" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -823,7 +823,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/expenses/components/payment_history.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3383199" vertical-offset="882" max-vertical-offset="1953">
+        <state vertical-scroll-proportion="0.46835443" vertical-offset="769" max-vertical-offset="1953">
           <caret line="56" column="40" selection-start-line="56" selection-start-column="40" selection-end-line="56" selection-end-column="40" />
           <folding />
         </state>
