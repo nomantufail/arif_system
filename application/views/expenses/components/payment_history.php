@@ -5,11 +5,12 @@
         <tr>
             <td style="width: 15%;"><b>From: </b><input class="form-control" type="date" value="<?= $search_keys['from'] ?>" name="from"></td>
             <td style="width: 15%;"><b>To: </b><input class="form-control" type="date" value="<?= $search_keys['to'] ?>" name="to"></td>
-            <td style="width: 35%;"><b>Bank a/c: </b>
-                <select class="select_box bank_ac_select_box" style="width: 100%;" name="bank_ac[]" id="bank_ac" multiple>
+            <td style="width: 35%;"><b>Account: </b>
+                <select class="select_box account_select_box" style="width: 100%;" name="account[]" id="account" multiple>
+                    <option value="cash" <?= (in_array("cash", $search_keys['accounts']))?'selected':'' ?>>Cash</option>
                     <?php foreach($bank_accounts as $account):?>
                         <?php
-                        $selected = (in_array(formatted_bank_account($account), $search_keys['bank_acs']))?'selected':''
+                        $selected = (in_array(formatted_bank_account($account), $search_keys['accounts']))?'selected':'';
                         ?>
                         <option value="<?= formatted_bank_account($account) ?>" <?= $selected ?>><?= formatted_bank_account($account) ?></option>
                     <?php endforeach; ?>
@@ -27,8 +28,8 @@
 <table class="my_table list_table table table-bordered">
     <thead class="table_header">
     <tr class="table_row table_header_row">
-        <?= sortable_header('invoice_number','numeric','Invoice#') ?>
-        <?= sortable_header('invoice_date','date','Date') ?>
+        <?= sortable_header('voucher_id','numeric','Invoice#') ?>
+        <?= sortable_header('voucher_date','date','Date') ?>
         <?= sortable_header('account', 'string', 'Account') ?>
         <?= sortable_header('amount', 'numeric', 'Amount') ?>
         <?= sortable_header('summary', 'string', 'Summary') ?>

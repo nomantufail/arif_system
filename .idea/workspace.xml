@@ -30,11 +30,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="expenses_model.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/application/models/expenses_model.php">
+      <file leaf-file-name="payment_history.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/views/expenses/components/payment_history.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.47619048" vertical-offset="2688" max-vertical-offset="10059">
-              <caret line="148" column="30" selection-start-line="148" selection-start-column="30" selection-end-line="148" selection-end-column="30" />
+            <state vertical-scroll-proportion="0.6766398" vertical-offset="126" max-vertical-offset="1974">
+              <caret line="34" column="35" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -101,15 +101,15 @@
         <option value="$PROJECT_DIR$/application/config/form_validation.php" />
         <option value="$PROJECT_DIR$/application/controllers/admin.php" />
         <option value="$PROJECT_DIR$/view_creator/expense_payments_view.php" />
-        <option value="$PROJECT_DIR$/application/views/expenses/components/payment_history.php" />
         <option value="$PROJECT_DIR$/application/views/expenses/components/few_payments.php" />
         <option value="$PROJECT_DIR$/application/views/expenses/components/add_expense_payment_form.php" />
         <option value="$PROJECT_DIR$/application/views/expenses/edit_payment.php" />
         <option value="$PROJECT_DIR$/application/views/expenses/edit_expense.php" />
         <option value="$PROJECT_DIR$/application/views/expenses/add_payment.php" />
-        <option value="$PROJECT_DIR$/application/controllers/expenses.php" />
         <option value="$PROJECT_DIR$/application/views/expenses/components/edit_expense_payment_form.php" />
+        <option value="$PROJECT_DIR$/application/controllers/expenses.php" />
         <option value="$PROJECT_DIR$/application/models/expenses_model.php" />
+        <option value="$PROJECT_DIR$/application/views/expenses/components/payment_history.php" />
       </list>
     </option>
   </component>
@@ -731,14 +731,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/expenses/components/payment_history.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46835443" vertical-offset="706" max-vertical-offset="1953">
-          <caret line="53" column="17" selection-start-line="53" selection-start-column="17" selection-end-line="59" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/views/expenses/components/few_payments.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.579977" vertical-offset="378" max-vertical-offset="1386">
@@ -811,18 +803,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/expenses.php">
+    <entry file="file://$PROJECT_DIR$/application/models/expenses_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.024165709" vertical-offset="6489" max-vertical-offset="9870">
-          <caret line="310" column="0" selection-start-line="310" selection-start-column="0" selection-end-line="310" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.8333333" vertical-offset="9114" max-vertical-offset="10059">
+          <caret line="469" column="38" selection-start-line="469" selection-start-column="38" selection-end-line="469" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/expenses_model.php">
+    <entry file="file://$PROJECT_DIR$/application/controllers/expenses.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47619048" vertical-offset="2688" max-vertical-offset="10059">
-          <caret line="148" column="30" selection-start-line="148" selection-start-column="30" selection-end-line="148" selection-end-column="30" />
+        <state vertical-scroll-proportion="0.4775604" vertical-offset="7292" max-vertical-offset="9870">
+          <caret line="367" column="17" selection-start-line="367" selection-start-column="17" selection-end-line="367" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/expenses/components/payment_history.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6766398" vertical-offset="126" max-vertical-offset="1974">
+          <caret line="34" column="35" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
           <folding />
         </state>
       </provider>

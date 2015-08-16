@@ -428,7 +428,7 @@ class Expenses extends ParentController {
             case "payment_history":
                 $from = '';
                 $to ='';
-                $bank_acs = array();
+                $accounts = array();
                 if(isset($_GET['from']))
                 {
                     $from = $_GET['from'];
@@ -449,14 +449,14 @@ class Expenses extends ParentController {
                     $to = $date;
                 }
 
-                if(isset($_GET['bank_ac']))
+                if(isset($_GET['account']))
                 {
-                    $bank_acs = $_GET['bank_ac'];
+                    $accounts = $_GET['account'];
                 }
 
                 $this->search_keys['from'] = $from;
                 $this->search_keys['to'] = $to;
-                $this->search_keys['bank_acs'] = $bank_acs;
+                $this->search_keys['accounts'] = $accounts;
 
                 break;
         }

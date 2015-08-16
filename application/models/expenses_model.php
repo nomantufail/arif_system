@@ -381,9 +381,9 @@ class Expenses_Model extends Parent_Model {
             $this->db->where('voucher_id',$keys['voucher_id']);
         }
 
-        if(isset($keys['bank_acs']) &&sizeof($keys['bank_acs']) > 0)
+        if(isset($keys['accounts']) &&sizeof($keys['accounts']) > 0)
         {
-            $this->db->where_in('account', $keys['bank_acs']);
+            $this->db->where_in('account', $keys['accounts']);
         }
 
         if(isset($keys['to']) &&$keys['to'] != '')
@@ -463,11 +463,11 @@ class Expenses_Model extends Parent_Model {
 
             case "expense_payments":
                 return array(
-                    'invoice_number'=>'vouchers.id',
-                    'invoice_date'=>'vouchers.voucher_date',
-                    'bank'=>'voucher_entries.ac_title',
-                    'amount'=>'voucher_entries.amount',
-                    'summary'=>'vouchers.summary',
+                    'voucher_id'=>'voucher_id',
+                    'voucher_date'=>'voucher_date',
+                    'account'=>'account',
+                    'amount'=>'amount',
+                    'summary'=>'summary',
                 );
         }
     }
