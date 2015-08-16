@@ -114,6 +114,7 @@ class Expenses extends ParentController {
 
         $this->bodyData['few_payments'] = $this->expenses_model->few_payments();
         $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
+        $this->bodyData['cash_balance'] = $this->accounts_model->cash_balance();
 
         $this->load->view('components/header', $headerData);
         $this->load->view('expenses/add_payment', $this->bodyData);
@@ -359,7 +360,7 @@ class Expenses extends ParentController {
 
             case "payment_history":
                 $sortable_columns = $this->expenses_model->sortable_columns('expense_payments');
-                $sort_by = 'vouchers.id';
+                $sort_by = 'voucher_id';
                 $order_by = 'desc';
 
                 if(isset($_GET['sort_by']) && array_key_exists($_GET['sort_by'], $sortable_columns))

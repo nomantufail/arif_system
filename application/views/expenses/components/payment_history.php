@@ -29,7 +29,7 @@
     <tr class="table_row table_header_row">
         <?= sortable_header('invoice_number','numeric','Invoice#') ?>
         <?= sortable_header('invoice_date','date','Date') ?>
-        <?= sortable_header('bank', 'string', 'Bank') ?>
+        <?= sortable_header('account', 'string', 'Account') ?>
         <?= sortable_header('amount', 'numeric', 'Amount') ?>
         <?= sortable_header('summary', 'string', 'Summary') ?>
         <th class="column_heading"></th>
@@ -54,7 +54,7 @@
             </td>
             <td>
                 <?php
-                $bank = $record->bank_ac;
+                $bank = $record->account;
                 echo $bank;
                 ?>
             </td>

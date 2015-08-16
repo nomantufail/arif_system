@@ -26,18 +26,28 @@
     BankBalance["<?= $key ?>"] = "<?= $value ?>";
     <?php endforeach; ?>
     /*----------------------------------------------------------*/
-    function bank_ac_changed(e)
+
+    /* making CashBalance Variable */
+    var CashBalance = <?= $cash_balance ?>;
+    /*----------------------------------------------------------*/
+
+
+    function account_changed(e)
     {
-        var id = (e == undefined)?'bank_ac':e.params.data.element.parentElement.id;
-        var bank_selected_index = document.getElementById("bank_ac").selectedIndex;
-        var bank = document.getElementById("bank_ac").options[bank_selected_index].value;
-        parts_of_bank = bank.split('_&&_');
-        bank = parts_of_bank[0];
-        document.getElementById("bank_balance").innerHTML = to_rupees(BankBalance[bank]);
+        var id = (e == undefined)?'account':e.params.data.element.parentElement.id;
+        var bank_selected_index = document.getElementById("account").selectedIndex;
+        var bank = document.getElementById("account").options[bank_selected_index].value;
+        if(bank != 'cash'){
+            var parts_of_bank = bank.split('_&&_');
+            bank = parts_of_bank[0];
+            document.getElementById("account_balance").innerHTML = to_rupees(BankBalance[bank]);
+        }else{
+            document.getElementById("account_balance").innerHTML = to_rupees(CashBalance);
+        }
     }
 
     $( document ).ready(function() {
-        bank_ac_changed();
+        account_changed();
     });
 </script>
 <h3 style="color: #006dcc; text-align: center;">Expense Payment Voucher</h3>
@@ -58,12 +68,13 @@
 
             <th>Bank A/C</th>
             <td>
-                <select class="select_box bank_ac_select_box" style="width: 100%;" name="bank_ac" id="bank_ac">
+                <select class="select_box account_select_box" style="width: 100%;" name="account" id="account">
+                    <option value="cash">Cash</option>
                     <?php foreach($bank_accounts as $account):?>
                         <option value="<?= $account->title." (".$account->bank." ".bn_masking($account->account_number).")"."_&&_".$account->type ?>"><?= $account->title." (".$account->bank." ".bn_masking($account->account_number).")" ?></option>
                     <?php endforeach; ?>
                 </select><br>
-                <span style="color: #808080;">Balance: </span><span style="color: gray;" id="bank_balance"></span>
+                <span style="color: #808080;">Balance: </span><span style="color: gray;" id="account_balance"></span>
             </td>
         </tr>
         <tr>
@@ -83,8 +94,9 @@
 </form>
 
 <script>
-    var $bank_ac_select = $(".bank_ac_select_box");
-    $bank_ac_select.on("select2:select", function (e) {
-        bank_ac_changed(e);
+
+    var $account_select = $(".account_select_box");
+    $account_select.on("select2:select", function (e) {
+        account_changed(e);
     });
 </script>

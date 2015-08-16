@@ -298,17 +298,23 @@ class Expenses_Model extends Parent_Model {
         include_once(APPPATH."models/helperClasses/App_Voucher.php");
         include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
 
+        $payment_account = $this->input->post('account');
+        $sub_title = "";
+        if($payment_account != 'cash')
+        {
+            $bank_account_parts = explode('_&&_',$payment_account);
+            $account_title = $bank_account_parts[0];
+            $sub_title = ($bank_account_parts[1]);
+        }else{
+            $account_title = $payment_account;
+        }
+
         $voucher = new App_Voucher();
         $voucher->voucher_date = $this->input->post('voucher_date');
         $voucher->summary = $this->input->post('summary');
         $voucher->voucher_type = 'expense payment';
 
         $voucher_entries = array();
-
-        $bank_account = $this->input->post('bank_ac');
-        $bank_account_parts = explode('_&&_',$bank_account);
-        $account_title = $bank_account_parts[0];
-        $sub_title = $bank_account_parts[1];
 
         /*---------First ENTRY--------*/
         $voucher_entry_1 = new App_voucher_Entry();
@@ -326,7 +332,7 @@ class Expenses_Model extends Parent_Model {
         $voucher_entry_2 = new App_voucher_Entry();
         $voucher_entry_2->ac_title = $account_title;
         $voucher_entry_2->ac_sub_title = $sub_title;
-        $voucher_entry_2->ac_type = 'bank';
+        $voucher_entry_2->ac_type = ($account_title != 'cash')?'bank':'cash';
         $voucher_entry_2->related_business = $this->admin_model->business_name();
         $voucher_entry_2->amount = $this->input->post('amount');
         $voucher_entry_2->dr_cr = 0;
@@ -359,32 +365,27 @@ class Expenses_Model extends Parent_Model {
     }
     public function search_expense_payment_history($keys, $sorting_info)
     {
-        $this->select_expense_payment_content();
-        $this->db->from($this->table);
-        $this->join_vouchers();
-        $this->active_vouchers();
-        $this->expense_payment_vouchers();
-        $this->with_credit_entries_only();
+        $this->db->select("*");
         /**
          * applying search keys
          **/
         if(isset($keys['voucher_id']) && sizeof($keys['voucher_id']) > 0)
         {
-            $this->db->where('vouchers.id',$keys['voucher_id']);
+            $this->db->where('voucher_id',$keys['voucher_id']);
         }
 
         if(isset($keys['bank_acs']) &&sizeof($keys['bank_acs']) > 0)
         {
-            $this->db->where_in('voucher_entries.ac_title', $keys['bank_acs']);
+            $this->db->where_in('account', $keys['bank_acs']);
         }
 
         if(isset($keys['to']) &&$keys['to'] != '')
         {
-            $this->db->where('vouchers.voucher_date <=',$keys['to']);
+            $this->db->where('voucher_date <=',$keys['to']);
         }
         if(isset($keys['from']) &&$keys['from'] != '')
         {
-            $this->db->where('vouchers.voucher_date >=',$keys['from']);
+            $this->db->where('voucher_date >=',$keys['from']);
         }
         /*------- End Of Search Keys-----*/
 
@@ -398,7 +399,7 @@ class Expenses_Model extends Parent_Model {
         /*------ Sorting Section Ends ------*/
 
 
-        $result = $this->db->get()->result();
+        $result = $this->db->get('expense_payments_view')->result();
 
         return $result;
     }
