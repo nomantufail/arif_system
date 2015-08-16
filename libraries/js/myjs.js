@@ -1,3 +1,13 @@
+function removeOptions(selectbox)
+{
+    var i;
+    for(i=selectbox.options.length-1;i>=0;i--)
+    {
+        selectbox.options[i].selected = false;
+        selectbox.remove(i);
+    }
+}
+
 function to_dr_cr_string(num)
 {
     var dr_cr = 'Dr';

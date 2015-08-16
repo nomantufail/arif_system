@@ -653,6 +653,33 @@ class Accounts_Model extends Parent_Model {
         return 0;
     }
 
+    public function cash_balance()
+    {
+        $this->db->select('SUM(amount) as amount, dr_cr');
+        $this->db->from('vouchers');
+        $this->db->join('voucher_entries','voucher_entries.voucher_id = vouchers.id','inner');
+        $this->db->where('ac_title','cash');
+
+        $this->db->where('vouchers.deleted',0);
+        $this->db->group_by('dr_cr');
+        $result = $this->db->get()->result();
+
+        $total_debit = 0;
+        $total_credit = 0;
+        if(sizeof($result) > 0)
+        {
+            foreach($result as $record)
+            {
+                if($record->dr_cr == '0')
+                    $total_credit = $record->amount;
+                else if($record->dr_cr == '1')
+                    $total_debit = $record->amount;
+            }
+        }
+
+        return round($total_debit - $total_credit, 2);
+    }
+
 }
 
 

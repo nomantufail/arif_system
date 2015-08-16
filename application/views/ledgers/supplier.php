@@ -107,7 +107,7 @@
                             <th style="width: 10%">Date</th>
                             <th>Ac / Title</th>
                             <th>Ac / Type</th>
-                            <th>Customer</th>
+                            <th>Supplier</th>
                             <th>Tanker</th>
                             <th>Summary</th>
                             <th style="width: 11%;">Debit</th>

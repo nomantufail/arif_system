@@ -59,7 +59,7 @@ class ParentController extends CI_Controller {
         ));
 
         //saving the latest route
-        $this->intelligent_router_model->save_latest_route();
+        //$this->intelligent_router_model->save_latest_route();
 
         //checking the login state below...
         $this->login = $this->helper_model->is_login();
@@ -147,7 +147,9 @@ class ParentController extends CI_Controller {
         }
     }
     function _LOGIN(){
+
         $this->helper_model->login($this->input->post('username'));
+
         $this->login = $this->helper_model->is_login();
     }
 

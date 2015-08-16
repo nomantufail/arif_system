@@ -218,6 +218,27 @@ class Sales extends ParentController {
         $this->load->view('components/footer');
     }
 
+    public function edit_freight_sale($invoice_id)
+    {
+        if($invoice_id == '')
+        {
+            redirect(base_url()."sales/freight_sale_history");
+        }
+        if($this->accounts_model->voucher_active($invoice_id) == false)
+        {
+            redirect(base_url()."sales/freight_sale_history");
+        }
+        $headerData['title']='Freight Sale';
+        $this->bodyData['section'] = 'edit';
+        $this->bodyData['cities'] = $this->source_destination_model->get();
+        $this->bodyData['tankers'] = $this->tankers_model->get();
+        $this->bodyData['invoice']= $this->sales_model->find_freight_sale($invoice_id);
+
+        $this->load->view('components/header',$headerData);
+        $this->load->view('sales/freight_sale/edit', $this->bodyData);
+        $this->load->view('components/footer');
+    }
+
     public function freight_sale_history()
     {
         $headerData['title']= 'Freight Invoices';
@@ -356,6 +377,7 @@ class Sales extends ParentController {
                         'voucher_entries.voucher_id'=>$_POST['invoice_number'],
                         'voucher_entries.item_id'=>$_POST['item_id'],
                     )) == true){
+
                     $this->helper_model->redirect_with_success('Invoice Removed Successfully!');
                 }else{
                     $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
@@ -475,6 +497,19 @@ class Sales extends ParentController {
                 }
             }else{
                 $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
+
+        /**
+         * Update freight sale
+         **/
+        if(isset($_POST['edit_freight_sale']))
+        {
+            $saved_invoice = $this->sales_model->update_route_sale($_POST['invoice_id']);
+            if($saved_invoice != 0){
+                $this->helper_model->redirect_with_success('Invoice Saved Successfully!');
+            }else{
+                $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
             }
         }
     }

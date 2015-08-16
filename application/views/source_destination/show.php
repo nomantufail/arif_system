@@ -61,15 +61,20 @@
                     <table class="my_table list_table table table-bordered">
                         <thead class="table_header">
                         <tr class="table_row table_header_row">
-                            <th class="column_heading">ID</th>
                             <th class="column_heading">Name</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody class="table_body">
                         <?php foreach($cities as $city):?>
                             <tr class="table_row table_body_row">
-                                <td class="table_td"><?= ucwords($city->id)?></td>
                                 <td class="table_td"><?= ucwords($city->name)?></td>
+
+                                <td>
+                                    <?php
+                                    deleting_btn('id',$city->id, 'delete_city');
+                                    ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>

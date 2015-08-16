@@ -142,6 +142,7 @@ class Ledgers_Model extends Parent_Model {
             $this->where_ac_type($keys['ac_type']);
 
         $result = $this->db->get()->result();
+
         return $result;
     }
     public function tanker_ledger($keys)

@@ -48,4 +48,11 @@ class Source_Destination_Model extends Parent_Model {
         return $this->db->trans_complete();
     }
 
+    public function delete($id)
+    {
+        $this->db->where('id',$id);
+        $result = $this->db->delete('cities');
+        return $result;
+    }
+
 }

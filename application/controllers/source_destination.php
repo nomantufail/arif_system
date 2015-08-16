@@ -51,7 +51,20 @@ class Source_Destination extends ParentController {
      **/
     public function is_any_thing_needs_to_be_deleted()
     {
-
+        /**
+         * delete a city
+         **/
+        if(isset($_POST['delete_city'])){
+            if($this->form_validation->run('delete_city') == true){
+                if( $this->source_destination_model->delete($_POST['id']) == true){
+                    $this->helper_model->redirect_with_success('Freight Point Successfully deleted!');
+                }else{
+                    $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
+                }
+            }else{
+                $this->helper_model->redirect_with_errors(validation_errors());
+            }
+        }
     }
     public function is_any_thing_needs_to_be_saved()
     {
@@ -61,7 +74,7 @@ class Source_Destination extends ParentController {
         if(isset($_POST['addCity'])){
             if($this->form_validation->run('add_city') == true){
                 if( $this->source_destination_model->insert() == true){
-                    $this->helper_model->redirect_with_success('Freight Point Successfully!');
+                    $this->helper_model->redirect_with_success('Freight Point Successfully added!');
                 }else{
                     $this->helper_model->redirect_with_errors('Some Unknown database fault happened. please try again a few moments later. Or you can contact your system provider.<br>Thank You');
                 }

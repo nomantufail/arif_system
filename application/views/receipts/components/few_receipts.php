@@ -1,11 +1,10 @@
-
 <table class="my_table list_table table table-bordered">
     <thead class="table_header">
     <tr class="table_row table_header_row">
-        <th class="column_heading">Vcouher#</th>
+        <th class="column_heading">Voucher#</th>
         <th class="column_heading">Date</th>
-        <th class="column_heading">Customer</th>
-        <th class="column_heading">Bank</th>
+        <th class="column_heading">Agent</th>
+        <th class="column_heading">Account</th>
         <th class="column_heading">Amount</th>
         <th class="column_heading">Summary</th>
         <th class="column_heading"></th>
@@ -32,20 +31,16 @@
             </td>
             <td>
                 <?php
-                $customer = $record->related_customer;
-                echo $customer;
+                echo $record->agent_type.": ".$record->agent;
                 ?>
             </td>
             <td>
-                <?php
-                $bank = $record->bank_ac;
-                echo $bank;
-                ?>
+                <?= $record->account; ?>
             </td>
             <td>
                 <?php
-                $amount = rupee_format($record->amount);
-                echo $amount;
+                $amount = $record->amount;
+                echo rupee_format($amount);
                 ?>
             </td>
             <td>
@@ -57,7 +52,6 @@
             <td style="vertical-align: middle;">
                 <?php deleting_btn('invoice_number', $record->voucher_id, 'delete_invoice') ?>
             </td>
-
 
         </tr>
     <?php endforeach; ?>

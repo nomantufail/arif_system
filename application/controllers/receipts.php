@@ -28,12 +28,15 @@ class Receipts extends ParentController {
 
     public function make()
     {
-        $headerData['title']='Payment New*';
+        $headerData['title']='Receipts New*';
         $this->bodyData['section'] = 'make';
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
+        $this->bodyData['suppliers'] = $this->suppliers_model->get();
         $this->bodyData['customers'] = $this->customers_model->get();
 
         $this->bodyData['customers_balance'] = $this->accounts_model->customers_balance();
+        $this->bodyData['suppliers_balance'] = $this->accounts_model->suppliers_balance();
+        $this->bodyData['cash_balance'] = $this->accounts_model->cash_balance();
         $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
         $this->bodyData['receipt_history'] = $this->receipts_model->few_receipts();
         $this->load->view('components/header',$headerData);
@@ -47,6 +50,7 @@ class Receipts extends ParentController {
         {
             redirect(base_url()."receipts/make");
         }
+
         if($this->accounts_model->voucher_active($id) == false)
         {
             redirect(base_url()."receipts/make");
@@ -59,9 +63,13 @@ class Receipts extends ParentController {
 
         $headerData['title']='Edit Payment';
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
+        $this->bodyData['suppliers'] = $this->suppliers_model->get();
+        $this->bodyData['suppliers'] = $this->suppliers_model->get();
         $this->bodyData['customers'] = $this->customers_model->get();
 
         $this->bodyData['customers_balance'] = $this->accounts_model->customers_balance();
+        $this->bodyData['suppliers_balance'] = $this->accounts_model->suppliers_balance();
+        $this->bodyData['cash_balance'] = $this->accounts_model->cash_balance();
         $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
         $this->bodyData['receipt_history'] = $this->receipts_model->few_receipts();
         $this->bodyData['receipt'] = $receipt_voucher;
@@ -79,6 +87,7 @@ class Receipts extends ParentController {
         $this->bodyData['section'] = 'history';
 
         $this->bodyData['customers'] = $this->customers_model->get();
+        $this->bodyData['suppliers'] = $this->suppliers_model->get();
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
         $this->bodyData['receipt_history'] = $this->receipts_model->search_receipt_history($this->search_keys, $this->sorting_info);
 
@@ -93,7 +102,7 @@ class Receipts extends ParentController {
         else
         {
             $this->load->view('components/header',$headerData);
-            $this->load->view('Receipts/history', $this->bodyData);
+            $this->load->view('receipts/history', $this->bodyData);
             $this->load->view('components/footer');
         }
     }
@@ -158,8 +167,9 @@ class Receipts extends ParentController {
             case "history":
                 $from = '';
                 $to ='';
-                $customer = array();
-                $bank_acs = array();
+                $suppliers = array();
+                $customers = array();
+                $accounts = array();
                 if(isset($_GET['from']))
                 {
                     $from = $_GET['from'];
@@ -180,20 +190,24 @@ class Receipts extends ParentController {
                     $to = $date;
                 }
 
-                if(isset($_GET['bank_ac']))
+                if(isset($_GET['account']))
                 {
-                    $bank_acs = $_GET['bank_ac'];
+                    $accounts = $_GET['account'];
+                }
+                if(isset($_GET['supplier']))
+                {
+                    $suppliers = $_GET['supplier'];
                 }
                 if(isset($_GET['customer']))
                 {
-                    $customer = $_GET['customer'];
+                    $customers = $_GET['customer'];
                 }
 
                 $this->search_keys['from'] = $from;
                 $this->search_keys['to'] = $to;
-                $this->search_keys['bank_acs'] = $bank_acs;
-                $this->search_keys['customers'] = $customer;
-
+                $this->search_keys['accounts'] = $accounts;
+                $this->search_keys['suppliers'] = $suppliers;
+                $this->search_keys['customers'] = $customers;
                 break;
         }
     }
@@ -205,7 +219,7 @@ class Receipts extends ParentController {
         {
             case "history":
                 $sortable_columns = $this->receipts_model->sortable_columns();
-                $sort_by = 'vouchers.id';
+                $sort_by = 'voucher_id';
                 $order_by = 'desc';
 
                 if(isset($_GET['sort_by']) && array_key_exists($_GET['sort_by'], $sortable_columns))

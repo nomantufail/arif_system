@@ -42,16 +42,25 @@ class Receipts_Model extends Parent_Model {
         include_once(APPPATH."models/helperClasses/App_Voucher.php");
         include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
 
-        $bank_account = $this->input->post('bank_ac');
-        $bank_account_parts = explode('_&&_',$bank_account);
-        $account_title = $bank_account_parts[0];
-        $sub_title = $bank_account_parts[1];
+        $agent_type = $this->input->post('agent_type');
+        $agent = $this->input->post('agent');
+        $payment_account = $this->input->post('account');
+        $sub_title = "";
+        if($payment_account != 'cash')
+        {
+            $bank_account_parts = explode('_&&_',$payment_account);
+            $account_title = $bank_account_parts[0];
+            $sub_title = ($bank_account_parts[1]);
+        }else{
+            $account_title = $payment_account;
+        }
+
 
         // making voucher
         $voucher = array();
         $voucher['voucher_date'] = $this->input->post('voucher_date');
         $voucher['summary'] = $this->input->post('summary');
-        $voucher['bank_ac'] = $account_title;
+        $voucher['bank_ac'] = ($account_title != 'cash')?$account_title:'';
 
         $this->db->trans_start();
 
@@ -63,24 +72,40 @@ class Receipts_Model extends Parent_Model {
 
 
 
+
         /*---------Updating voucher Entries--------*/
-        $voucher_entries_1 = array();
-        $voucher_entries_1['related_customer'] = $this->input->post('customer');
-        $voucher_entries_1['amount'] = $this->input->post('amount');
 
 
-        $this->editing_model->update_voucher_entries(array(
-            'voucher_entries.voucher_id'=>$voucher_id,
-            'voucher_entries.related_customer !='=>'',
-        ),$voucher_entries_1);
-
-        $voucher_entry_2 = array();
-        $voucher_entry_2['ac_sub_title'] = $sub_title;
-        $voucher_entry_2['ac_title'] = $account_title;
+        $voucher_entry_1 = array();
+        $voucher_entry_1['ac_sub_title'] = $sub_title;
+        $voucher_entry_1['ac_title'] = $account_title;
+        $voucher_entry_1['ac_type'] = ($account_title == "cash")?'cash':'bank';
+        $voucher_entry_1['amount'] = $this->input->post('amount');
 
         $this->editing_model->update_voucher_entries(array(
             'voucher_entries.voucher_id'=>$voucher_id,
             'voucher_entries.dr_cr'=>1,
+            'voucher_entries.deleted'=>0,
+        ),$voucher_entry_1);
+
+
+        $voucher_entry_2 = array();
+        if($agent_type == 'customer'){
+            $voucher_entry_2['ac_type'] = 'receivable';
+            $voucher_entry_2['related_customer'] = $agent;
+            $voucher_entry_2['related_supplier'] = "";
+        }
+        else if($agent_type == 'supplier'){
+            $voucher_entry_2['ac_type'] = 'payable';
+            $voucher_entry_2['related_supplier'] = $agent;
+            $voucher_entry_2['related_customer'] = "";
+        }
+        $voucher_entry_2['amount'] = $this->input->post('amount');
+
+        $this->editing_model->update_voucher_entries(array(
+            'voucher_entries.voucher_id'=>$voucher_id,
+            'voucher_entries.dr_cr'=>0,
+            'voucher_entries.deleted'=>0,
         ),$voucher_entry_2);
 
         /*----------------------------------*/
@@ -94,25 +119,33 @@ class Receipts_Model extends Parent_Model {
         include_once(APPPATH."models/helperClasses/App_Voucher.php");
         include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
 
-        $bank_account = $this->input->post('bank_ac');
-        $bank_account_parts = explode('_&&_',$bank_account);
-        $account_title = $bank_account_parts[0];
-        $sub_title = $bank_account_parts[1];
+
+        $agent_type = $this->input->post('agent_type');
+        $agent = $this->input->post('agent');
+        $payment_account = $this->input->post('account');
+        $sub_title = "";
+        if($payment_account != 'cash')
+        {
+            $bank_account_parts = explode('_&&_',$payment_account);
+            $account_title = $bank_account_parts[0];
+            $sub_title = ($bank_account_parts[1]);
+        }else{
+            $account_title = $payment_account;
+        }
 
         $voucher = new App_Voucher();
         $voucher->voucher_date = $this->input->post('voucher_date');
         $voucher->summary = $this->input->post('summary');
         $voucher->voucher_type = 'receipt';
-        $voucher->bank_ac = $account_title;
+        $voucher->bank_ac = ($payment_account != 'cash')?$account_title:'';
 
         $voucher_entries = array();
-
 
         /*---------First ENTRY--------*/
         $voucher_entry_2 = new App_voucher_Entry();
         $voucher_entry_2->ac_title = $account_title;
         $voucher_entry_2->ac_sub_title = $sub_title;
-        $voucher_entry_2->ac_type = 'bank';
+        $voucher_entry_2->ac_type = ($account_title != 'cash')?'bank':'cash';
         $voucher_entry_2->related_business = $this->admin_model->business_name();
         $voucher_entry_2->amount = $this->input->post('amount');
         $voucher_entry_2->dr_cr = 1;
@@ -122,10 +155,18 @@ class Receipts_Model extends Parent_Model {
 
         /*---------Second ENTRY--------*/
         $voucher_entry_2 = new App_voucher_Entry();
-        $voucher_entry_2->ac_title = 'cash';
+        $voucher_entry_2->ac_title = 'receipt';
         $voucher_entry_2->ac_sub_title = '';
-        $voucher_entry_2->ac_type = 'receivable';
-        $voucher_entry_2->related_customer = $this->input->post('customer');
+
+        if($agent_type == 'customer'){
+            $voucher_entry_2->ac_type = 'receivable';
+            $voucher_entry_2->related_customer = $agent;
+        }
+        else if($agent_type == 'supplier'){
+            $voucher_entry_2->ac_type = 'payable';
+            $voucher_entry_2->related_supplier = $agent;
+        }
+
         $voucher_entry_2->amount = $this->input->post('amount');
         $voucher_entry_2->dr_cr = 0;
 
@@ -156,38 +197,39 @@ class Receipts_Model extends Parent_Model {
 
     public function search_receipt_history($keys, $sorting_info)
     {
-        $this->select_receipt_content();
-        $this->db->from($this->table);
-        $this->join_vouchers();
-        $this->active_vouchers();
-        $this->with_credit_entries_only();
-        $this->receipt_vouchers();
-
+        $this->db->select("*");
         /**
          * applying search keys
          **/
         if(isset($keys['voucher_id']) && sizeof($keys['voucher_id']) > 0)
         {
-            $this->db->where('vouchers.id',$keys['voucher_id']);
+            $this->db->where('voucher_id',$keys['voucher_id']);
+        }
+
+        if(isset($keys['suppliers']) && sizeof($keys['suppliers']) > 0)
+        {
+            $this->db->where('agent_type' , 'supplier');
+            $this->db->where_in('agent', $keys['suppliers']);
         }
 
         if(isset($keys['customers']) && sizeof($keys['customers']) > 0)
         {
-            $this->where_related_customers($keys['customers']);
+            $this->db->where('agent_type' , 'customer');
+            $this->db->where_in('agent', $keys['customers']);
         }
 
-        if(isset($keys['bank_acs']) &&sizeof($keys['bank_acs']) > 0)
+        if(isset($keys['accounts']) &&sizeof($keys['accounts']) > 0)
         {
-            $this->db->where_in('vouchers.bank_ac', $keys['bank_acs']);
+            $this->db->where_in('account', $keys['accounts']);
         }
 
         if(isset($keys['to']) &&$keys['to'] != '')
         {
-            $this->db->where('vouchers.voucher_date <=',$keys['to']);
+            $this->db->where('voucher_date <=',$keys['to']);
         }
         if(isset($keys['from']) &&$keys['from'] != '')
         {
-            $this->db->where('vouchers.voucher_date >=',$keys['from']);
+            $this->db->where('voucher_date >=',$keys['from']);
         }
         /*------- End Of Search Keys-----*/
 
@@ -201,37 +243,22 @@ class Receipts_Model extends Parent_Model {
         /*------ Sorting Section Ends ------*/
 
 
-        $result = $this->db->get()->result();
+        $result = $this->db->get('receipts_view')->result();
 
         return $result;
     }
 
     public function receipt_history()
     {
-        $this->select_receipt_content();
-        $this->db->from($this->table);
-        $this->join_vouchers();
-        $this->active_vouchers();
-        $this->with_credit_entries_only();
-        $this->receipt_vouchers();
-        $this->latest($this->table);
-        $result = $this->db->get()->result();
-
-        return $result;
+        return $this->db->get('receipts_view')->result();
     }
 
     public function few_receipts()
     {
-        $this->select_receipt_content();
-        $this->db->from($this->table);
-        $this->join_vouchers();
-        $this->active_vouchers();
-        $this->with_credit_entries_only();
-        $this->receipt_vouchers();
-        $this->latest($this->table);
+        $this->db->select('*');
+        $this->db->order_by('voucher_id','desc');
         $this->db->limit(10);
-        $result = $this->db->get()->result();
-
+        $result = $this->db->get('receipts_view')->result();
         return $result;
     }
 
@@ -251,7 +278,7 @@ class Receipts_Model extends Parent_Model {
     }
 
     public function find($id){
-        $invoices = $this->search_receipt_history(array('voucher_id'=>$id), null);
+        $invoices = $this->db->get_where('receipts_view',array('voucher_id'=>$id))->result();
         if(sizeof($invoices) > 0){
             $record = $invoices[0];
             return $record;

@@ -69,6 +69,7 @@ class Editing_Model extends Parent_Model {
          * ---------------------------------
          * suppliers ==> name
          * voucher_entries ==> related_supplier
+         * voucher_entries ==> ac_title
          */
         $this->db->trans_start();
 
@@ -76,6 +77,7 @@ class Editing_Model extends Parent_Model {
         {
             case "name":
                 $this->update_table_column('voucher_entries','related_supplier', $value, $pk);
+                $this->update_table_column('voucher_entries','ac_title', $value, $pk);
                 $this->update_table_column('suppliers', 'name', $value, $pk);
                 break;
         }
@@ -215,7 +217,7 @@ class Editing_Model extends Parent_Model {
         $data = array(
             $property.''=>$value,
         );
-
+        
         $this->db->where($table.'.'.$property,$key);
         $this->db->update($table,$data);
     }

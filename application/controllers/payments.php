@@ -31,8 +31,11 @@ class Payments extends ParentController {
         $headerData['title']='Payment New*';
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
         $this->bodyData['suppliers'] = $this->suppliers_model->get();
+        $this->bodyData['customers'] = $this->customers_model->get();
 
+        $this->bodyData['customers_balance'] = $this->accounts_model->customers_balance();
         $this->bodyData['suppliers_balance'] = $this->accounts_model->suppliers_balance();
+        $this->bodyData['cash_balance'] = $this->accounts_model->cash_balance();
         $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
         $this->bodyData['payment_history'] = $this->payments_model->few_payments();
         $this->load->view('components/header',$headerData);
@@ -59,14 +62,17 @@ class Payments extends ParentController {
         $headerData['title']='Edit Payment';
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
         $this->bodyData['suppliers'] = $this->suppliers_model->get();
+        $this->bodyData['suppliers'] = $this->suppliers_model->get();
+        $this->bodyData['customers'] = $this->customers_model->get();
 
+        $this->bodyData['customers_balance'] = $this->accounts_model->customers_balance();
         $this->bodyData['suppliers_balance'] = $this->accounts_model->suppliers_balance();
+        $this->bodyData['cash_balance'] = $this->accounts_model->cash_balance();
         $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
         $this->bodyData['payment_history'] = $this->payments_model->few_payments();
         $this->bodyData['payment'] = $payment_voucher;
 
         $this->bodyData['voucher_id'] = $id;
-
         $this->load->view('components/header',$headerData);
         $this->load->view('payments/edit', $this->bodyData);
         $this->load->view('components/footer');
@@ -78,6 +84,7 @@ class Payments extends ParentController {
         $this->bodyData['section'] = 'history';
 
         $this->bodyData['suppliers'] = $this->suppliers_model->get();
+        $this->bodyData['customers'] = $this->customers_model->get();
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
 
         $this->bodyData['payment_history'] = $this->payments_model->search_payment_history($this->search_keys, $this->sorting_info);
@@ -159,7 +166,8 @@ class Payments extends ParentController {
                 $from = '';
                 $to ='';
                 $suppliers = array();
-                $bank_acs = array();
+                $customers = array();
+                $accounts = array();
                 if(isset($_GET['from']))
                 {
                     $from = $_GET['from'];
@@ -180,19 +188,24 @@ class Payments extends ParentController {
                     $to = $date;
                 }
 
-                if(isset($_GET['bank_ac']))
+                if(isset($_GET['account']))
                 {
-                    $bank_acs = $_GET['bank_ac'];
+                    $accounts = $_GET['account'];
                 }
                 if(isset($_GET['supplier']))
                 {
                     $suppliers = $_GET['supplier'];
                 }
+                if(isset($_GET['customer']))
+                {
+                    $customers = $_GET['customer'];
+                }
 
                 $this->search_keys['from'] = $from;
                 $this->search_keys['to'] = $to;
-                $this->search_keys['bank_acs'] = $bank_acs;
+                $this->search_keys['accounts'] = $accounts;
                 $this->search_keys['suppliers'] = $suppliers;
+                $this->search_keys['customers'] = $customers;
 
                 break;
         }
@@ -205,7 +218,7 @@ class Payments extends ParentController {
         {
             case "history":
                 $sortable_columns = $this->payments_model->sortable_columns();
-                $sort_by = 'vouchers.id';
+                $sort_by = 'voucher_id';
                 $order_by = 'desc';
 
                 if(isset($_GET['sort_by']) && array_key_exists($_GET['sort_by'], $sortable_columns))

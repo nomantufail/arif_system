@@ -16,8 +16,8 @@
     <tr class="table_row table_header_row">
         <th>Invoice#</th>
         <th>Date</th>
-        <th>Customer</th>
-        <th>Bank</th>
+        <th>Agent</th>
+        <th>Account</th>
         <th>Amount</th>
         <th>Summary</th>
     </tr>
@@ -43,15 +43,11 @@
             </td>
             <td>
                 <?php
-                $customer = $record->related_customer;
-                echo $customer;
+                echo $record->agent_type.": ".$record->agent;
                 ?>
             </td>
             <td>
-                <?php
-                $bank = $record->bank_ac;
-                echo $bank;
-                ?>
+                <?= $record->account; ?>
             </td>
             <td>
                 <?php

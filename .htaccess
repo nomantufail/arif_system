@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /inventory_system/
+RewriteBase /production/inventory_system/
 RewriteCond %{REQUEST_URI} ^system.*
 RewriteRule ^(.*)$ /index.php/$1 [L]
 

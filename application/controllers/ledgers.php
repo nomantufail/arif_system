@@ -61,8 +61,8 @@ class ledgers extends ParentController {
         }
         else
         {
-            $current_customer = $this->bodyData['customers'][0];
-            $customer = $current_customer->name;
+            $current_customer = (sizeof($this->bodyData['customers']) > 0)?$this->bodyData['customers'][0]:null;
+            $customer = (sizeof($this->bodyData['customers']) > 0)?$current_customer->name:null;
         }
 
         $ac_title = '';
@@ -142,8 +142,8 @@ class ledgers extends ParentController {
         }
         else
         {
-            $current_supplier = $this->bodyData['suppliers'][0];
-            $supplier = $current_supplier->name;
+            $current_supplier = (sizeof($this->bodyData['suppliers']))?$this->bodyData['suppliers'][0]:null;
+            $supplier = (sizeof($this->bodyData['suppliers']))?$current_supplier->name:null;;
         }
 
         $ac_title = '';
@@ -227,8 +227,8 @@ class ledgers extends ParentController {
         }
         else
         {
-            $current_tanker = $this->bodyData['tankers'][0];
-            $tanker = $current_tanker->number;
+            $current_tanker = (sizeof($this->bodyData['tankers']) > 0)?$this->bodyData['tankers'][0]:null;
+            $tanker = (sizeof($this->bodyData['tankers']) > 0)?$current_tanker->number:null;;
         }
 
         $ac_title = '';
@@ -307,8 +307,8 @@ class ledgers extends ParentController {
         }
         else
         {
-            $current_title = $this->bodyData['bank_accounts'][0];
-            $ac_title = $current_title->formatted_title;
+            $current_title = (sizeof($this->bodyData['bank_accounts']) > 0)?$this->bodyData['bank_accounts'][0]:null;
+            $ac_title = (sizeof($this->bodyData['bank_accounts']) > 0)?$current_title->formatted_title:null;
         }
 
         $ac_type = '';
@@ -380,8 +380,8 @@ class ledgers extends ParentController {
         }
         else
         {
-            $current_title = $this->bodyData['withdrawl_accounts'][0];
-            $ac_title = $current_title->title;
+            $current_title = (sizeof($this->bodyData['withdrawl_accounts']) > 0)?$this->bodyData['withdrawl_accounts'][0]:null;
+            $ac_title = (sizeof($this->bodyData['withdrawl_accounts']) > 0)?$current_title->title:null;
         }
 
         $ac_type = '';

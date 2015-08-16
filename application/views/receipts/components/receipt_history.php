@@ -5,8 +5,18 @@
         <tr>
             <td style="width: 15%;"><b>From: </b><input class="form-control" type="date" value="<?= $search_keys['from'] ?>" name="from"></td>
             <td style="width: 15%;"><b>To: </b><input class="form-control" type="date" value="<?= $search_keys['to'] ?>" name="to"></td>
+            <td style="width: 20%;"><b>Supplier: </b><br>
+                <select name="supplier[]" class="select_box" multiple style="width: 100%;">
+                    <?php foreach($suppliers as $supplier):?>
+                        <?php
+                        $selected = (in_array($supplier->name, $search_keys['suppliers']))?'selected':''
+                        ?>
+                        <option value="<?= $supplier->name ?>" <?= $selected ?>><?= $supplier->name ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
             <td style="width: 20%;"><b>Customer: </b><br>
-                <select name="customer[]" class="select_box bank_ac_select_box" multiple style="width: 100%;">
+                <select name="customer[]" class="select_box" multiple style="width: 100%;">
                     <?php foreach($customers as $customer):?>
                         <?php
                         $selected = (in_array($customer->name, $search_keys['customers']))?'selected':''
@@ -15,11 +25,12 @@
                     <?php endforeach; ?>
                 </select>
             </td>
-            <td style="width: 20%;"><b>Bank a/c: </b><br>
-                <select class="select_box bank_ac_select_box" style="width: 100%;" name="bank_ac[]" id="bank_ac" multiple>
+            <td style="width: 20%;"><b>Account: </b><br>
+                <select class="select_box bank_ac_select_box" style="width: 100%;" name="account[]" id="bank_ac" multiple>
+                    <option value="cash" <?= (in_array('cash',$search_keys['accounts']))?'selected':'' ?>>Cash</option>
                     <?php foreach($bank_accounts as $account):?>
                         <?php
-                        $selected = (in_array(formatted_bank_account($account), $search_keys['bank_acs']))?'selected':''
+                        $selected = (in_array(formatted_bank_account($account), $search_keys['accounts']))?'selected':''
                         ?>
                         <option value="<?= formatted_bank_account($account) ?>" <?= $selected ?>><?= formatted_bank_account($account) ?></option>
                     <?php endforeach; ?>
@@ -39,8 +50,8 @@
     <tr class="table_row table_header_row">
         <?= sortable_header('invoice_number','numeric','Invoice#') ?>
         <?= sortable_header('invoice_date','date','Date') ?>
-        <?= sortable_header('customer', 'string', 'Customer') ?>
-        <?= sortable_header('bank', 'string', 'Bank') ?>
+        <?= sortable_header('agent', 'string', 'Agent') ?>
+        <?= sortable_header('account', 'string', 'Account') ?>
         <?= sortable_header('amount', 'numeric', 'Amount') ?>
         <?= sortable_header('summary', 'string', 'Summary') ?>
         <th class="column_heading"></th>
@@ -67,15 +78,11 @@
             </td>
             <td>
                 <?php
-                $customer = $record->related_customer;
-                echo $customer;
+                echo $record->agent_type.": ".$record->agent;
                 ?>
             </td>
             <td>
-                <?php
-                $bank = $record->bank_ac;
-                echo $bank;
-                ?>
+                <?= $record->account; ?>
             </td>
             <td>
                 <?php

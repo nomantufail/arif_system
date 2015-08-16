@@ -1380,7 +1380,6 @@ class Sales_Model extends Parent_Model {
         $voucher_entry_1->amount = $freight_amount;
         $voucher_entry_1->source = $this->input->post('source');
         $voucher_entry_1->destination = $this->input->post('destination');
-        $voucher_entry_1->description = "customer: ".$this->input->post('customer');
         $voucher_entry_1->dr_cr = 1;
 
         array_push($voucher_entries, $voucher_entry_1);
@@ -1394,7 +1393,6 @@ class Sales_Model extends Parent_Model {
         $voucher_entry_2->amount = $freight_amount;
         $voucher_entry_2->source = $this->input->post('source');
         $voucher_entry_2->destination = $this->input->post('destination');
-        $voucher_entry_2->description = "customer: ".$this->input->post('customer');
         $voucher_entry_2->dr_cr = 0;
 
         array_push($voucher_entries, $voucher_entry_2);
@@ -1457,6 +1455,41 @@ class Sales_Model extends Parent_Model {
     public function next_invoice()
     {
         return $this->helper_model->next_id($this->table);
+    }
+
+    public function find_freight_sale($invoice_id)
+    {
+        $result = $this->db->get_where('route_sales_view',array('invoice_id'=>$invoice_id))->result();
+        if(sizeof($result) > 0)
+            return $result[0];
+
+        return null;
+    }
+
+    public function update_route_sale($invoice_id)
+    {
+        $voucherData = array(
+            'voucher_date' => $_POST['invoice_date'],
+            'summary' => $_POST['extra_info'],
+            'tanker' => $_POST['tanker'],
+        );
+        $voucherEntryData = array(
+            'source' => $_POST['source'],
+            'destination' => $_POST['destination'],
+            'amount' => $_POST['freight_amount'],
+        );
+
+        $this->db->trans_start();
+        $this->editing_model->update_voucher("id = ".$invoice_id, $voucherData);
+        $this->editing_model->update_voucher_entries("voucher_id = ".$invoice_id, $voucherEntryData);
+        $this->editing_model->update_voucher_entries(array(
+            'voucher_id'=>$invoice_id,
+            'dr_cr'=>1,
+        ), array(
+            'related_tanker' => $_POST['tanker']
+        ));
+
+        return $this->db->trans_complete();
     }
 
     public function product_sale_sortable_columns()

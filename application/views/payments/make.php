@@ -31,7 +31,7 @@
             <div class="row" style="background-color: ; margin-top: 10px;">
 
                 <!-- Receipt Voucher -->
-                <div class="col-md-10 " style="">
+                <div class="col-md-12 " style="">
                     <?php
                     include_once(APPPATH."views/payments/components/few_payments.php");
                     ?>

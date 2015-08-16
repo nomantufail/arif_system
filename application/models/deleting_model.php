@@ -255,6 +255,7 @@ class Deleting_Model extends Parent_Model {
 
     public function safely_delete_sale_invoice_items_where($where)
     {
+
         $this->db->select('voucher_entries.ac_title as product_name, voucher_entries.quantity,
             vouchers.tanker,
         ');
