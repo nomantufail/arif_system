@@ -71,7 +71,7 @@
                 <select class="select_box account_select_box" style="width: 100%;" name="account" id="account">
                     <option value="cash">Cash</option>
                     <?php foreach($bank_accounts as $account):?>
-                        <option value="<?= $account->title." (".$account->bank." ".bn_masking($account->account_number).")"."_&&_".$account->type ?>"><?= $account->title." (".$account->bank." ".bn_masking($account->account_number).")" ?></option>
+                        <option value="<?= formatted_bank_account($account)."_&&_".$account->type ?>"><?= $account->title." (".$account->bank." ".bn_masking($account->account_number).")" ?></option>
                     <?php endforeach; ?>
                 </select><br>
                 <span style="color: #808080;">Balance: </span><span style="color: gray;" id="account_balance"></span>

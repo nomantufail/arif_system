@@ -113,10 +113,16 @@ class Expenses_Model extends Parent_Model {
         include_once(APPPATH."models/helperClasses/App_Voucher.php");
         include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
 
-        $bank_account = $this->input->post('bank_ac');
-        $bank_account_parts = explode('_&&_',$bank_account);
-        $account_title = $bank_account_parts[0];
-        $sub_title = $bank_account_parts[1];
+        $payment_account = $this->input->post('account');
+        $sub_title = "";
+        if($payment_account != 'cash')
+        {
+            $bank_account_parts = explode('_&&_',$payment_account);
+            $account_title = $bank_account_parts[0];
+            $sub_title = ($bank_account_parts[1]);
+        }else{
+            $account_title = $payment_account;
+        }
 
         // making voucher
         $voucher = array();
@@ -143,8 +149,9 @@ class Expenses_Model extends Parent_Model {
         ),$voucher_entries_1);
 
         $voucher_entry_2 = array();
-        $voucher_entry_2['ac_sub_title'] = $sub_title;
         $voucher_entry_2['ac_title'] = $account_title;
+        $voucher_entry_2['ac_sub_title'] = $sub_title;
+        $voucher_entry_2['ac_type'] = ($account_title != 'cash')?'bank':'cash';
 
         $this->editing_model->update_voucher_entries(array(
             'voucher_entries.voucher_id'=>$voucher_id,
@@ -419,16 +426,10 @@ class Expenses_Model extends Parent_Model {
 
     public function few_payments()
     {
-        $this->select_expense_payment_content();
-        $this->db->from($this->table);
-        $this->join_vouchers();
-        $this->active_vouchers();
-        $this->expense_payment_vouchers();
-        $this->with_credit_entries_only();
+        $this->db->select("*");
         $this->db->limit(10);
-        $this->latest($this->table);
-        $result = $this->db->get()->result();
-
+        $this->db->order_by('voucher_id','desc');
+        $result = $this->db->get('expense_payments_view')->result();
         return $result;
     }
 

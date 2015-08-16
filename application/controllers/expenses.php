@@ -94,6 +94,7 @@ class Expenses extends ParentController {
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
 
         $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
+        $this->bodyData['cash_balance'] = $this->accounts_model->cash_balance();
         $this->bodyData['few_payments'] = $this->expenses_model->few_payments();
         $this->bodyData['payment'] = $payment_voucher;
 
