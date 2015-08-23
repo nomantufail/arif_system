@@ -164,11 +164,12 @@ class Admin extends ParentController {
         ));
     }
 
-    public function stock_history()
+
+    function stock_history()
     {
         $this->db->select('
-            vouchers.id as voucher_id,
-            vouchers.voucher_date, voucher_entries.quantity, voucher_entries.cost_per_item,
+            vouchers.id as voucher_id, voucher_entries.id as voucher_entry_id,
+            vouchers.voucher_date, vouchers.inserted_at, voucher_entries.cost_per_item,
             (
                 case
                     when vouchers.voucher_type = "purchase" then
@@ -177,6 +178,24 @@ class Admin extends ParentController {
                         "out"
                 end
             ) as in_out,
+
+            (
+                case
+                    when vouchers.voucher_type = "purchase" then
+                        voucher_entries.quantity
+                    else
+                        0
+                end
+            ) as s_in,
+
+            (
+                case
+                    when vouchers.voucher_type = "purchase" then
+                        0
+                    else
+                        voucher_entries.quantity
+                end
+            ) as s_out,
 
             (
                 case
@@ -196,7 +215,7 @@ class Admin extends ParentController {
                 end
             ) as agent,
 
-            voucher_entries.ac_title as product,
+            voucher_entries.ac_title as product, vouchers.tanker
         ');
         $this->db->join('voucher_entries','voucher_entries.voucher_id = vouchers.id','inner');
         $where = "(voucher_entries.related_supplier != '' || voucher_entries.related_customer != '')";
@@ -210,9 +229,25 @@ class Admin extends ParentController {
         $this->db->order_by('vouchers.voucher_date','asc');
         $this->db->order_by('vouchers.inserted_at','asc');
         $this->db->group_by('voucher_entries.voucher_id, voucher_entries.item_id');
-        $result = $this->db->get('vouchers')->result();
+        $result = $this->db->get('voucher')->result();
         var_dump($result);
     }
+
+    public function stock_view()
+    {
+        $this->db->select('cpcv.product, cpcv.tanker,
+            (SUM(s_in) - SUM(s_out)) as quantity,
+            cpcv.cost_per_item as price_per_unit, cpcv.voucher_id as purchase_id,
+            products.id as product_id, stock_history_view.voucher_entry_id as id,
+        ');
+        $this->db->join('current_purchase_cost_view as cpcv','cpcv.voucher_entry_id = stock_history_view.voucher_entry_id','left');
+        $this->db->join('products','products.name = cpcv.product','left');
+        $this->db->group_by('stock_history_view.product, stock_history_view.tanker');
+        $result = $this->db->get('stock_history_vie')->result();
+        var_dump($result);
+    }
+
+
 
     public function save_opening_balance()
     {

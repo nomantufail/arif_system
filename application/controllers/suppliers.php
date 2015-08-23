@@ -23,7 +23,7 @@ class Suppliers extends ParentController {
             {
                 $this->bodyData['section'] = 'all';
             }
-            redirect(base_url()."purchases/all");
+            redirect(base_url()."suppliers/all");
         }
     }
     
