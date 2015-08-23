@@ -94,6 +94,7 @@ class Expenses extends ParentController {
         $this->bodyData['bank_accounts'] = $this->bank_ac_model->get();
 
         $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
+        $this->bodyData['cash_balance'] = $this->accounts_model->cash_balance();
         $this->bodyData['few_payments'] = $this->expenses_model->few_payments();
         $this->bodyData['payment'] = $payment_voucher;
 
@@ -114,6 +115,7 @@ class Expenses extends ParentController {
 
         $this->bodyData['few_payments'] = $this->expenses_model->few_payments();
         $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
+        $this->bodyData['cash_balance'] = $this->accounts_model->cash_balance();
 
         $this->load->view('components/header', $headerData);
         $this->load->view('expenses/add_payment', $this->bodyData);
@@ -359,7 +361,7 @@ class Expenses extends ParentController {
 
             case "payment_history":
                 $sortable_columns = $this->expenses_model->sortable_columns('expense_payments');
-                $sort_by = 'vouchers.id';
+                $sort_by = 'voucher_id';
                 $order_by = 'desc';
 
                 if(isset($_GET['sort_by']) && array_key_exists($_GET['sort_by'], $sortable_columns))
@@ -426,7 +428,7 @@ class Expenses extends ParentController {
             case "payment_history":
                 $from = '';
                 $to ='';
-                $bank_acs = array();
+                $accounts = array();
                 if(isset($_GET['from']))
                 {
                     $from = $_GET['from'];
@@ -447,14 +449,14 @@ class Expenses extends ParentController {
                     $to = $date;
                 }
 
-                if(isset($_GET['bank_ac']))
+                if(isset($_GET['account']))
                 {
-                    $bank_acs = $_GET['bank_ac'];
+                    $accounts = $_GET['account'];
                 }
 
                 $this->search_keys['from'] = $from;
                 $this->search_keys['to'] = $to;
-                $this->search_keys['bank_acs'] = $bank_acs;
+                $this->search_keys['accounts'] = $accounts;
 
                 break;
         }

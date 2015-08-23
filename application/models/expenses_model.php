@@ -113,10 +113,16 @@ class Expenses_Model extends Parent_Model {
         include_once(APPPATH."models/helperClasses/App_Voucher.php");
         include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
 
-        $bank_account = $this->input->post('bank_ac');
-        $bank_account_parts = explode('_&&_',$bank_account);
-        $account_title = $bank_account_parts[0];
-        $sub_title = $bank_account_parts[1];
+        $payment_account = $this->input->post('account');
+        $sub_title = "";
+        if($payment_account != 'cash')
+        {
+            $bank_account_parts = explode('_&&_',$payment_account);
+            $account_title = $bank_account_parts[0];
+            $sub_title = ($bank_account_parts[1]);
+        }else{
+            $account_title = $payment_account;
+        }
 
         // making voucher
         $voucher = array();
@@ -143,8 +149,9 @@ class Expenses_Model extends Parent_Model {
         ),$voucher_entries_1);
 
         $voucher_entry_2 = array();
-        $voucher_entry_2['ac_sub_title'] = $sub_title;
         $voucher_entry_2['ac_title'] = $account_title;
+        $voucher_entry_2['ac_sub_title'] = $sub_title;
+        $voucher_entry_2['ac_type'] = ($account_title != 'cash')?'bank':'cash';
 
         $this->editing_model->update_voucher_entries(array(
             'voucher_entries.voucher_id'=>$voucher_id,
@@ -298,17 +305,23 @@ class Expenses_Model extends Parent_Model {
         include_once(APPPATH."models/helperClasses/App_Voucher.php");
         include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
 
+        $payment_account = $this->input->post('account');
+        $sub_title = "";
+        if($payment_account != 'cash')
+        {
+            $bank_account_parts = explode('_&&_',$payment_account);
+            $account_title = $bank_account_parts[0];
+            $sub_title = ($bank_account_parts[1]);
+        }else{
+            $account_title = $payment_account;
+        }
+
         $voucher = new App_Voucher();
         $voucher->voucher_date = $this->input->post('voucher_date');
         $voucher->summary = $this->input->post('summary');
         $voucher->voucher_type = 'expense payment';
 
         $voucher_entries = array();
-
-        $bank_account = $this->input->post('bank_ac');
-        $bank_account_parts = explode('_&&_',$bank_account);
-        $account_title = $bank_account_parts[0];
-        $sub_title = $bank_account_parts[1];
 
         /*---------First ENTRY--------*/
         $voucher_entry_1 = new App_voucher_Entry();
@@ -326,7 +339,7 @@ class Expenses_Model extends Parent_Model {
         $voucher_entry_2 = new App_voucher_Entry();
         $voucher_entry_2->ac_title = $account_title;
         $voucher_entry_2->ac_sub_title = $sub_title;
-        $voucher_entry_2->ac_type = 'bank';
+        $voucher_entry_2->ac_type = ($account_title != 'cash')?'bank':'cash';
         $voucher_entry_2->related_business = $this->admin_model->business_name();
         $voucher_entry_2->amount = $this->input->post('amount');
         $voucher_entry_2->dr_cr = 0;
@@ -359,32 +372,27 @@ class Expenses_Model extends Parent_Model {
     }
     public function search_expense_payment_history($keys, $sorting_info)
     {
-        $this->select_expense_payment_content();
-        $this->db->from($this->table);
-        $this->join_vouchers();
-        $this->active_vouchers();
-        $this->expense_payment_vouchers();
-        $this->with_credit_entries_only();
+        $this->db->select("*");
         /**
          * applying search keys
          **/
         if(isset($keys['voucher_id']) && sizeof($keys['voucher_id']) > 0)
         {
-            $this->db->where('vouchers.id',$keys['voucher_id']);
+            $this->db->where('voucher_id',$keys['voucher_id']);
         }
 
-        if(isset($keys['bank_acs']) &&sizeof($keys['bank_acs']) > 0)
+        if(isset($keys['accounts']) &&sizeof($keys['accounts']) > 0)
         {
-            $this->db->where_in('voucher_entries.ac_title', $keys['bank_acs']);
+            $this->db->where_in('account', $keys['accounts']);
         }
 
         if(isset($keys['to']) &&$keys['to'] != '')
         {
-            $this->db->where('vouchers.voucher_date <=',$keys['to']);
+            $this->db->where('voucher_date <=',$keys['to']);
         }
         if(isset($keys['from']) &&$keys['from'] != '')
         {
-            $this->db->where('vouchers.voucher_date >=',$keys['from']);
+            $this->db->where('voucher_date >=',$keys['from']);
         }
         /*------- End Of Search Keys-----*/
 
@@ -398,7 +406,7 @@ class Expenses_Model extends Parent_Model {
         /*------ Sorting Section Ends ------*/
 
 
-        $result = $this->db->get()->result();
+        $result = $this->db->get('expense_payments_view')->result();
 
         return $result;
     }
@@ -418,16 +426,10 @@ class Expenses_Model extends Parent_Model {
 
     public function few_payments()
     {
-        $this->select_expense_payment_content();
-        $this->db->from($this->table);
-        $this->join_vouchers();
-        $this->active_vouchers();
-        $this->expense_payment_vouchers();
-        $this->with_credit_entries_only();
+        $this->db->select("*");
         $this->db->limit(10);
-        $this->latest($this->table);
-        $result = $this->db->get()->result();
-
+        $this->db->order_by('voucher_id','desc');
+        $result = $this->db->get('expense_payments_view')->result();
         return $result;
     }
 
@@ -461,11 +463,11 @@ class Expenses_Model extends Parent_Model {
 
             case "expense_payments":
                 return array(
-                    'invoice_number'=>'vouchers.id',
-                    'invoice_date'=>'vouchers.voucher_date',
-                    'bank'=>'voucher_entries.ac_title',
-                    'amount'=>'voucher_entries.amount',
-                    'summary'=>'vouchers.summary',
+                    'voucher_id'=>'voucher_id',
+                    'voucher_date'=>'voucher_date',
+                    'account'=>'account',
+                    'amount'=>'amount',
+                    'summary'=>'summary',
                 );
         }
     }

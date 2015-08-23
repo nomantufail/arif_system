@@ -15,7 +15,7 @@
     <tr class="table_row table_header_row">
         <th class="column_heading">Invoice#</th>
         <th class="column_heading">Date</th>
-        <th class="column_heading">Bank</th>
+        <th class="column_heading">Account</th>
         <th class="column_heading">Amount</th>
         <th class="column_heading">Summary</th>
     </tr>
@@ -39,7 +39,7 @@
             </td>
             <td>
                 <?php
-                $bank = $record->bank_ac;
+                $bank = $record->account;
                 echo $bank;
                 ?>
             </td>
