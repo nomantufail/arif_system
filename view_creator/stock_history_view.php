@@ -67,6 +67,7 @@ function stock_history()
         'purchase'
     ]);
     $this->db->where('vouchers.deleted',0);
+    $this->db->where('voucher_entries.deleted',0);
     $this->db->order_by('vouchers.voucher_date','asc');
     $this->db->order_by('vouchers.inserted_at','asc');
     $this->db->group_by('voucher_entries.voucher_id, voucher_entries.item_id');

@@ -8,16 +8,16 @@ class Stock_Model extends Parent_Model {
     }
 
     public function get(){
-        $this->db->select("stock.id as stock_id, stock.product_id, products.name as product_name,
+        $this->db->select("stock.id as stock_id, stock.product_id, stock.product as product_name,
         stock.quantity, stock.tanker, stock.price_per_unit,
         ");
-        $this->db->from('stock');
-        $this->join_stock_and_products();
+        $this->db->from('stock_view as stock');
         $records = $this->db->get()->result();
         $grouped = Arrays::groupBy($records, Functions::extractField('product_name'));
         ksort($grouped);
         return $grouped;
     }
+
     public function get_where($select, $where)
     {
         if($select != '*')
