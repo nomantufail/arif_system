@@ -18,7 +18,48 @@ class Stock_Model extends Parent_Model {
         return $grouped;
     }
 
-    public function get_where($select, $where)
+    public function busy_tankers()
+    {
+        $this->db->select("tanker");
+        $this->db->distinct();
+        $this->db->where('quantity >',0);
+        $result = $this->db->get('stock_view')->result();
+        return $result;
+    }
+
+    public function purchase_prices_of($stock_elements)
+    {
+        $stock_where = '(';
+        $count = 0;
+        foreach($stock_elements as $element)
+        {
+            $count++;
+            $stock_where.="(tanker = '".$element['tanker']."' AND "."product = '".$element['product']."')";
+            if($count < sizeof($stock_elements))
+            {
+                $stock_where.=" OR ";
+            }
+        }
+        $stock_where.=")";
+
+        $this->db->select('price_per_unit, tanker, product as product_name');
+        $this->db->from('stock_view');
+        $this->db->where($stock_where);
+        $result = $this->db->get()->result();
+        $price_per_units = array();
+        foreach($result as $record)
+        {
+            $key = strtolower($record->product_name."_".$record->tanker);
+            $price_per_units[$key] = $record->price_per_unit;
+        }
+        return $price_per_units;
+    }
+
+    /**
+     *  below is the area for old seperate stock table managing. which is not in use now.
+     *  but changing below code can cas system errors.
+     **/
+    public function get_where_stock_temp($select, $where)
     {
         if($select != '*')
         {
@@ -36,6 +77,7 @@ class Stock_Model extends Parent_Model {
         $result = $this->db->get($this->table)->result();
         return $result;
     }
+
     public function get_limited($limit, $start, $keys, $sort) {
 
         $this->db->order_by($sort['sort_by'], $sort['order']);
@@ -263,44 +305,6 @@ class Stock_Model extends Parent_Model {
         {
             return true;
         }
-    }
-
-    public function busy_tankers()
-    {
-        $this->db->select("stock.tanker");
-        $this->db->distinct();
-        $this->db->where('stock.quantity >',0);
-        $result = $this->db->get($this->table)->result();
-        return $result;
-    }
-
-    public function purchase_prices_of($stock_elements)
-    {
-        $stock_where = '(';
-        $count = 0;
-        foreach($stock_elements as $element)
-        {
-            $count++;
-            $stock_where.="(tanker = '".$element['tanker']."' AND "."products.name = '".$element['product']."')";
-            if($count < sizeof($stock_elements))
-            {
-                $stock_where.=" OR ";
-            }
-        }
-        $stock_where.=")";
-
-        $this->db->select('stock.price_per_unit, stock.tanker, products.name as product_name');
-        $this->db->from('stock');
-        $this->join_stock_and_products();
-        $this->db->where($stock_where);
-        $result = $this->db->get()->result();
-        $price_per_units = array();
-        foreach($result as $record)
-        {
-            $key = strtolower($record->product_name."_".$record->tanker);
-            $price_per_units[$key] = $record->price_per_unit;
-        }
-        return $price_per_units;
     }
 
 }

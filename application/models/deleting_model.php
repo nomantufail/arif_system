@@ -165,7 +165,7 @@ class Deleting_Model extends Parent_Model {
                 /*----------Managing Stack-------------*/
 
                 //getting the price per unit
-                $previous_stock = $this->stock_model->get_where(array('price_per_unit','purchase_id'), array(
+                $previous_stock = $this->stock_model->get_where_stock_temp(array('price_per_unit','purchase_id'), array(
                     'products.name'=>$record->product_name,
                     'stock.tanker'=>$record->tanker,
                 ));
@@ -218,7 +218,7 @@ class Deleting_Model extends Parent_Model {
             /*----------Managing Stack-------------*/
 
             //getting the price per unit
-            $previous_stock = $this->stock_model->get_where(array('price_per_unit','purchase_id'), array(
+            $previous_stock = $this->stock_model->get_where_stock_temp(array('price_per_unit','purchase_id'), array(
                 'products.name'=>$entry->product_name,
                 'stock.tanker'=>$entry->tanker,
             ));
@@ -276,7 +276,7 @@ class Deleting_Model extends Parent_Model {
                 /*----------Managing Stack-------------*/
 
                 //getting the price per unit
-                $previous_stock = $this->stock_model->get_where(array('price_per_unit','purchase_id'), array(
+                $previous_stock = $this->stock_model->get_where_stock_temp(array('price_per_unit','purchase_id'), array(
                     'products.name'=>$entry->product_name,
                     'stock.tanker'=>$entry->tanker,
                 ));
