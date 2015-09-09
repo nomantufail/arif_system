@@ -64,6 +64,16 @@ class Ledgers_Model extends Parent_Model {
         return $opening_balance;
     }
 
+    function  opening_balance_for_cash_ledgers($from)
+    {
+        $this->db->select("
+            (SUM(debit_amount) - SUM(credit_amount)) as opening_balance
+        ");
+        $this->db->where('voucher_date <', $from);
+        $result = $this->db->get('cash_ledgers')->result();
+        return doubleval($result[0]->opening_balance);die();
+    }
+
     public function opening_balance($ledger, $keys)
     {
         $this->db->select('SUM(voucher_entries.amount) as total_amount, voucher_entries.dr_cr');
@@ -220,6 +230,21 @@ class Ledgers_Model extends Parent_Model {
     }
     /*********************************/
 
+    public function cash_ledgers($keys = null)
+    {
+        $this->db->select('*');
+        if($keys != null){
+            if($keys['from'] != ''){
+                $this->db->where('voucher_date >=', $keys['from']);
+            }
+            if($keys['to'] != ''){
+                $this->db->where('voucher_date <=', $keys['to']);
+            }
+        }
+        $this->db->order_by('voucher_date','desc');
+        $result = $this->db->get('cash_ledgers')->result();
+        return $result;
+    }
 
 }
 

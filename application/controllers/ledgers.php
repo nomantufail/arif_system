@@ -398,11 +398,52 @@ class ledgers extends ParentController {
         $this->bodyData['ac_title'] = $ac_title;
         $this->bodyData['ac_type'] = $ac_type;
 
-        $headerData['title']="Ledgers: tanker";
+        $headerData['title']="Ledgers: Withdrawls";
         $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance("", $keys);
         $this->bodyData['ledger'] = $this->ledgers_model->withdrawls_ledger($keys);
         $this->load->view('components/header', $headerData);
         $this->load->view('ledgers/withdrawls', $this->bodyData);
+        $this->load->view('components/footer');
+    }
+
+    public function cash()
+    {
+
+        $from = '';
+        $to ='';
+        if(isset($_GET['from']))
+        {
+            $from = $_GET['from'];
+        }
+        else
+        {
+            $date = Carbon::now()->toDateString();
+            $from = first_day_of_month($date);
+        }
+
+        if(isset($_GET['to']))
+        {
+            $to = $_GET['to'];
+        }
+        else
+        {
+            $date = Carbon::now()->toDateString();
+            $to = $date;
+        }
+
+        $keys = array(
+            'from'=>$from,
+            'to'=>$to,
+        );
+
+        $this->bodyData['from'] = $from;
+        $this->bodyData['to'] = $to;
+
+        $headerData['title']="Ledgers: Cash";
+        $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance_for_cash_ledgers($keys['from']);
+        $this->bodyData['ledger'] = $this->ledgers_model->cash_ledgers($keys);
+        $this->load->view('components/header', $headerData);
+        $this->load->view('ledgers/cash', $this->bodyData);
         $this->load->view('components/footer');
     }
 
