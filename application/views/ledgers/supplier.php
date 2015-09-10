@@ -109,6 +109,7 @@
                             <th>Ac / Type</th>
                             <th>Supplier</th>
                             <th>Tanker</th>
+                            <th>Qty</th>
                             <th>Summary</th>
                             <th style="width: 11%;">Debit</th>
                             <th style="width: 11%;">Credit</th>
@@ -146,6 +147,9 @@
                                     <?= ucfirst($record->tanker) ?>
                                 </td>
                                 <td>
+                                    <?= ($record->quantity) ?>
+                                </td>
+                                <td>
                                     <?= ucfirst($record->summary) ?>
                                 </td>
                                 <td><?= (($record->dr_cr == 0)?'':$this->helper_model->money(round($record->amount, 3))); ?></td>
@@ -169,7 +173,7 @@
                         </tbody>
                         <tfoot class="table_footer">
                         <tr class="table_footer_row table_footer_row_totals">
-                            <th colspan="7" style="text-align: right;">Totals:</th>
+                            <th colspan="8" style="text-align: right;">Totals:</th>
                             <th><?= $this->helper_model->money(round($total_debit, 3)) ?></th>
                             <th colspan=""><?= $this->helper_model->money(round($total_credit, 3)) ?></th>
                             <th></th><th></th>

@@ -419,7 +419,7 @@ class Parent_Model extends CI_Model {
             vouchers.tanker,
             voucher_entries.ac_sub_title, voucher_entries.amount, vouchers.voucher_date,
             voucher_entries.id as entry_id, voucher_entries.ac_type,
-            voucher_entries.dr_cr,
+            voucher_entries.dr_cr, voucher_entries.quantity,
             voucher_entries.related_supplier, voucher_entries.related_customer,
             voucher_entries.related_business, voucher_entries.related_other_agent,
             voucher_entries.related_tanker,
