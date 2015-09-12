@@ -95,7 +95,7 @@ class ledgers extends ParentController {
         $this->bodyData['account_titles'] = $this->accounts_model->account_titles("customers");
         $this->bodyData['account_types'] = $this->accounts_model->account_types();
         $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance("customers", $keys);
-        $this->bodyData['ledger'] = $this->ledgers_model->customer_ledger($keys);
+        $this->bodyData['ledger'] = $this->ledgers_model->customer_ledger($keys, $this->sorting_info);
 
         if(isset($_GET['print']))
         {
@@ -176,7 +176,7 @@ class ledgers extends ParentController {
         $this->bodyData['account_titles'] = $this->accounts_model->account_titles("suppliers");
         $this->bodyData['account_types'] = $this->accounts_model->account_types();
         $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance("suppliers", $keys);
-        $this->bodyData['ledger'] = $this->ledgers_model->supplier_ledger($keys);
+        $this->bodyData['ledger'] = $this->ledgers_model->supplier_ledger($keys, $this->sorting_info);
         if(isset($_GET['print']))
         {
             $this->load->view('ledgers/print/supplier', $this->bodyData);
@@ -261,7 +261,7 @@ class ledgers extends ParentController {
         $this->bodyData['account_titles'] = $this->accounts_model->account_titles("tankers");
         $this->bodyData['account_types'] = $this->accounts_model->account_types();
         $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance("tankers", $keys);
-        $this->bodyData['ledger'] = $this->ledgers_model->tanker_ledger($keys);
+        $this->bodyData['ledger'] = $this->ledgers_model->tanker_ledger($keys, $this->sorting_info);
         if(isset($_GET['print']))
         {
             $this->load->view('ledgers/print/tanker', $this->bodyData);
@@ -332,7 +332,7 @@ class ledgers extends ParentController {
         $headerData['title']="Ledgers: tanker";
         $this->bodyData['account_types'] = $this->accounts_model->account_types();
         $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance_of_bank_accounts($keys);
-        $this->bodyData['ledger'] = $this->ledgers_model->bank_ac_ledger($keys);
+        $this->bodyData['ledger'] = $this->ledgers_model->bank_ac_ledger($keys, $this->sorting_info);
         if(isset($_GET['print']))
         {
             $this->load->view('ledgers/print/bank_accounts', $this->bodyData);
@@ -400,10 +400,18 @@ class ledgers extends ParentController {
 
         $headerData['title']="Ledgers: Withdrawls";
         $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance("", $keys);
-        $this->bodyData['ledger'] = $this->ledgers_model->withdrawls_ledger($keys);
-        $this->load->view('components/header', $headerData);
-        $this->load->view('ledgers/withdrawls', $this->bodyData);
-        $this->load->view('components/footer');
+        $this->bodyData['ledger'] = $this->ledgers_model->withdrawls_ledger($keys, $this->sorting_info);
+
+        if(isset($_GET['print']))
+        {
+            $this->load->view('ledgers/print/withdrawls', $this->bodyData);
+        }
+        else
+        {
+            $this->load->view('components/header', $headerData);
+            $this->load->view('ledgers/withdrawls', $this->bodyData);
+            $this->load->view('components/footer');
+        }
     }
 
     public function cash()
@@ -441,10 +449,18 @@ class ledgers extends ParentController {
 
         $headerData['title']="Ledgers: Cash";
         $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance_for_cash_ledgers($keys['from']);
-        $this->bodyData['ledger'] = $this->ledgers_model->cash_ledgers($keys);
-        $this->load->view('components/header', $headerData);
-        $this->load->view('ledgers/cash', $this->bodyData);
-        $this->load->view('components/footer');
+        $this->bodyData['ledger'] = $this->ledgers_model->cash_ledgers($keys, $this->sorting_info);
+
+        if(isset($_GET['print']))
+        {
+            $this->load->view('ledgers/print/cash', $this->bodyData);
+        }
+        else
+        {
+            $this->load->view('components/header', $headerData);
+            $this->load->view('ledgers/cash', $this->bodyData);
+            $this->load->view('components/footer');
+        }
     }
 
     public function check_for_prerequisites($data, $section = null)
@@ -507,5 +523,59 @@ class ledgers extends ParentController {
             }
         }
 
+    }
+
+
+    public function set_sort_info_for_required_section()
+    {
+        $area = $this->uri->segment(2);
+        switch($area)
+        {
+            case "customers":
+                $sortable_columns = $this->ledgers_model->sortable_columns('customers');
+                $sort_by = 'vouchers.id';
+                $order_by = 'desc';
+                break;
+            case "suppliers":
+                $sortable_columns = $this->ledgers_model->sortable_columns('suppliers');
+                $sort_by = 'vouchers.id';
+                $order_by = 'desc';
+                break;
+            case "bank_accounts":
+                $sortable_columns = $this->ledgers_model->sortable_columns('bank_accounts');
+                $sort_by = 'vouchers.id';
+                $order_by = 'desc';
+                break;
+            case "tankers":
+                $sortable_columns = $this->ledgers_model->sortable_columns('tankers');
+                $sort_by = 'vouchers.id';
+                $order_by = 'desc';
+                break;
+            case "withdrawls":
+                $sortable_columns = $this->ledgers_model->sortable_columns('withdrawls');
+                $sort_by = 'vouchers.id';
+                $order_by = 'desc';
+                break;
+            case "cash":
+                $sortable_columns = $this->ledgers_model->sortable_columns('cash');
+                $sort_by = 'voucher_id';
+                $order_by = 'desc';
+                break;
+            default:
+                $sort_by = 'voucher_id';
+                $order_by = 'desc';
+        }
+
+        if(isset($_GET['sort_by']) && array_key_exists($_GET['sort_by'], $sortable_columns))
+        {
+            $sort_by = $sortable_columns[$_GET['sort_by']];
+        }
+        if(isset($_GET['order']) && $_GET['order'] == 'asc')
+        {
+            $order_by = 'asc';
+        }
+
+        $this->sorting_info['sort_by'] = $sort_by;
+        $this->sorting_info['order_by'] = $order_by;
     }
 }

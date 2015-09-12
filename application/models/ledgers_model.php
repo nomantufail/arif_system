@@ -113,7 +113,7 @@ class Ledgers_Model extends Parent_Model {
         return $opening_balance;
     }
 
-    public function customer_ledger($keys)
+    public function customer_ledger($keys, $sorting_info = null)
     {
         $this->select_whole_voucher_content();
         $this->db->from('vouchers');
@@ -130,11 +130,20 @@ class Ledgers_Model extends Parent_Model {
         if($keys['ac_type'] != '')
             $this->where_ac_type($keys['ac_type']);
 
+        /**
+         * Sorting Section
+         **/
+        if($sorting_info != null)
+        {
+            $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        }
+        /*------ Sorting Section Ends ------*/
+
         $result = $this->db->get()->result();
         return $result;
     }
 
-    public function supplier_ledger($keys)
+    public function supplier_ledger($keys, $sorting_info = null)
     {
         $this->select_whole_voucher_content();
         $this->db->from('vouchers');
@@ -150,6 +159,15 @@ class Ledgers_Model extends Parent_Model {
 
         if($keys['ac_type'] != '')
             $this->where_ac_type($keys['ac_type']);
+
+        /**
+         * Sorting Section
+         **/
+        if($sorting_info != null)
+        {
+            $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        }
+        /*------ Sorting Section Ends ------*/
 
         $result = $this->db->get()->result();
 
@@ -176,7 +194,7 @@ class Ledgers_Model extends Parent_Model {
         return $result;
     }
 
-    public function bank_ac_ledger($keys)
+    public function bank_ac_ledger($keys, $sorting_info = null)
     {
         if($keys['ac_title'] == '')
         {
@@ -201,11 +219,20 @@ class Ledgers_Model extends Parent_Model {
         if($keys['ac_type'] != '')
             $this->where_ac_type($keys['ac_type']);
 
+        /**
+         * Sorting Section
+         **/
+        if($sorting_info != null)
+        {
+            $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        }
+        /*------ Sorting Section Ends ------*/
+
         $result = $this->db->get()->result();
         return $result;
     }
 
-    public function withdrawls_ledger($keys)
+    public function withdrawls_ledger($keys, $sorting_info = null)
     {
         if($keys['ac_title'] == '')
         {
@@ -225,12 +252,21 @@ class Ledgers_Model extends Parent_Model {
 
         }
 
+        /**
+         * Sorting Section
+         **/
+        if($sorting_info != null)
+        {
+            $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        }
+        /*------ Sorting Section Ends ------*/
+
         $result = $this->db->get()->result();
         return $result;
     }
     /*********************************/
 
-    public function cash_ledgers($keys = null)
+    public function cash_ledgers($keys = null, $sorting_info = null)
     {
         $this->db->select('*');
         if($keys != null){
@@ -241,9 +277,51 @@ class Ledgers_Model extends Parent_Model {
                 $this->db->where('voucher_date <=', $keys['to']);
             }
         }
-        $this->db->order_by('voucher_date','desc');
+
+        /**
+         * Sorting Section
+         **/
+        if($sorting_info != null)
+        {
+            $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        }
+        /*------ Sorting Section Ends ------*/
+
         $result = $this->db->get('cash_ledgers')->result();
         return $result;
+    }
+
+    public function sortable_columns($section)
+    {
+        $columns = [];
+        switch($section)
+        {
+            case "customers":
+                $columns['voucher_id'] = 'vouchers.id';
+                $columns['voucher_date'] = 'vouchers.voucher_date';
+                break;
+            case "suppliers":
+                $columns['voucher_id'] = 'vouchers.id';
+                $columns['voucher_date'] = 'vouchers.voucher_date';
+                break;
+            case "tankers":
+                $columns['voucher_id'] = 'vouchers.id';
+                $columns['voucher_date'] = 'vouchers.voucher_date';
+                break;
+            case "bank_accounts":
+                $columns['voucher_id'] = 'vouchers.id';
+                $columns['voucher_date'] = 'vouchers.voucher_date';
+                break;
+            case "withdrawls":
+                $columns['voucher_id'] = 'vouchers.id';
+                $columns['voucher_date'] = 'vouchers.voucher_date';
+                break;
+            case "cash":
+                $columns['voucher_id'] = 'voucher_id';
+                $columns['voucher_date'] = 'voucher_date';
+                break;
+        }
+        return $columns;
     }
 
 }

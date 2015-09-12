@@ -103,8 +103,8 @@
                         </tr>
 
                         <tr class="table_row table_header_row">
-                           <th style="">Voucher#</th>
-                            <th style="width: 10%">Date</th>
+                            <?= sortable_header('voucher_id', 'numeric','Voucher#'); ?>
+                            <?= sortable_header('voucher_date', 'string','Date'); ?>
                             <th>Ac / Title</th>
                             <th>Ac / Type</th>
                             <th>Supplier</th>

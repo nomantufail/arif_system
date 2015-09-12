@@ -70,8 +70,8 @@
                         </tr>
 
                         <tr class="table_row table_header_row">
-                           <th style="">Voucher#</th>
-                            <th style="width: 10%">Date</th>
+                            <?= sortable_header('voucher_id', 'numeric','Voucher#'); ?>
+                            <?= sortable_header('voucher_date', 'string','Date'); ?>
                             <th>Summary</th>
                             <th style="width: 11%;">Debit</th>
                             <th style="width: 11%;">Credit</th>

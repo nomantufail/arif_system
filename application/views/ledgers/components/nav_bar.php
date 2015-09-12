@@ -15,5 +15,8 @@
         <li class="<?php if($section == 'withdrawls'){echo "active";} ?>">
             <a href="<?= base_url()."ledgers/withdrawls" ?>"><i class="fa fa-fw fa-file-o"></i> Withdrawls </a>
         </li>
+        <li class="<?php if($section == 'cash'){echo "active";} ?>">
+            <a href="<?= base_url()."ledgers/cash" ?>"><i class="fa fa-fw fa-file-o"></i> Cash </a>
+        </li>
     </ul>
 </div>
