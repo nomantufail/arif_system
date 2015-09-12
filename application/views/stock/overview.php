@@ -1,17 +1,12 @@
 
-<div class="row page_heading_container">
-    <div class="col-lg-12">
-        <section class="col-md-6">
-            <h3 class="">
-                Stock In Hand <small></small>
-            </h3>
-        </section>
-    </div>
-</div>
 <div id="page-wrapper" class="whole_page_container">
 
     <div class="container-fluid">
-
+        <div class="row">
+            <?php
+            include_once(APPPATH."views/stock/components/nav_bar.php");
+            ?>
+        </div>
         <!--Notifications Area-->
         <div class="row">
             <?php echo $this->helper_model->display_flash_errors(); ?>

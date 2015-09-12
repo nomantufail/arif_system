@@ -18,6 +18,37 @@ class Stock_Model extends Parent_Model {
         return $grouped;
     }
 
+    public function get_history($keys){
+        $this->db->select("*");
+
+        if($keys['from'] != '')
+            $this->db->where('voucher_date >=', $keys['from']);
+        if($keys['to'] != '')
+            $this->db->where('voucher_date <=', $keys['to']);
+        if($keys['product'] != '')
+            $this->db->where('product', $keys['product']);
+        if($keys['tanker'] != '')
+            $this->db->where('tanker', $keys['tanker']);
+
+        $result = $this->db->get('stock_history_view')->result();
+        return $result;
+    }
+
+    public function opening_stock($keys)
+    {
+        $this->db->select("(sum(s_in) - sum(s_out)) as available");
+
+        if($keys['from'] != '')
+            $this->db->where('voucher_date <', $keys['from']);
+        if($keys['product'] != '')
+            $this->db->where('product', $keys['product']);
+        if($keys['tanker'] != '')
+            $this->db->where('tanker', $keys['tanker']);
+
+        $result = $this->db->get('stock_history_view')->result();
+        return $result[0]->available;
+    }
+
     public function busy_tankers()
     {
         $this->db->select("tanker");

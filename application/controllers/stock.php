@@ -23,10 +23,10 @@ class Stock extends ParentController {
             {
                 $this->bodyData['section'] = 'show';
             }
-            redirect(base_url()."stock/show");
+            redirect(base_url()."stock/overview");
         }
     }
-    public function show()
+    public function overview()
     {
         $headerData = array(
             'title' => 'Stock',
@@ -44,11 +44,35 @@ class Stock extends ParentController {
         else
         {
             $this->load->view('components/header', $headerData);
-            $this->load->view('stock/show', $bodyData);
+            $this->load->view('stock/overview', $bodyData);
             $this->load->view('components/footer');
         }
     }
 
+    public function history()
+    {
+        $headerData = array(
+            'title' => 'Stock History',
+        );
+        $this->bodyData['history'] = $this->stock_model->get_history($this->search_keys);
+        $this->bodyData['products'] = $this->products_model->get();
+        $this->bodyData['opening_stock'] = $this->stock_model->opening_stock($this->search_keys);
+        $this->bodyData['tankers'] = $this->tankers_model->get();
+        if(isset($_GET['print']))
+        {
+            $this->load->view('prints/stock_history', $this->bodyData);
+        }
+        else if(isset($_GET['export']))
+        {
+            $this->load->view('exports/stock', $this->bodyData);
+        }
+        else
+        {
+            $this->load->view('components/header', $headerData);
+            $this->load->view('stock/history', $this->bodyData);
+            $this->load->view('components/footer');
+        }
+    }
 
     /**
      * Below functions are used t save or deleted
@@ -68,6 +92,45 @@ class Stock extends ParentController {
         $area = $this->uri->segment(2);
         switch($area)
         {
+            case "history":
+                $from = '';
+                $to ='';
+                $tanker = "00000";
+                $product = "hsd";
+                if(isset($_GET['from']))
+                {
+                    $from = $_GET['from'];
+                }
+                else
+                {
+                    $date = Carbon::now()->toDateString();
+                    $from = first_day_of_month($date);
+                }
+                if(isset($_GET['to']))
+                {
+                    $to = $_GET['to'];
+                }
+                else
+                {
+                    $date = Carbon::now()->toDateString();
+                    $to = $date;
+                }
+                if(isset($_GET['product']))
+                {
+                    $product = $_GET['product'];
+                }
+
+                if(isset($_GET['tanker']))
+                {
+                    $tanker = $_GET['tanker'];
+                }
+
+                $this->search_keys['from'] = $from;
+                $this->search_keys['to'] = $to;
+                $this->search_keys['tanker'] = $tanker;
+                $this->search_keys['product'] = $product;
+
+                break;
 
         }
     }
