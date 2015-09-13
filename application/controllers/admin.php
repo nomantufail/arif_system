@@ -40,30 +40,65 @@ class Admin extends ParentController {
 
     public function home()
     {
-        $date = Carbon::now()->toDateString();
-        $from = first_day_of_month($date);
-        $to = $date;
-
-        $this->bodyData['from'] = $from;
-        $this->bodyData['to'] = $to;
+        $this->bodyData['search_keys'] = $this->search_keys;
 
         $headerData['title']='Home';
         $this->bodyData['section'] = 'home';
 
-        $this->bodyData['total_sales'] = $this->sales_model->total_sales($from, $to);
-        $this->bodyData['total_purchases'] = $this->purchases_model->total_purchases($from, $to);
-        $this->bodyData['total_payables'] = $this->payments_model->total_payables($from, $to);
-        $this->bodyData['total_receivables'] = $this->receipts_model->total_receivables($from, $to);
+        $this->bodyData['total_sales'] = $this->sales_model->total_sales($this->search_keys['from'], $this->search_keys['to']);
+        $this->bodyData['total_purchases'] = $this->purchases_model->total_purchases($this->search_keys['from'], $this->search_keys['to']);
+        $this->bodyData['total_payables'] = $this->payments_model->total_payables($this->search_keys['from'], $this->search_keys['to']);
+        $this->bodyData['total_receivables'] = $this->receipts_model->total_receivables($this->search_keys['from'], $this->search_keys['to']);
 
         $this->bodyData['bank_accounts'] = $this->accounts_model->bank_accounts_status();
 
-        $this->bodyData['profit_loss'] = $this->accounts_model->profit_loss($from, $to);
+        $this->bodyData['profit_loss'] = $this->accounts_model->profit_loss($this->search_keys['from'], $this->search_keys['to']);
 
         $this->bodyData['business_performance'] = $this->business_performance_model->month_by_month_expense_sales_purchase_sheet();
 
         $this->load->view('components/header',$headerData);
         $this->load->view('admin/home', $this->bodyData);
         $this->load->view('components/footer');
+    }
+
+    public function set_search_keys_for_required_section()
+    {
+        $area = $this->uri->segment(2);
+        switch($area)
+        {
+            case "home":
+                $from = '';
+                $to ='';
+                if(isset($_GET['from']))
+                {
+                    if($_GET['from'] == '')
+                        $from = "1970-01-01";
+                    else
+                        $from = $_GET['from'];
+                }
+                else
+                {
+                    $date = Carbon::now()->toDateString();
+                    $from = first_day_of_month($date);
+                }
+                if(isset($_GET['to']))
+                {
+                    if($_GET['to'] == '')
+                        $to = date('Y-m-d');
+                    else
+                        $to = $_GET['to'];
+                }
+                else
+                {
+                    $date = Carbon::now()->toDateString();
+                    $to = $date;
+                }
+                $this->search_keys['from'] = $from;
+                $this->search_keys['to'] = $to;
+
+                break;
+
+        }
     }
 
     public function update_bank_entries()

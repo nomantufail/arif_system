@@ -19,6 +19,7 @@ class Sales_Model extends Parent_Model {
         $this->active_vouchers();
         $this->all_sale_vouchers();
         $this->with_debit_entries_only();
+        $this->voucher_duration($from, $to);
         $this->latest($this->table);
         $result = $this->db->get()->result();
         $total_sales = ($result[0]->total_sales != null)?$result[0]->total_sales:0;

@@ -19,6 +19,7 @@ class Purchases_Model extends Parent_Model {
         $this->active_vouchers();
         $this->purchase_vouchers();
         $this->with_credit_entries_only();
+        $this->voucher_duration($from, $to);
         $this->latest($this->table);
         $result = $this->db->get()->result();
         $total_purchases = ($result[0]->total_purchases != null)?$result[0]->total_purchases:0;

@@ -29,9 +29,20 @@
         <div class="row actual_body_contents">
             <div class="row">
                 <div class="col-md-6">
+                    <div>
+                        <form>
+                            <table>
+                                <tr>
+                                    <td><input style="height: 25px;" type="date" name="from" value="<?= $search_keys['from'] ?>"></td>
+                                    <td><input style="height: 25px;" type="date" name="to" value="<?= $search_keys['to'] ?>"></td>
+                                    <td><input style="height: 25px;" type="submit"></td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"> Business Status ( <?= Carbon::createFromFormat('Y-m-d',$from)->toFormattedDateString()." to ".Carbon::createFromFormat('Y-m-d',$to)->toFormattedDateString() ?> )</h3>
+                            <h3 class="panel-title"> Business Status ( <?= Carbon::createFromFormat('Y-m-d',$search_keys['from'])->toFormattedDateString()." to ".Carbon::createFromFormat('Y-m-d',$search_keys['to'])->toFormattedDateString() ?> )</h3>
                         </div>
                         <div class="panel-body">
                             <table class="table">
@@ -57,7 +68,7 @@
 
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"> Profit & Loss ( <?= Carbon::createFromFormat('Y-m-d',$from)->toFormattedDateString()." to ".Carbon::createFromFormat('Y-m-d',$to)->toFormattedDateString() ?> )</h3>
+                            <h3 class="panel-title"> Profit & Loss ( <?= Carbon::createFromFormat('Y-m-d',$search_keys['from'])->toFormattedDateString()." to ".Carbon::createFromFormat('Y-m-d',$search_keys['to'])->toFormattedDateString() ?> )</h3>
                         </div>
                         <div class="panel-body">
                             <table class="table">
