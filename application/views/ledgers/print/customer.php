@@ -1,9 +1,8 @@
 
 <link href="<?= css()?>bootstrap.min.css" rel="stylesheet">
-<style>
+<link href="<?= css()?>ledgers.css" rel="stylesheet">
 
-</style>
-<table class="my_table list_table table table-bordered" style="font-size:10px;">
+<table class="my_table list_table table-bordered print-friendly" style="font-size:12px;">
     <?php
     $starting_balance = $opening_balance;
     $searched_balance = 0;
@@ -17,8 +16,6 @@
         <th style="">Voucher#</th>
         <th style="width: 10%">Date</th>
         <th>Ac / Title</th>
-        <th>Ac / Type</th>
-        <th>Customer</th>
         <th>Tanker</th>
         <th>Qty</th>
         <th>Summary</th>
@@ -41,51 +38,45 @@
         <?php $total_debit += $debit_amount; ?>
         <?php $total_credit += $credit_amount; ?>
         <tr style="">
-            <td><?= $record->voucher_id ?></td>
-            <td>
+            <td><div class="avoidPrintBreak"><?= $record->voucher_id ?></div></td>
+            <td><div class="avoidPrintBreak">
                 <?= $this->carbon->createFromFormat('Y-m-d', $record->voucher_date)->toFormattedDateString(); ?>
-            </td>
-            <td>
+            </div></td>
+            <td><div class="avoidPrintBreak">
                 <?= ucfirst($record->ac_title) ?>
-            </td>
-            <td>
-                <?= ucfirst($record->ac_type) ?>
-            </td>
-            <td>
-                <?= ucfirst($record->related_customer) ?>
-            </td>
-            <td>
+            </div></td>
+            <td><div class="avoidPrintBreak">
                 <?= ucfirst($record->tanker) ?>
-            </td>
-            <td>
+            </div></td>
+            <td><div class="avoidPrintBreak">
                 <?= ($record->quantity) ?>
-            </td>
-            <td>
+            </div></td>
+            <td><div class="avoidPrintBreak">
                 <?= ucfirst($record->summary) ?>
-            </td>
+            </div></td>
 
-            <td><?= (($record->dr_cr == 0)?'':$this->helper_model->money(round($record->amount, 3))); ?></td>
-            <td><?= (($record->dr_cr == 1)?'':$this->helper_model->money(round($record->amount, 3))); ?></td>
-            <td>
+            <td><div class="avoidPrintBreak"><?= (($record->dr_cr == 0)?'':$this->helper_model->money(round($record->amount, 3))); ?></div></td>
+            <td><div class="avoidPrintBreak"><?= (($record->dr_cr == 1)?'':$this->helper_model->money(round($record->amount, 3))); ?></div></td>
+            <td><div class="avoidPrintBreak">
                 <?php
                 $searched_balance = (($debit_amount - $credit_amount) + $searched_balance);
                 $searched_balance = round($searched_balance, 3);
                 ?>
                 <?= (($searched_balance < 0)?"(".($this->helper_model->money($searched_balance*-1)).")":$this->helper_model->money($searched_balance)) ?>
-            </td>
-            <td>
+            </div></td>
+            <td><div class="avoidPrintBreak">
                 <?php
                 $starting_balance = (($debit_amount - $credit_amount) + $starting_balance);
                 $starting_balance = round($starting_balance, 3);
                 ?>
                 <?= (($starting_balance < 0)?"(".($this->helper_model->money($starting_balance*-1)).")":$this->helper_model->money($starting_balance)) ?>
-            </td>
+            </div></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
     <tfoot class="table_footer">
     <tr class="table_footer_row table_footer_row_totals">
-        <th colspan="8" style="text-align: right;">Totals:</th>
+        <th colspan="6" style="text-align: right;">Totals:</th>
         <th><?= $this->helper_model->money(round($total_debit, 3)) ?></th>
         <th colspan=""><?= $this->helper_model->money(round($total_credit, 3)) ?></th>
         <th></th><th></th>

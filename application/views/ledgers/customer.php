@@ -101,7 +101,7 @@
                         <tr>
                             <td colspan="11" style="text-align: right;">Opening Balance: <?= (($opening_balance < 0)?"(".(rupee_format($opening_balance*-1)).")":rupee_format($opening_balance)) ?></td>
                         </tr>
-
+                        <tr>
                         <tr class="table_row table_header_row">
                             <?= sortable_header('voucher_id', 'numeric','Voucher#'); ?>
                             <?= sortable_header('voucher_date', 'string','Date'); ?>

@@ -1,16 +1,15 @@
 
 <link href="<?= css()?>bootstrap.min.css" rel="stylesheet">
-<style>
+<link href="<?= css()?>ledgers.css" rel="stylesheet">
 
-</style>
-<table class="my_table list_table table table-bordered" style="font-size:10px;">
+<table class="my_table list_table table-bordered" style="font-size:10px;">
     <?php
     $starting_balance = $opening_balance;
     $searched_balance = 0;
     ?>
     <thead class="table_header">
     <tr>
-        <td colspan="8" style="text-align: right;">Opening Balance: <?= (($opening_balance < 0)?"(".(rupee_format($opening_balance*-1)).")":rupee_format($opening_balance)) ?></td>
+        <td colspan="8" style="text-align: right;">Opening Balance: <?= (($opening_balance < 0)?"(".(rupee_format($opening_balance*-1)).")":rupee_format($opening_balance)) ?></div></td>
     </tr>
 
     <tr class="table_row table_header_row">
@@ -37,32 +36,32 @@
         <?php $total_debit += $debit_amount; ?>
         <?php $total_credit += $credit_amount; ?>
         <tr style="">
-            <td><?= $record->voucher_id ?></td>
-            <td>
+            <td><div class="avoidPrintBreak"><?= $record->voucher_id ?></div></td>
+            <td><div class="avoidPrintBreak">
                 <?= $this->carbon->createFromFormat('Y-m-d', $record->voucher_date)->toFormattedDateString(); ?>
-            </td>
-            <td>
+            </div></td>
+            <td><div class="avoidPrintBreak">
                 <?= ucfirst($record->ac_title) ?>
-            </td>
-            <td>
+            </div></td>
+            <td><div class="avoidPrintBreak">
                 <?= ucfirst($record->summary) ?>
-            </td>
-            <td><?= (($record->dr_cr == 0)?'':$this->helper_model->money(round($record->amount, 3))); ?></td>
-            <td><?= (($record->dr_cr == 1)?'':$this->helper_model->money(round($record->amount, 3))); ?></td>
-            <td>
+            </div></td>
+            <td><div class="avoidPrintBreak"><?= (($record->dr_cr == 0)?'':$this->helper_model->money(round($record->amount, 3))); ?></div></td>
+            <td><div class="avoidPrintBreak"><?= (($record->dr_cr == 1)?'':$this->helper_model->money(round($record->amount, 3))); ?></div></td>
+            <td><div class="avoidPrintBreak">
                 <?php
                 $searched_balance = (($debit_amount - $credit_amount) + $searched_balance);
                 $searched_balance = round($searched_balance, 3);
                 ?>
                 <?= (($searched_balance < 0)?"(".($this->helper_model->money($searched_balance*-1)).")":$this->helper_model->money($searched_balance)) ?>
-            </td>
-            <td>
+            </div></td>
+            <td><div class="avoidPrintBreak">
                 <?php
                 $starting_balance = (($debit_amount - $credit_amount) + $starting_balance);
                 $starting_balance = round($starting_balance, 3);
                 ?>
                 <?= (($starting_balance < 0)?"(".($this->helper_model->money($starting_balance*-1)).")":$this->helper_model->money($starting_balance)) ?>
-            </td>
+            </div></div></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
