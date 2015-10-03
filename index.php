@@ -1,6 +1,6 @@
 <?php
 /*echo "system is updating..<br>Please wait."; die();*/
-/*echo "System is updating...<br>Please wait!"; die();*/
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
