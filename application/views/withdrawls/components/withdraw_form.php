@@ -25,6 +25,7 @@
     ?>
     BankBalance["<?= $key ?>"] = "<?= $value ?>";
     <?php endforeach; ?>
+    BankBalance["cash"] = "<?= $cash_balance ?>";
     /*----------------------------------------------------------*/
 
     /* making array of Withdraw accounts balances at this point */
@@ -48,8 +49,10 @@
         var id = (e == undefined)?'bank_ac':e.params.data.element.parentElement.id;
         var bank_selected_index = document.getElementById("bank_ac").selectedIndex;
         var bank = document.getElementById("bank_ac").options[bank_selected_index].value;
-        parts_of_bank = bank.split('_&&_');
-        bank = parts_of_bank[0];
+        if(bank != 'cash'){
+            parts_of_bank = bank.split('_&&_');
+            bank = parts_of_bank[0];
+        }
         document.getElementById("bank_balance").innerHTML = to_dr_cr_string(BankBalance[bank]);
     }
     function withdraw_ac_changed(e)
@@ -86,6 +89,7 @@
                     <?php foreach($bank_accounts as $account):?>
                         <option value="<?= $account->title." (".$account->bank." ".bn_masking($account->account_number).")"."_&&_".$account->type ?>"><?= $account->title." (".$account->bank." ".bn_masking($account->account_number).")" ?></option>
                     <?php endforeach; ?>
+                    <option value="cash">Cash</option>
                 </select><br>
                 <span style="color: #808080;">Balance: </span><span style="color: gray;" id="bank_balance"></span>
             </td>

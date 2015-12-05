@@ -441,6 +441,7 @@ class Expenses_Model extends Parent_Model {
         $this->active_vouchers();
         $this->expense_payable_vouchers();
         $this->with_debit_entries_only();
+        $this->voucher_duration($from,$to);
         $result = $this->db->get()->result();
 
         return ($result[0]->total_expense != null)?round(doubleval($result[0]->total_expense), 3): 0;

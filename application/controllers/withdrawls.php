@@ -41,6 +41,7 @@ class Withdrawls extends ParentController {
         $this->bodyData['withdraw_accounts'] = $this->withdrawls_model->accounts();
 
         $this->bodyData['banks_balance'] = $this->accounts_model->banks_balance();
+        $this->bodyData['cash_balance'] = $this->accounts_model->cash_balance();
         $this->bodyData['withdraw_accounts_balance'] = $this->accounts_model->withdraw_accounts_balance();
         $this->bodyData['few_withdrawls'] = $this->withdrawls_model->few_withdrawls();
 

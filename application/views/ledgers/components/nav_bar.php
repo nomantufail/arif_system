@@ -9,6 +9,9 @@
         <li class="<?php if($section == 'tankers'){echo "active";} ?>">
             <a href="<?= base_url()."ledgers/tankers" ?>"><i class="fa fa-fw fa-file-o"></i> Tankers </a>
         </li>
+        <li class="<?php if($section == 'products'){echo "active";} ?>">
+            <a href="<?= base_url()."ledgers/products" ?>"><i class="fa fa-fw fa-file-o"></i> Products </a>
+        </li>
         <li class="<?php if($section == 'bank_accounts'){echo "active";} ?>">
             <a href="<?= base_url()."ledgers/bank_accounts" ?>"><i class="fa fa-fw fa-file-o"></i> Bank Accounts </a>
         </li>

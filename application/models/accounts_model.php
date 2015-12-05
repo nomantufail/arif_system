@@ -113,8 +113,8 @@ class Accounts_Model extends Parent_Model {
             $balances[$bank_name] = $balance;
         }
         return $balances;
-
     }
+
     public function withdraw_accounts_balance()
     {
         $this->db->select('voucher_entries.ac_title as withdraw_account,

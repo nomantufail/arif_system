@@ -85,17 +85,17 @@ class Ledgers_Model extends Parent_Model {
         {
             case "customers":
                 $this->get_customer_vouchers();
-                if($keys['customer'] != '')
+                if(isset($keys['customer']) && $keys['customer'] != '')
                     $this->where_customer($keys['customer']);
                 break;
             case "suppliers":
                 $this->get_supplier_vouchers();
-                if($keys['supplier'] != '')
+                if(isset($keys['supplier']) && $keys['supplier'] != '')
                     $this->where_supplier($keys['supplier']);
                 break;
             case "tankers":
                 $this->get_tanker_vouchers();
-                if($keys['tanker'] != '')
+                if(isset($keys['tanker']) && $keys['tanker'] != '')
                     $this->where_tanker($keys['tanker']);
                 break;
         }
@@ -123,6 +123,48 @@ class Ledgers_Model extends Parent_Model {
         $this->get_customer_vouchers();
         if($keys['customer'] != '')
             $this->where_customer($keys['customer']);
+
+        if($keys['ac_title'] != '')
+            $this->where_ac_title($keys['ac_title']);
+
+        if($keys['ac_type'] != '')
+            $this->where_ac_type($keys['ac_type']);
+
+        /**
+         * Sorting Section
+         **/
+        if($sorting_info != null)
+        {
+            $this->db->order_by($sorting_info['sort_by'],$sorting_info['order_by']);
+        }
+        /*------ Sorting Section Ends ------*/
+
+        $result = $this->db->get()->result();
+        return $result;
+    }
+
+    public function products_ledger($keys, $sorting_info = null)
+    {
+        /**
+         * getting products
+         **/
+        $result = $this->products_model->get();
+        $products = property_to_array('name',$result);
+
+        /**
+         * fetching ledgers..
+         **/
+        $this->select_whole_voucher_content();
+        $this->db->from('vouchers');
+        $this->join_vouchers();
+        $this->active_vouchers();
+
+        if($keys['from'] != '')
+            $this->db->where('vouchers.voucher_date >=',$keys['from']);
+        if($keys['to'] != '')
+            $this->db->where('vouchers.voucher_date <=',$keys['to']);
+
+        $this->db->where_in('ac_title', $products);
 
         if($keys['ac_title'] != '')
             $this->where_ac_title($keys['ac_title']);

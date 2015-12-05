@@ -51,16 +51,21 @@ class Withdrawls_model extends Parent_Model {
         include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
 
         $bank_account = $this->input->post('bank_ac');
-        $bank_account_parts = explode('_&&_',$bank_account);
-        $account_title = $bank_account_parts[0];
-        $sub_title = $bank_account_parts[1];
+
+        if(strtolower($bank_account) == strtolower('cash')){
+            $account_title = 'cash';
+            $sub_title = '';
+        }else{
+            $bank_account_parts = explode('_&&_',$bank_account);
+            $account_title = $bank_account_parts[0];
+            $sub_title = $bank_account_parts[1];
+        }
 
         // making voucher
         $voucher = array();
         $voucher['voucher_date'] = $this->input->post('voucher_date');
         $voucher['summary'] = $this->input->post('summary');
-        $voucher['bank_ac'] = $account_title;
-
+        $voucher['bank_ac'] = ($account_title != 'cash')?$account_title:'';
         $this->db->trans_start();
 
         /**
@@ -85,6 +90,7 @@ class Withdrawls_model extends Parent_Model {
         $voucher_entry_2 = array();
         $voucher_entry_2['ac_sub_title'] = $sub_title;
         $voucher_entry_2['ac_title'] = $account_title;
+        $voucher_entry_2['ac_type'] = ($account_title == "cash")?$account_title:'bank';
         $voucher_entry_2['amount'] = $this->input->post('amount');
 
         $this->editing_model->update_voucher_entries(array(
@@ -102,15 +108,19 @@ class Withdrawls_model extends Parent_Model {
         include_once(APPPATH."models/helperClasses/App_Voucher_Entry.php");
 
         $bank_account = $this->input->post('bank_ac');
-        $bank_account_parts = explode('_&&_',$bank_account);
-        $account_title = $bank_account_parts[0];
-        $sub_title = $bank_account_parts[1];
-
+        if(strtolower($bank_account) == strtolower('cash')){
+            $account_title = 'cash';
+            $sub_title = '';
+        }else{
+            $bank_account_parts = explode('_&&_',$bank_account);
+            $account_title = $bank_account_parts[0];
+            $sub_title = $bank_account_parts[1];
+        }
         $voucher = new App_Voucher();
         $voucher->voucher_date = $this->input->post('voucher_date');
         $voucher->summary = $this->input->post('summary');
         $voucher->voucher_type = 'withdraw';
-        $voucher->bank_ac = $account_title;
+        $voucher->bank_ac = ($account_title != 'cash')?$account_title:'';
 
         $voucher_entries = array();
 
@@ -130,7 +140,7 @@ class Withdrawls_model extends Parent_Model {
         $voucher_entry_2 = new App_voucher_Entry();
         $voucher_entry_2->ac_title = $account_title;
         $voucher_entry_2->ac_sub_title = $sub_title;
-        $voucher_entry_2->ac_type = 'bank';
+        $voucher_entry_2->ac_type = ($account_title == "cash")?$account_title:'bank';
         $voucher_entry_2->amount = $this->input->post('amount');
         $voucher_entry_2->dr_cr = 0;
 

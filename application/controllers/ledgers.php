@@ -273,6 +273,79 @@ class ledgers extends ParentController {
             $this->load->view('components/footer');
         }
     }
+
+
+    public function products()
+    {
+        $this->bodyData['customers'] = $this->customers_model->get();
+
+        $from = '';
+        $to ='';
+        $customer = '';
+        if(isset($_GET['from']))
+        {
+            $from = $_GET['from'];
+        }
+        else
+        {
+            $date = Carbon::now()->toDateString();
+            $from = first_day_of_month($date);
+        }
+
+        if(isset($_GET['to']))
+        {
+            $to = $_GET['to'];
+        }
+        else
+        {
+            $date = Carbon::now()->toDateString();
+            $to = $date;
+        }
+
+        $ac_title = '';
+        if(isset($_GET['ac_title']))
+        {
+            $ac_title = $_GET['ac_title'];
+        }
+
+        $ac_type = '';
+        if(isset($_GET['ac_type']))
+        {
+            $ac_type = $_GET['ac_type'];
+        }
+
+        $keys = array(
+            'from'=>$from,
+            'to'=>$to,
+            'ac_type'=>$ac_type,
+            'ac_title'=>$ac_title,
+        );
+
+        $this->bodyData['from'] = $from;
+        $this->bodyData['to'] = $to;
+        $this->bodyData['ac_title'] = $ac_title;
+        $this->bodyData['ac_type'] = $ac_type;
+        $this->bodyData['products'] = $this->products_model->get();
+
+        $headerData['title']="Ledgers: Products";
+        $this->bodyData['account_titles'] = $this->accounts_model->account_titles("customers");
+        $this->bodyData['account_types'] = $this->accounts_model->account_types();
+        $this->bodyData['opening_balance'] = $this->ledgers_model->opening_balance("customers", $keys);
+        $this->bodyData['ledger'] = $this->ledgers_model->products_ledger($keys, $this->sorting_info);
+
+        if(isset($_GET['print']))
+        {
+            $this->load->view('ledgers/print/product', $this->bodyData);
+        }
+        else
+        {
+            $this->load->view('components/header', $headerData);
+            $this->load->view('ledgers/product', $this->bodyData);
+            $this->load->view('components/footer');
+        }
+
+    }
+
     public function bank_accounts()
     {
         $bank_accounts = $this->bank_ac_model->get_formatted();
